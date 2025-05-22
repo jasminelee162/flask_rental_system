@@ -321,6 +321,12 @@
             border-radius: 2px;
         }
 
+        .img-box{
+            width: 600px;
+            height: 400px;
+            object-fit: cover;
+            object-position: center;
+        }
     </style>
 
 </head>
@@ -389,7 +395,9 @@
                         <div class="course">
 
                             <!--图-->
-                            <div><a href="#"><img class='img-fluid img-box' src="/static/img/house-bg1.jpg" alt=""></a>
+                            <div><a href="/house/{{ house.id }}">
+                                <img class='img-fluid img-box' src="/static/img/{{ house.picture }}" alt="房源图片">
+                            </a>
                             </div>
                             <!--价格-->
                             <div class="house-info">
@@ -569,9 +577,9 @@
                                         {% for house in tuijian %}
                                         <div class="col-lg-4 col-md-4">
                                             <div class="recommend">
-                                                <div><a href="/house/{{ house.id }}"><img class='img-fluid img-box'
-                                                                                          src="/static/img/house-bg1.jpg"
-                                                                                          alt=""></a>
+                                                <div><a href="/house/{{ house.id }}">
+                                                    <img class='img-fluid img-box' src="/static/img/{{ house.picture }}" alt="推荐房源">
+                                                </a>
                                                 </div>
                                                 <div class="recommend-info">
                                                     <span class="glyphicon glyphicon-map-marker"></span>

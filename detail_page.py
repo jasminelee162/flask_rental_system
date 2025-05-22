@@ -232,7 +232,7 @@ def detail(hid):
         else:
             tuijian = putong_tuijian
 
-    return render_template('detail_page.html', house=house, sheshi=sheshi_list, tuijian=tuijian)
+    return render_template('detail_page.html', house=house, sheshi=sheshi_list, tuijian=tuijian, picture=house.picture)
 
 
 # 实现户型占比功能

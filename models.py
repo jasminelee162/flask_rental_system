@@ -26,6 +26,7 @@ class House(db.Model):
     #people_name = db.Column(db.String(100))
     phone_num = db.Column(db.String(100))
     #house_num = db.Column(db.String(100))
+    picture = db.Column(db.String(255))
 
     # 重写__repr__方法， 方便我们查看对象的输出内容
     def __repr__(self):
@@ -42,6 +43,7 @@ class Tuijian(db.Model):
     address = db.Column(db.String(100))
     block = db.Column(db.String(100))
     score = db.Column(db.Integer)
+    picture = db.Column(db.String(255))
 
 
 # userinfo表的模型类
