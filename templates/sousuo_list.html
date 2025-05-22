@@ -82,50 +82,54 @@
 
         /* chanle */
 
-        .collection-line {
-            /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);*/
-            padding: 5px 0 25px;
-            margin: 20px 0;
-            background: #fff;
-            border-bottom: #ecf0f1 1px solid;
-        }
+.collection-line {
+    padding: 15px;
+    margin: 20px 0;
+    background: rgba(39, 41, 61, 0.8);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
 
-        .collection-line-info {
-            font-size: 14px;
-        }
+.collection-line:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(154, 104, 242, 0.2);
+}
 
-        .collection-line-info .title {
-            margin-bottom: 4px;
-        }
+.collection-line-info {
+    font-size: 14px;
+}
 
-        .collection-line-info .title a {
-            font-size: 20px;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            text-decoration: none;
-            line-height: 20px;
-        }
+.collection-line-info .title {
+    margin-bottom: 8px;
+}
 
-        .collection-line-info .title a:hover {
-            color: #17a2b8;
-        }
+.collection-line-info .title a {
+    font-size: 20px;
+    font-weight: 500;
+    color: #9a68f2;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
 
-        .collection-line-info div {
-            height: 30px;
-        }
+.collection-line-info .title a:hover {
+    color: #7b4fc9;
+}
 
-        .collection-line-info .attribute-text {
-            font-weight: 400;
-            color: #394043;
-            letter-spacing: 0.4px;
-            opacity: 0.8;
-        }
+.collection-line-info div {
+    height: 30px;
+}
 
-        .collection-line-info .info-text {
-            font-weight: 500;
-            color: #394043;
-            letter-spacing: 0.2px;
-        }
+.collection-line-info .attribute-text {
+    font-weight: 400;
+    color: rgba(154, 104, 242, 0.8);
+}
+
+.collection-line-info .info-text {
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+}
+
 
         /* more */
         .info-more {
@@ -151,12 +155,15 @@
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
+
+        .collection-line {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+
         }
         /* registe login*/
         .register-login-line {

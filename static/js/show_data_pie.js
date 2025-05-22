@@ -1,54 +1,63 @@
 function pie_chart(data) {
+    // 使用 dark-purple 主题
     var myChart = echarts.init(document.getElementById('pie'), 'dark-purple');
-    
+
+    window.addEventListener('resize', function () {
+        myChart.resize();
+    });
+
     var option = {
-        title: {
-            text: '户型占比分析',
-            subtext: '当前区域房源分布'
-        },
         tooltip: {
             trigger: 'item',
-            formatter: "{a} <br/>{b}: {c} ({d}%)"
-        },
-        legend: {
-            orient: 'vertical',
-            right: 10,
-            top: 'center'
+            formatter: "{a} <br/>{b} : {c} ({d}%)",
+            backgroundColor: 'rgba(26,26,46,0.9)',
+            textStyle: {
+                color: '#ffffff'
+            }
         },
         series: [{
-            name: '户型占比',
+            name: '户型的占比',
             type: 'pie',
-            radius: ['40%', '70%'],
-            center: ['40%', '50%'],
-            avoidLabelOverlap: false,
-            itemStyle: {
-                borderRadius: 10,
-                borderColor: 'rgba(39, 41, 61, 0.8)',
-                borderWidth: 2
-            },
+            radius: ['10%', '50%'],
+            center: ['50%', '50%'],
+            // 优化后的配色方案（与dark-purple背景协调的宝石色调）
+            color: [
+                '#8A2BE2', // 蓝紫色
+                '#9370DB', // 中紫色
+                '#BA55D3', // 中等兰花紫
+                '#9932CC', // 暗兰花紫
+                '#DA70D6', // 兰花紫
+                '#FF69B4', // 热粉红
+                '#FF1493', // 深粉红
+                '#C71585', // 中紫红色
+                '#DB7093', // 苍紫罗兰红
+                '#FFA07A'  // 浅鲑鱼色
+            ],
             label: {
-                show: true,
-                position: 'outside',
-                formatter: '{b}: {d}%'
-            },
-            emphasis: {
-                label: {
-                    show: true,
-                    fontSize: '16',
-                    fontWeight: 'bold'
-                }
+                color: '#ffffff',
+                fontSize: 14,
+                fontWeight: 'bold'  // 加粗标签文字
             },
             labelLine: {
-                show: true
+                lineStyle: {
+                    color: 'rgba(255, 255, 255, 0.3)',
+                    width: 1.5
+                }
+            },
+            itemStyle: {
+                borderColor: 'rgba(0,0,0,0.3)',
+                borderWidth: 1,
+                emphasis: {
+                    shadowBlur: 15,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(255, 255, 255, 0.5)', // 白色阴影更协调
+                    borderWidth: 2,
+                    borderColor: '#ffffff'
+                }
             },
             data: data
         }]
     };
-    
+
     myChart.setOption(option);
-    
-    // 响应式调整
-    window.addEventListener('resize', function() {
-        myChart.resize();
-    });
 }
