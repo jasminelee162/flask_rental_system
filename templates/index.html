@@ -596,15 +596,19 @@
 <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
 <script src="/static/js/echarts.min.js"></script>
 
-<!-- 百度地图API -->
+<!-- 百度地图基础API -->
 <script type="text/javascript" src="https://api.map.baidu.com/api?v=3.0&ak=nSxiPohfziUaCuONe4ViUP2N"></script>
+<!-- 百度地图点聚合库 -->
+<script type="text/javascript" src="https://api.map.baidu.com/library/TextIconOverlay/1.2/src/TextIconOverlay_min.js"></script>
+<script type="text/javascript" src="https://api.map.baidu.com/library/MarkerClusterer/1.2/src/MarkerClusterer_min.js"></script>
+<!-- 地图初始化脚本 -->
 <script>
-// 添加地图加载状态检查
 var map = null;
+var markers = []; // 存储所有标记点
+var markerClusterer = null; // 点聚合管理器
 
 function initMap() {
     try {
-        // 检查BMap是否成功加载
         if (typeof BMap === 'undefined') {
             console.error('百度地图脚本未成功加载');
             document.getElementById('mapContainer').innerHTML = '地图加载失败，请检查网络连接';
@@ -612,45 +616,125 @@ function initMap() {
         }
 
         // 创建地图实例
-        map = new BMap.Map("mapContainer");
+        map = new BMap.Map("mapContainer", {
+            enableMapClick: true,
+            enableDragging: true,
+            enableDoubleClickZoom: true
+        });
         
         // 创建点坐标（默认北京市中心）
         var point = new BMap.Point(116.404, 39.915);
-        
-        // 初始化地图，设置中心点坐标和地图级别
         map.centerAndZoom(point, 12);
         
         // 开启鼠标滚轮缩放
         map.enableScrollWheelZoom(true);
         
         // 添加地图控件
-        map.addControl(new BMap.NavigationControl());
+        map.addControl(new BMap.NavigationControl({
+            type: BMAP_NAVIGATION_CONTROL_LARGE
+        }));
         map.addControl(new BMap.ScaleControl());
         map.addControl(new BMap.OverviewMapControl());
-        map.addControl(new BMap.MapTypeControl());
+        map.addControl(new BMap.MapTypeControl({
+            mapTypes: [BMAP_NORMAL_MAP, BMAP_HYBRID_MAP]
+        }));
 
-        // 添加加载成功的提示
-        console.log('地图初始化成功');
-        
-        // 添加房源标记点
-        {% for house in house_new_list1 %}
-            try {
-                var marker = new BMap.Marker(new BMap.Point({{house.longitude|default(116.404)}}, {{house.latitude|default(39.915)}}));
-                var content = `
-                    <div class="map-info-window">
-                        <h4>{{house.title|default('未命名房源')}}</h4>
-                        <p>{{house.address|default('地址未知')}}</p>
-                        <p>{{house.rooms|default('未知户型')}} - {{house.area|default('0')}}平米</p>
-                        <p class="price">￥{{house.price|default('未知')}}</p>
-                        <a href="/house/{{house.id}}" class="btn btn-primary btn-sm">查看详情</a>
-                    </div>
-                `;
-                addClickHandler(content, marker);
-                map.addOverlay(marker);
-            } catch (e) {
-                console.error('添加标记点失败:', e);
+        // 添加定位控件
+        var geolocationControl = new BMap.GeolocationControl({
+            anchor: BMAP_ANCHOR_BOTTOM_RIGHT,
+            showAddressBar: true,
+            enableAutoLocation: true
+        });
+        map.addControl(geolocationControl);
+
+        // 添加缩略地图控件
+        var overviewMapControl = new BMap.OverviewMapControl({
+            isOpen: true,
+            anchor: BMAP_ANCHOR_BOTTOM_RIGHT
+        });
+        map.addControl(overviewMapControl);
+
+        // 添加地图类型切换控件
+        var mapTypeControl = new BMap.MapTypeControl({
+            mapTypes: [BMAP_NORMAL_MAP, BMAP_HYBRID_MAP],
+            anchor: BMAP_ANCHOR_TOP_LEFT
+        });
+        map.addControl(mapTypeControl);
+
+        // 自定义地图样式
+        var styleJson = [{
+            "featureType": "all",
+            "elementType": "all",
+            "stylers": {
+                "lightness": 10,
+                "saturation": -100
             }
-        {% endfor %}
+        }, {
+            "featureType": "water",
+            "elementType": "all",
+            "stylers": {
+                "color": "#044161"
+            }
+        }, {
+            "featureType": "land",
+            "elementType": "all",
+            "stylers": {
+                "color": "#091934"
+            }
+        }];
+        map.setMapStyle({styleJson: styleJson});
+
+        // 添加房源标记点
+        var testPoints = [
+            {lat: 39.915, lng: 116.404, title: "测试房源1"},
+            {lat: 39.925, lng: 116.414, title: "测试房源2"},
+            {lat: 39.935, lng: 116.424, title: "测试房源3"}
+        ];
+
+        testPoints.forEach(function(p) {
+            var point = new BMap.Point(p.lng, p.lat);
+            var marker = new BMap.Marker(point);
+            var content = p.title;
+            var infoWindow = new BMap.InfoWindow(content);
+            marker.addEventListener("click", function() {
+                map.openInfoWindow(infoWindow, point);
+            });
+            markers.push(marker);
+            map.addOverlay(marker);
+        });
+
+        // 将原有的点聚合管理器代码替换为：
+        if (markers.length > 0) {
+            try {
+                // 普通方式创建点聚合
+                var markerClusterer = new BMapLib.MarkerClusterer(map, {
+                    markers: markers
+                });
+            } catch (e) {
+                console.error('点聚合创建失败，使用普通标记点显示');
+                // 如果点聚合失败，至少显示普通标记点
+                markers.forEach(function(marker) {
+                    map.addOverlay(marker);
+                });
+            }
+        }
+
+        // 添加搜索功能
+        var searchControl = new BMap.Control({
+            anchor: BMAP_ANCHOR_TOP_LEFT
+        });
+        
+        var div = document.createElement("div");
+        div.className = "map-search-box";
+        div.innerHTML = `
+            <input type="text" id="mapSearch" placeholder="搜索地址..." />
+            <button onclick="searchLocation()">搜索</button>
+        `;
+        searchControl.defaultDOM = div;
+        map.addControl(searchControl);
+
+        // 添加地图加载成功的提示
+        console.log('地图初始化成功');
 
     } catch (e) {
         console.error('地图初始化失败:', e);
@@ -658,24 +742,81 @@ function initMap() {
     }
 }
 
+// 搜索地址功能
+function searchLocation() {
+    var local = new BMap.LocalSearch(map, {
+        renderOptions: {
+            map: map,
+            autoViewport: true
+        }
+    });
+    var address = document.getElementById('mapSearch').value;
+    local.search(address);
+}
+
+// 导航功能
+function navigateToHouse(lat, lng) {
+    var destination = new BMap.Point(lng, lat);
+    
+    // 获取用户当前位置
+    var geolocation = new BMap.Geolocation();
+    geolocation.getCurrentPosition(function(r) {
+        if (this.getStatus() == BMAP_STATUS_SUCCESS) {
+            var driving = new BMap.DrivingRoute(map, {
+                renderOptions: {
+                    map: map,
+                    autoViewport: true
+                }
+            });
+            driving.search(r.point, destination);
+        } else {
+            alert('获取当前位置失败，请检查定位权限');
+        }
+    });
+}
+
 // 确保在页面完全加载后再初始化地图
 document.addEventListener('DOMContentLoaded', function() {
-    // 添加加载状态提示
     document.getElementById('mapContainer').innerHTML = '地图加载中...';
-    
-    // 设置超时检查
     setTimeout(function() {
         if (!map) {
             document.getElementById('mapContainer').innerHTML = '地图加载超时，请刷新页面重试';
         }
     }, 5000);
-
     initMap();
 });
 </script>
 
-<!-- 添加地图相关样式 -->
+<!-- 添加新的地图相关样式 -->
 <style>
+/* 搜索框样式 */
+.map-search-box {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.map-search-box input {
+    padding: 8px;
+    border: 1px solid #9a68f2;
+    border-radius: 4px;
+    margin-right: 5px;
+    width: 200px;
+}
+
+.map-search-box button {
+    padding: 8px 15px;
+    background: #9a68f2;
+    border: none;
+    border-radius: 4px;
+    color: white;
+}
+
 /* 地图容器样式 */
 .map-container {
     background-color: rgba(39, 41, 61, 0.8);
