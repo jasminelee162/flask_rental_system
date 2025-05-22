@@ -621,14 +621,14 @@ function initMap() {
             enableDragging: true,
             enableDoubleClickZoom: true
         });
-        
+
         // 创建点坐标（默认北京市中心）
         var point = new BMap.Point(116.404, 39.915);
         map.centerAndZoom(point, 12);
-        
+
         // 开启鼠标滚轮缩放
         map.enableScrollWheelZoom(true);
-        
+
         // 添加地图控件
         map.addControl(new BMap.NavigationControl({
             type: BMAP_NAVIGATION_CONTROL_LARGE
@@ -723,7 +723,7 @@ function initMap() {
         var searchControl = new BMap.Control({
             anchor: BMAP_ANCHOR_TOP_LEFT
         });
-        
+
         var div = document.createElement("div");
         div.className = "map-search-box";
         div.innerHTML = `
@@ -757,7 +757,7 @@ function searchLocation() {
 // 导航功能
 function navigateToHouse(lat, lng) {
     var destination = new BMap.Point(lng, lat);
-    
+
     // 获取用户当前位置
     var geolocation = new BMap.Geolocation();
     geolocation.getCurrentPosition(function(r) {
@@ -788,114 +788,6 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <!-- 添加新的地图相关样式 -->
-<style>
-/* 搜索框样式 */
-.map-search-box {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    z-index: 1000;
-    background: rgba(255, 255, 255, 0.9);
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.map-search-box input {
-    padding: 8px;
-    border: 1px solid #9a68f2;
-    border-radius: 4px;
-    margin-right: 5px;
-    width: 200px;
-}
-
-.map-search-box button {
-    padding: 8px 15px;
-    background: #9a68f2;
-    border: none;
-    border-radius: 4px;
-    color: white;
-}
-
-/* 地图容器样式 */
-.map-container {
-    background-color: rgba(39, 41, 61, 0.8);
-    padding: 20px 0;
-    margin: 20px 0;
-}
-
-#mapContainer {
-    width: 100%;
-    height: 500px;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(39, 41, 61, 0.9);
-    color: white;
-    font-size: 16px;
-}
-
-/* 地图信息窗口样式 */
-.map-info-window {
-    padding: 10px;
-    max-width: 250px;
-}
-
-.map-info-window h4 {
-    margin: 0 0 10px 0;
-    color: #333;
-    font-size: 16px;
-}
-
-.map-info-window p {
-    margin: 5px 0;
-    color: #666;
-    font-size: 14px;
-}
-
-.map-info-window .price {
-    color: #9a68f2;
-    font-weight: bold;
-    font-size: 16px;
-}
-
-.map-info-window .btn {
-    margin-top: 10px;
-    background: linear-gradient(45deg, #9a68f2, #7b4fc9);
-    border: none;
-    color: white;
-    padding: 5px 15px;
-    transition: all 0.3s ease;
-}
-
-.map-info-window .btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(154, 104, 242, 0.3);
-}
-
-/* 地图控件样式优化 */
-.BMap_stdMpCtrl {
-    margin: 20px !important;
-}
-
-.BMap_stdMpZoom {
-    background-color: rgba(39, 41, 61, 0.9) !important;
-    border-radius: 8px !important;
-    border: 1px solid rgba(154, 104, 242, 0.3) !important;
-}
-
-.BMap_stdMpZoom .BMap_button {
-    background-color: rgba(39, 41, 61, 0.9) !important;
-    color: white !important;
-}
-
-.BMap_stdMpZoom .BMap_button:hover {
-    background-color: rgba(154, 104, 242, 0.3) !important;
-}
-</style>
 
 </body>
 
