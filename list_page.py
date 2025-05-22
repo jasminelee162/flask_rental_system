@@ -46,8 +46,10 @@ def return_new_list(page):
     # 对列表的数据进行保护，只能查看前10页的数据，当请求的页码数大于10 或者页码数 小于0的时候，我们返回page=1
     if page > 10 or page <= 0:
         page =1
-    result = House.query.order_by(House.publish_time.desc()).paginate(page, per_page=10)  # page 当前的页码数 per_page 每页所展示的数据条数
-                                                                                           # paginate()函数 能够终止链式查询 作用和all（）相同
+    # result = House.query.order_by(House.publish_time.desc()).paginate(page, per_page=10)  # page 当前的页码数 per_page 每页所展示的数据条数
+    result = House.query.order_by(House.publish_time.desc()).paginate(page=page, per_page=10)
+
+    # paginate()函数 能够终止链式查询 作用和all（）相同
 
     return render_template('list.html', house_list=result.items, page_num=result.page)
 
@@ -65,7 +67,7 @@ def return_new_list(page):
 def return_hot_list(page):
     if page > 10 or page <= 0:
         page=1
-    result = House.query.order_by(House.page_view.desc()).paginate(page, per_page=10)
+    result = House.query.order_by(House.page_view.desc()).paginate(page=page, per_page=10)
     #return (result)
     return render_template('list.html', house_list=result.items, page_num=result.page)
 

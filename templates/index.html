@@ -180,11 +180,13 @@
 
         }
 
-        .img-box {
-        width: 100%; /* 设置图片宽度为100% */
-        height: 200px; /* 设置图片高度为200px */
-        object-fit: cover; /* 保持图片比例，裁剪多余部分 */
+        .img-box{
+            width: 300px;
+            height: 200px;
+            object-fit: cover;
+            object-position: center;
         }
+
     </style>
 
 </head>
@@ -299,10 +301,13 @@
         {% for house in house_new_list1 %}
         <div class="col-lg-4">
             <div class="course">
-                <div><a href="/house/{{ house.id }}"><img class='img-fluid img-box' src="/static/img/house-new-{{ loop.index }}.jpg"
-                                                          alt=""></a></div>
+                <div><a href="/house/{{ house.id }}">
+                                <img class='img-fluid img-box' src="/static/img/{{ house.picture }}" alt="">
+                            </a>
+                            </div>
                 <div class="course-info">
                     <span>{{ house.address }}</span>
+
                 </div>
                 <div class="course-info1">
                     <span>{{ house.rooms }} - {{ house.area }}平米</span>
@@ -330,8 +335,10 @@
         {% for house in house_hot_list1 %}
         <div class="col-lg-3">
             <div class="course">
-                <div><a href="/house/81421"><img class='img-fluid img-box' src="/static/img/house-hot-{{ loop.index}}.jpg"
-                                                 alt=""></a></div>
+                <div><a href="/house/{{ house.id }}">
+                                <img class='img-fluid img-box' src="/static/img/{{ house.picture }}" alt="">
+                            </a>
+                            </div>
                 <div class="course-info">
                     <span>{{ house.address }}</span>
                 </div>
@@ -563,7 +570,6 @@
                                 li_text = list[i]['t_name'] + '<span class="badge float-right">大约有' + list[i]['num'] + '套房</span>';
                                 console.log(li_text);
                                 item.innerHTML = li_text;
-                                
                                 // 添加点击事件
                                 item.addEventListener('click', function() {
                                     var searchType = $(".my-nav-tab li.active").text();
@@ -576,6 +582,7 @@
                                 });
                                 oList.appendChild(item);
                                 info_to_txt();
+
                             }
                             return list;
                         }

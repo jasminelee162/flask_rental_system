@@ -18,6 +18,9 @@
     <link href="https://cdn.bootcss.com/jquery.bootstrapvalidator/0.5.3/css/bootstrapValidator.min.css"
           rel="stylesheet">
 
+    <!-- Black Dashboard CSS -->
+    <link href="/static/vendor/assets/css/black-dashboard.min.css" rel="stylesheet">
+    <link href="/static/vendor/assets/css/nucleo-icons.css" rel="stylesheet">
 
     <!-- Custom fonts for this template -->
     <link href="/static/css/font-awesome.min.css" rel="stylesheet">
@@ -79,50 +82,54 @@
 
         /* chanle */
 
-        .collection-line {
-            /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);*/
-            padding: 5px 0 25px;
-            margin: 20px 0;
-            background: #fff;
-            border-bottom: #ecf0f1 1px solid;
-        }
+.collection-line {
+    padding: 15px;
+    margin: 20px 0;
+    background: rgba(39, 41, 61, 0.8);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
 
-        .collection-line-info {
-            font-size: 14px;
-        }
+.collection-line:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(154, 104, 242, 0.2);
+}
 
-        .collection-line-info .title {
-            margin-bottom: 4px;
-        }
+.collection-line-info {
+    font-size: 14px;
+}
 
-        .collection-line-info .title a {
-            font-size: 20px;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            text-decoration: none;
-            line-height: 20px;
-        }
+.collection-line-info .title {
+    margin-bottom: 8px;
+}
 
-        .collection-line-info .title a:hover {
-            color: #17a2b8;
-        }
+.collection-line-info .title a {
+    font-size: 20px;
+    font-weight: 500;
+    color: #9a68f2;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
 
-        .collection-line-info div {
-            height: 30px;
-        }
+.collection-line-info .title a:hover {
+    color: #7b4fc9;
+}
 
-        .collection-line-info .attribute-text {
-            font-weight: 400;
-            color: #394043;
-            letter-spacing: 0.4px;
-            opacity: 0.8;
-        }
+.collection-line-info div {
+    height: 30px;
+}
 
-        .collection-line-info .info-text {
-            font-weight: 500;
-            color: #394043;
-            letter-spacing: 0.2px;
-        }
+.collection-line-info .attribute-text {
+    font-weight: 400;
+    color: rgba(154, 104, 242, 0.8);
+}
+
+.collection-line-info .info-text {
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+}
+
 
         /* more */
         .info-more {
@@ -173,6 +180,13 @@
         /*hr*/
         hr {
             margin: 2px;
+        }
+
+        .img-box{
+            width: 600px;
+            height: 400px;
+            object-fit: cover;
+            object-position: center;
         }
     </style>
 
@@ -257,8 +271,10 @@
             <div class="row collection-line">
 
                 <div class="col-lg-5 col-md-5 mx-auto">
-                    <div><a href="/house/{{ house.id }}"><img class='img-fluid img-box' src="/static/img/house-bg1.jpg"
-                                                              alt=""></a></div>
+                    <div><a href="/house/{{ house.id }}">
+                                <img class='img-fluid img-box' src="/static/img/{{ house.picture }}" alt="">
+                            </a>
+                            </div>
                 </div>
                 <div class="col-lg-5 col-md-5 mx-auto">
                     <div class="collection-line-info">
@@ -394,6 +410,13 @@
                                 <div class="form-group">
                                     <label for="" class="form-info">密码</label>
                                     <input class="form-control" name="password" type="password" placeholder="">
+                                </div>
+                                <div class="form-group">
+                                        <label class="form-info">验证码</label>
+                                        <div style="display: flex; align-items: center;">
+                                        <input class="form-control" name="captcha" type="text" style="width: 60%;">
+                                        <img src="/captcha" id="captcha-img" style="cursor: pointer; margin-left: 10px; height: 38px;" onclick="this.src='/captcha?'+Math.random()">
+                                    </div>
                                 </div>
                                 <div class="text-right">
                                     <button class="btn btn-primary" id='login-btn'>登录</button>
