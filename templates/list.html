@@ -467,6 +467,13 @@
                                     <label for="" class="form-info">密码</label>
                                     <input class="form-control" name="password" type="password" placeholder="">
                                 </div>
+                                <div class="form-group">
+                                        <label class="form-info">验证码</label>
+                                        <div style="display: flex; align-items: center;">
+                                        <input class="form-control" name="captcha" type="text" style="width: 60%;">
+                                        <img src="/captcha" id="captcha-img" style="cursor: pointer; margin-left: 10px; height: 38px;" onclick="this.src='/captcha?'+Math.random()">
+                                    </div>
+                                </div>
                                 <div class="text-right">
                                     <button class="btn btn-primary" id='login-btn'>登录</button>
                                     <button class="btn btn-danger" data-dismiss="modal">取消</button>

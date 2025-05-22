@@ -1,4 +1,7 @@
-from flask import Blueprint, request, Response, jsonify, render_template, redirect
+import random
+import string
+from captcha.image import ImageCaptcha
+from flask import Blueprint, request, Response, jsonify, render_template, redirect, session, send_file
 from models import User, House
 from settings import db
 import json
@@ -133,30 +136,27 @@ def user(name):
 
 @user_page.route('/login', methods=['POST'])
 def login():
-    # 首先需要获取用户提交的信息 用户的名字和密码
+    # 获取用户提交的信息
     name = request.form['username']
     password = request.form['password']
+    captcha_input = request.form.get('captcha', '').strip()
 
-    # 根据用户的名字 来进行校验
+    # 校验验证码
+    if captcha_input.upper() != session.get('captcha_code', '').upper():
+        return jsonify({'valid': '0', 'msg': '验证码错误！'})
+
+    # 根据用户名查找用户
     user = User.query.filter(User.name == name).first()
 
-    # 用户存在
     if user:
-        # 密码也正确
         if user.password == password:
-            # 将响应信息变化成json字符串
             result = {'valid': '1', 'msg': user.name}
             result_json = json.dumps(result)
-            # 放入响应内容
             res = Response(result_json)
-            # 设置登陆状态
             res.set_cookie('name', user.name, 3600 * 2)
             return res
-
         else:
             return jsonify({'valid': '0', 'msg': '密码不正确！'})
-
-    # 用户不存在的时候
     else:
         return jsonify({'valid': '0', 'msg': '用户名不正确！'})
 
@@ -448,7 +448,15 @@ def del_record():
         return jsonify({'valid': '0', 'msg': '暂无信息可以删除!'})
 
 
+@user_page.route('/captcha')
+def get_captcha():
+    # 生成4位随机验证码
+    code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))
+    session['captcha_code'] = code  # 存入 session
 
+    image = ImageCaptcha()
+    data = image.generate(code)
+    return send_file(data, mimetype='image/png')
 
 
 
