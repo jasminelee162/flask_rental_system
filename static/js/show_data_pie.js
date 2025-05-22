@@ -1,55 +1,54 @@
 function pie_chart(data) {
-    var myChart = echarts.init(document.getElementById('pie'));
-
-    window.addEventListener('resize', function () {
-        myChart.resize();
-    });
-
+    var myChart = echarts.init(document.getElementById('pie'), 'dark-purple');
+    
     var option = {
-        tooltip : {
-            trigger: 'item',
-            formatter: "{a} <br/>{b} : {c} ({d}%)",
+        title: {
+            text: '户型占比分析',
+            subtext: '当前区域房源分布'
         },
-
-        series:[{
-
-            name: '户型的占比',
-
+        tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b}: {c} ({d}%)"
+        },
+        legend: {
+            orient: 'vertical',
+            right: 10,
+            top: 'center'
+        },
+        series: [{
+            name: '户型占比',
             type: 'pie',
-
-            radius: ['10%', '50%'],
-            center: ['50%', '50%'],
-
-            labelLine: {
-
-                normal: {
-                    show: true
-                },
-                // 选中后加重表现
-                emphasis: {
-                    show: true
-                }
-            },
-            // 饼状图的内部名字
-            label: {
-                normal: {
-                    show: true
-                },
-                emphasis: {
-                    show: true
-                }
-            },
-            //
+            radius: ['40%', '70%'],
+            center: ['40%', '50%'],
+            avoidLabelOverlap: false,
             itemStyle: {
-                emphasis: {
-                    shadowBlur: 10,
-                    shadowOffsetX: 0,
-                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                borderRadius: 10,
+                borderColor: 'rgba(39, 41, 61, 0.8)',
+                borderWidth: 2
+            },
+            label: {
+                show: true,
+                position: 'outside',
+                formatter: '{b}: {d}%'
+            },
+            emphasis: {
+                label: {
+                    show: true,
+                    fontSize: '16',
+                    fontWeight: 'bold'
                 }
             },
-            data: data,
+            labelLine: {
+                show: true
+            },
+            data: data
         }]
     };
-
+    
     myChart.setOption(option);
+    
+    // 响应式调整
+    window.addEventListener('resize', function() {
+        myChart.resize();
+    });
 }

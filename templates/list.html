@@ -18,6 +18,9 @@
     <link href="https://cdn.bootcss.com/jquery.bootstrapvalidator/0.5.3/css/bootstrapValidator.min.css"
           rel="stylesheet">
 
+    <!-- Black Dashboard CSS -->
+    <link href="/static/vendor/assets/css/black-dashboard.min.css" rel="stylesheet">
+    <link href="/static/vendor/assets/css/nucleo-icons.css" rel="stylesheet">
 
     <!-- Custom fonts for this template -->
     <link href="/static/css/font-awesome.min.css" rel="stylesheet">
@@ -28,6 +31,32 @@
     <!-- Custom page for this template -->
     <link href="/static/css/zxf_page.css" rel="stylesheet">
     <style>
+        body {
+            background: linear-gradient(to right, rgba(30, 30, 47, 0.9), rgba(42, 42, 66, 0.9));
+            color: #ffffff;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+
+        #mainNav {
+            background-color: rgba(39, 41, 61, 0.95) !important;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-light .navbar-brand, 
+        .navbar-light .navbar-nav .nav-link {
+            color: #ffffff !important;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-light .navbar-brand:hover,
+        .navbar-light .navbar-nav .nav-link:hover {
+            color: #9a68f2 !important;
+            transform: translateY(-1px);
+        }
+
         .area-info {
             margin-left: 5px;
             padding-left: 5px;
@@ -80,84 +109,82 @@
         /* chanle */
 
         .collection-line {
-            /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);*/
-            padding: 5px 0 25px;
-            margin: 20px 0;
-            background: #fff;
-            border-bottom: #ecf0f1 1px solid;
+            background-color: rgba(39, 41, 61, 0.8);
+            border: 1px solid rgba(154, 104, 242, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .collection-line:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
         }
 
         .collection-line-info {
             font-size: 14px;
-        }
-
-        .collection-line-info .title {
-            margin-bottom: 4px;
+            letter-spacing: 0.5px;
         }
 
         .collection-line-info .title a {
-            font-size: 20px;
+            color: #9a68f2;
+            font-size: 18px;
             font-weight: 500;
-            letter-spacing: 0.5px;
-            text-decoration: none;
-            line-height: 20px;
+            transition: all 0.3s ease;
         }
 
         .collection-line-info .title a:hover {
-            color: #17a2b8;
-        }
-
-        .collection-line-info div {
-            height: 30px;
+            color: #7b4fc9;
+            text-decoration: none;
         }
 
         .collection-line-info .attribute-text {
-            font-weight: 400;
-            color: #394043;
-            letter-spacing: 0.4px;
-            opacity: 0.8;
+            color: rgba(154, 104, 242, 0.8);
+            font-weight: 300;
         }
 
         .collection-line-info .info-text {
-            font-weight: 500;
-            color: #394043;
-            letter-spacing: 0.2px;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 400;
         }
 
         /* more */
         .info-more {
-            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .info-more .price {
+            color: #9a68f2;
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 15px;
         }
 
         .info-more a {
-            font-weight: 400;
-            color: #17a2b8;
-            font-size: 16px;
-            text-decoration: none;
+            color: rgba(154, 104, 242, 0.8);
+            transition: all 0.3s ease;
         }
 
-        .info-more i {
-            padding: 65px 30px 65px 50px;
-            position: relative;
+        .info-more a:hover {
+            color: #9a68f2;
+            transform: translateX(5px);
         }
 
-        .info-more i:hover, .info-more i:focus {
-            color: #e74c3c;
-            opacity: 0;
-            animation: fadeIn 0.5s infinite linear alternate-reverse;
+        .img-fluid {
+            border-radius: 10px;
+            transition: all 0.3s ease;
         }
 
-        @keyframes fadeIn {
-
-        .collection-line {
-            opacity: 0;
+        .img-fluid:hover {
+            transform: scale(1.02);
         }
 
-        to {
-            opacity: 1;
-        }
-
-        }
         /* registe login*/
         .register-login-line {
             margin: 0;
@@ -165,14 +192,57 @@
 
         /* page */
         .my-page-line {
-            padding: 5px 0 2px;
-            margin: 10px 0 1px;
-            background: #fff;
+            background-color: rgba(39, 41, 61, 0.8);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
         }
 
         /*hr*/
         hr {
             margin: 2px;
+        }
+
+        .modal-content {
+            background-color: #27293d;
+            color: #ffffff;
+        }
+
+        .form-control {
+            background-color: #2b3553;
+            border: 1px solid #9a68f2;
+            color: #ffffff;
+        }
+
+        .form-control:focus {
+            background-color: #2b3553;
+            border-color: #9a68f2;
+            color: #ffffff;
+        }
+
+        .btn-primary {
+            background-color: #9a68f2 !important;
+            border-color: #9a68f2 !important;
+        }
+
+        .btn-primary:hover {
+            background-color: #7b4fc9 !important;
+            border-color: #7b4fc9 !important;
+        }
+
+        .zxf_pagediv {
+            background-color: transparent;
+        }
+
+        .zxf_pagediv a {
+            color: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(154, 104, 242, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .zxf_pagediv a:hover {
+            background-color: rgba(154, 104, 242, 0.2);
+            color: #9a68f2;
         }
     </style>
 

@@ -95,57 +95,176 @@
 //
 // }
 function getdata1(data) {
-    var myChart = echarts.init(document.getElementById('pie'));
-
-    window.addEventListener('resize', function () {
-        myChart.resize();
+    var myChart = echarts.init(document.getElementById('f_line'), 'dark-purple');
+    
+    // 计算线性回归
+    var myRegression = ecStat.regression('linear', data);
+    myRegression.points.sort(function(a, b) {
+        return a[0] - b[0];
     });
-
+    
     var option = {
-        tooltip : {
-            trigger: 'item',
-            formatter: "{a} <br/>{b} : {c} ({d}%)",
+        title: {
+            text: '房价走势分析',
+            subtext: '基于历史数据预测'
         },
-
-        series:[{
-
-            name: '户型的占比',
-
-            type: 'pie',
-
-            radius: ['10%', '50%'],
-            center: ['50%', '50%'],
-
-            labelLine: {
-
-                normal: {
-                    show: true
-                },
-                // 选中后加重表现
-                emphasis: {
-                    show: true
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'cross'
+            }
+        },
+        legend: {
+            data: ['实际房价', '预测走势']
+        },
+        grid: [{
+            left: '3%',
+            right: '3%',
+            bottom: '53%',
+            containLabel: true
+        }, {
+            left: '3%',
+            right: '3%',
+            top: '55%',
+            height: '35%'
+        }],
+        xAxis: [{
+            type: 'value',
+            splitLine: {
+                lineStyle: {
+                    type: 'dashed'
+                }
+            }
+        }, {
+            gridIndex: 1,
+            type: 'value',
+            splitLine: {
+                lineStyle: {
+                    type: 'dashed'
                 }
             },
-            // 饼状图的内部名字
-            label: {
-                normal: {
-                    show: true
-                },
-                emphasis: {
-                    show: true
+            show: false
+        }],
+        yAxis: [{
+            type: 'value',
+            name: '价格（元/月）',
+            splitLine: {
+                lineStyle: {
+                    type: 'dashed'
+                }
+            }
+        }, {
+            gridIndex: 1,
+            type: 'value',
+            name: '价格（元/月）',
+            splitLine: {
+                lineStyle: {
+                    type: 'dashed'
                 }
             },
-            //
-            itemStyle: {
-                emphasis: {
-                    shadowBlur: 10,
-                    shadowOffsetX: 0,
-                    shadowColor: 'rgba(0, 0, 0, 0.5)'
-                }
-            },
+            show: false
+        }],
+        series: [{
+            name: '实际房价',
+            type: 'scatter',
             data: data,
+            symbolSize: 10,
+            itemStyle: {
+                opacity: 0.7
+            }
+        }, {
+            name: '预测走势',
+            type: 'line',
+            smooth: true,
+            data: myRegression.points,
+            symbolSize: 0.1,
+            lineStyle: {
+                width: 2
+            },
+            markPoint: {
+                label: {
+                    show: true,
+                    position: 'top',
+                    formatter: myRegression.expression,
+                    color: '#fff',
+                    backgroundColor: 'rgba(154, 104, 242, 0.8)',
+                    padding: [5, 10],
+                    borderRadius: 5
+                },
+                data: [{
+                    coord: myRegression.points[myRegression.points.length - 1]
+                }]
+            }
+        }, {
+            name: '数据表格',
+            type: 'custom',
+            renderItem: function(params, api) {
+                var data = params.dataIndex >= myRegression.points.length ? 
+                    data[params.dataIndex - myRegression.points.length] :
+                    myRegression.points[params.dataIndex];
+                return {
+                    type: 'group',
+                    children: [{
+                        type: 'rect',
+                        shape: {
+                            x: api.coord([data[0], data[1]])[0] - 40,
+                            y: api.coord([data[0], data[1]])[1] - 10,
+                            width: 80,
+                            height: 20
+                        },
+                        style: {
+                            fill: 'rgba(154, 104, 242, 0.1)'
+                        }
+                    }, {
+                        type: 'text',
+                        style: {
+                            text: data[0].toFixed(2) + ',' + data[1].toFixed(2),
+                            textAlign: 'center',
+                            textVerticalAlign: 'middle',
+                            x: api.coord([data[0], data[1]])[0],
+                            y: api.coord([data[0], data[1]])[1],
+                            fill: '#fff'
+                        }
+                    }]
+                };
+            },
+            data: data.concat(myRegression.points),
+            gridIndex: 1,
+            z: 100
         }]
     };
-
+    
     myChart.setOption(option);
+    
+    // 创建数据表格
+    var tableHtml = '<div class="data-table-container" style="margin-top: 20px; padding: 15px; background: rgba(39, 41, 61, 0.8); border-radius: 10px;">' +
+        '<h4 style="color: #fff; margin-bottom: 15px;">房价数据明细</h4>' +
+        '<div style="max-height: 300px; overflow-y: auto;">' +
+        '<table class="table table-dark table-hover" style="background: transparent;">' +
+        '<thead><tr><th>序号</th><th>时间点</th><th>实际价格</th><th>预测价格</th><th>差异</th></tr></thead>' +
+        '<tbody>';
+    
+    data.forEach(function(item, index) {
+        var predictedPrice = myRegression.points[index][1];
+        var difference = (item[1] - predictedPrice).toFixed(2);
+        var differenceClass = difference > 0 ? 'text-success' : 'text-danger';
+        
+        tableHtml += '<tr>' +
+            '<td>' + (index + 1) + '</td>' +
+            '<td>' + item[0].toFixed(2) + '</td>' +
+            '<td>' + item[1].toFixed(2) + '</td>' +
+            '<td>' + predictedPrice.toFixed(2) + '</td>' +
+            '<td class="' + differenceClass + '">' + difference + '</td>' +
+            '</tr>';
+    });
+    
+    tableHtml += '</tbody></table></div></div>';
+    
+    // 在图表容器后插入表格
+    document.getElementById('f_line').insertAdjacentHTML('afterend', tableHtml);
+    
+    // 响应式调整
+    window.addEventListener('resize', function() {
+        myChart.resize();
+    });
 }

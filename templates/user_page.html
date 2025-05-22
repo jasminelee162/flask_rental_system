@@ -16,6 +16,10 @@
     <!-- Bootstrap core CSS -->
     <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
+    <!-- Black Dashboard CSS -->
+    <link href="/static/vendor/assets/css/black-dashboard.min.css" rel="stylesheet">
+    <link href="/static/vendor/assets/css/nucleo-icons.css" rel="stylesheet">
+
     <!-- Custom fonts for this template -->
     <link href="/static/css/font-awesome.min.css" rel="stylesheet">
 
@@ -24,31 +28,95 @@
 
 
     <style>
+        body {
+            background-color: #1e1e2f;
+            color: #ffffff;
+        }
 
-        <!--
-        -->
         #mainNav {
-            border-bottom: 1px solid #ecf0f1;
-            background: transparent;
+            background-color: #27293d !important;
+            border-bottom: 1px solid #9a68f2;
         }
 
-        #mainNav .navbar-brand {
-            padding: 10px 20px;
-            color: #343a40;
-        }
-
-        #mainNav .navbar-brand:focus, #mainNav .navbar-brand:hover {
-            color: #0085A1;
-        }
-
+        #mainNav .navbar-brand, 
         #mainNav .navbar-nav > li.nav-item > a {
-            padding: 10px 20px;
-            color: #343a40;
+            color: #ffffff !important;
         }
 
-        #mainNav .navbar-nav > li.nav-item > a:focus, #mainNav .navbar-nav > li.nav-item > a:hover {
-            color: #0085A1;
+        #mainNav .navbar-brand:hover,
+        #mainNav .navbar-nav > li.nav-item > a:hover {
+            color: #9a68f2 !important;
+        }
 
+        .detail-body {
+            background-color: #27293d;
+        }
+
+        .user-info {
+            background-color: #27293d;
+            border: 1px solid #9a68f2;
+            box-shadow: 0 4px 8px 0 rgba(154, 104, 242, 0.2);
+        }
+
+        .c-1 {
+            background-color: #2b3553;
+            color: #ffffff;
+        }
+
+        .btn-info {
+            background-color: #9a68f2 !important;
+            border-color: #9a68f2 !important;
+        }
+
+        .btn-info:hover {
+            background-color: #7b4fc9 !important;
+            border-color: #7b4fc9 !important;
+        }
+
+        .collection-line {
+            background-color: #27293d;
+            border: 1px solid #9a68f2;
+            box-shadow: 0 4px 8px 0 rgba(154, 104, 242, 0.2);
+        }
+
+        .collection-line-info .attribute-text {
+            color: #9a68f2;
+        }
+
+        .collection-line-info .info-text {
+            color: #ffffff;
+        }
+
+        .info-more a {
+            color: #9a68f2;
+        }
+
+        .info-more a:hover {
+            color: #7b4fc9;
+        }
+
+        .nav-tabs > li > a {
+            background-color: #2b3553;
+            color: #ffffff;
+            border-color: #9a68f2;
+        }
+
+        .nav-tabs > li > a:hover,
+        .nav-tabs > li > a:focus {
+            background-color: #9a68f2;
+            color: #ffffff;
+        }
+
+        .form-control {
+            background-color: #2b3553;
+            border: 1px solid #9a68f2;
+            color: #ffffff;
+        }
+
+        .form-control:focus {
+            background-color: #2b3553;
+            border-color: #9a68f2;
+            color: #ffffff;
         }
 
         header.masthead {

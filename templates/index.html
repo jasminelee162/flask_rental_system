@@ -18,6 +18,9 @@
     <link href="https://cdn.bootcss.com/jquery.bootstrapvalidator/0.5.3/css/bootstrapValidator.min.css"
           rel="stylesheet">
 
+    <!-- Black Dashboard CSS -->
+    <link href="/static/vendor/assets/css/black-dashboard.min.css" rel="stylesheet">
+    <link href="/static/vendor/assets/css/nucleo-icons.css" rel="stylesheet">
 
     <!-- Custom fonts for this template -->
     <link href="/static/css/font-awesome.min.css" rel="stylesheet">
@@ -26,32 +29,170 @@
     <link href="/static/css/clean-blog.min.css" rel="stylesheet">
 
     <style>
+        body {
+            background: linear-gradient(to right, rgba(30, 30, 47, 0.9), rgba(42, 42, 66, 0.9));
+            color: #ffffff;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
 
+        .navbar {
+            background-color: rgba(39, 41, 61, 0.95) !important;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-light .navbar-brand, 
+        .navbar-light .navbar-nav .nav-link {
+            color: #ffffff !important;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-light .navbar-brand:hover,
+        .navbar-light .navbar-nav .nav-link:hover {
+            color: #9a68f2 !important;
+            transform: translateY(-1px);
+        }
+
+        .container {
+            background-color: rgba(39, 41, 61, 0.8);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .card {
+            background-color: rgba(39, 41, 61, 0.9);
+            border: 1px solid rgba(154, 104, 242, 0.3);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(154, 104, 242, 0.2);
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #9a68f2, #7b4fc9);
+            border: none;
+            border-radius: 8px;
+            padding: 12px 25px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(154, 104, 242, 0.3);
+        }
+
+        .form-control {
+            background-color: rgba(43, 53, 83, 0.8);
+            border: 1px solid rgba(154, 104, 242, 0.3);
+            border-radius: 8px;
+            color: #ffffff;
+            padding: 12px 15px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            background-color: rgba(43, 53, 83, 0.9);
+            border-color: #9a68f2;
+            box-shadow: 0 0 15px rgba(154, 104, 242, 0.2);
+        }
+
+        .modal-content {
+            background-color: rgba(39, 41, 61, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 1px solid rgba(154, 104, 242, 0.3);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid rgba(154, 104, 242, 0.2);
+        }
+
+        .modal-footer {
+            border-top: 1px solid rgba(154, 104, 242, 0.2);
+        }
+
+        .course {
+            background-color: rgba(39, 41, 61, 0.8);
+            border-radius: 12px;
+            padding: 15px;
+            margin: 15px 0;
+            transition: all 0.3s ease;
+        }
+
+        .course:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .course-info {
+            font-size: 16px;
+            font-weight: 400;
+            margin: 10px 0;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .price {
+            color: #9a68f2;
+            font-weight: 500;
+            font-size: 18px;
+        }
+
+        .area-info {
+            background-color: rgba(39, 41, 61, 0.8);
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border: 1px solid rgba(154, 104, 242, 0.2);
+        }
+
+        .describe {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        .img-fluid {
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .img-fluid:hover {
+            transform: scale(1.02);
+        }
+
+        footer {
+            background-color: rgba(39, 41, 61, 0.95);
+            padding: 30px 0;
+            margin-top: 50px;
+        }
+
+        .text-muted {
+            color: rgba(255, 255, 255, 0.6) !important;
+        }
+
+        /* 修复z-index语法错误 */
+        .login_form {
+            margin-top: 150px;
+            z-index: 999;
+        }
 
         /*定位，数量*/
-        .area-info {
-            margin-left: 5px;
-            padding-left: 5px;
-            font-size: 16px;
-            padding-bottom: 10px;
-            border-bottom: #ecf0f1 1px solid;
+        .area-info, .collection-line {
+            border-bottom: 1px solid #9a68f2;
         }
 
         .info-line {
             margin: 10px 0 55px 0;
-        }
-
-        .course {
-            margin-top: 10px;
-            padding: 7px 5px 0 5px;
-            background: #fff;
-        }
-
-        .course-info {
-            height: 37px;
-            font-weight: 500;
-            color: #333;
-            font-size: 16px;
         }
 
         .course-info1 {
@@ -64,28 +205,13 @@
             line-height: 37px;
         }
 
-        .price {
-            color: #e74c3c;
-            font-size: 14px;
-        }
-
         .tj-header {
             margin: 30px 0 10px;
-        }
-
-        .describe {
-            font-size: 15px;
-            color: #bdc3c7;
         }
 
         /* login */
         .m-header {
             padding: 10px 16px 2px;
-        }
-
-        .login_form {
-            margin-top: 150px;
-            z-index：999;
         }
 
         .form-info {
@@ -452,6 +578,7 @@
 <script src="/static/js/clean-blog.min.js"></script>
 <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
 <script src="/static/js/echarts.min.js"></script>
+<script src="/static/js/dark-purple-theme.js"></script>
 
 
 <script>
