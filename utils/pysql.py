@@ -8,7 +8,7 @@
 from pymysql import connect
 
 USERNAME = 'root'
-PASSWORD = '123'
+PASSWORD = '123456'
 HOST = 'localhost'
 PORT = 3306
 DATABASE = 'beijing_house_data'
