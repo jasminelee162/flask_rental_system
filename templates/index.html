@@ -41,7 +41,7 @@
             box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
         }
 
-        .navbar-light .navbar-brand, 
+        .navbar-light .navbar-brand,
         .navbar-light .navbar-nav .nav-link {
             color: #ffffff !important;
             font-weight: 300;
@@ -555,6 +555,23 @@
     <hr>
 </div>
 
+<!-- 地图展示模块 -->
+<div class="map-container">
+    <div class="container">
+        <div class="row info-line">
+            <div class="col-lg-12 tj-header">
+                <h3>房源地图</h3>
+                <div class="describe">
+                    <span>直观查看房源地理位置分布</span>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div id="mapContainer"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Footer -->
 <footer>
     <div class="container">
@@ -578,150 +595,166 @@
 <script src="/static/js/clean-blog.min.js"></script>
 <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
 <script src="/static/js/echarts.min.js"></script>
-<script src="/static/js/dark-purple-theme.js"></script>
 
-
+<!-- 百度地图API -->
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=3.0&ak=nSxiPohfziUaCuONe4ViUP2N"></script>
 <script>
+// 添加地图加载状态检查
+var map = null;
 
-    // 户型搜索 跳到 地区搜索  或者 地区搜索重复点击
-    $(".chanle1").on('click', function () {
-        // 用于地区搜索重复点击的初始化
-        if ($('.chanle1').hasClass('active')) {
-            $(".chanle1").removeClass('active');
-            $("#txt").attr('name', '');
-            $('#txt').attr('placeholder', '')
+function initMap() {
+    try {
+        // 检查BMap是否成功加载
+        if (typeof BMap === 'undefined') {
+            console.error('百度地图脚本未成功加载');
+            document.getElementById('mapContainer').innerHTML = '地图加载失败，请检查网络连接';
+            return;
         }
-        // 用于 户型搜索跳到地区搜索 移除 户型搜索的样式
-        $(".chanle2").removeClass('active');
-        // 重新设置 选中字段和input标签的属性
-        $(".chanle1").addClass('active');
-        $("#txt").attr('name', 'addr');
-        $('#txt').attr('placeholder', '请输入区域、商圈或小区名开始找房');
-    });
 
-    // 地区搜索跳户型搜索  或者 户型搜索重复点击
-    $(".chanle2").on('click', function () {
-        // 用于户型搜索重复点击的初始化
-        if ($('.chanle2').hasClass('active')) {
-            $(".chanle2").removeClass('active');
-            $("#txt").attr('name', '');
-            $('#txt').attr('placeholder', '')
-        }
-        // 用于 地区搜索跳户型搜索 移除 地区搜索的样式
-        $(".chanle1").removeClass('active');
-        // 重新设置 选中字段和input标签的属性
-        $(".chanle2").addClass('active');
-        $("#txt").attr('name', 'rooms');
-        $('#txt').attr('placeholder', '请输入户型开始找房，例如:1室1厅');
-    });
+        // 创建地图实例
+        map = new BMap.Map("mapContainer");
+        
+        // 创建点坐标（默认北京市中心）
+        var point = new BMap.Point(116.404, 39.915);
+        
+        // 初始化地图，设置中心点坐标和地图级别
+        map.centerAndZoom(point, 12);
+        
+        // 开启鼠标滚轮缩放
+        map.enableScrollWheelZoom(true);
+        
+        // 添加地图控件
+        map.addControl(new BMap.NavigationControl());
+        map.addControl(new BMap.ScaleControl());
+        map.addControl(new BMap.OverviewMapControl());
+        map.addControl(new BMap.MapTypeControl());
 
-
-    // 输入框的书写逻辑
-    var oTxt = document.getElementById('txt');  // input输入框
-    var oBtn = document.getElementById('btn');  // 提交按钮
-    var oList = document.getElementById('list');// ul 搜索列表
-
-    // 设置锁， true表示将输入框锁住 false表示打开
-    var cpLock = false;
-
-    // 中文搜索：监听compositionstart事件，如果触发，就将输入框锁起来
-    $('#txt').on('compositionstart', function () {
-        cpLock = true;
-    });
-
-    // 中文搜索：监听compositionend事件，如果触发，将输入框打开
-    $('#txt').on('compositionend', function () {
-        cpLock = false;
-        var keyWord = oTxt.value;
-        var resultList = searchByIndexOf(keyWord);
-    });
-
-    // 英文搜索：监听input事件 用于处理字母搜索
-    $('#txt').on('input', function () {
-        if (!cpLock) {
-            var keyWord = oTxt.value;
-            var resultList = searchByIndexOf(keyWord);
-        }
-    });
-
-
-    // 搜索关键词
-    function searchByIndexOf(keyWord) {
-
-        // 这里的li标签 代表的 两个字段 地区搜索 一个 户型搜索
-        $(".my-nav-tab li").each(function (index, element) {
-            if ($(this).hasClass("active")) {
-                var info = $(this).text();
-                data = {"kw": keyWord, "info": info};
-                $.ajax({
-                    url: "/search/keyword/",
-                    type: 'post',
-                    dataType: 'json',
-                    data: data,
-                    success: function (data) {  // {code=0, info=[]}
-                        if (data['code'] == 0) {
-                            warning_str = '未找到关于' + keyWord + '的房屋信息！';
-                            alert(warning_str)
-                        }
-                        if (data['code'] == 1) {  // {code=1, info=[{t_name='字段的名字 例如：东城-xxx-xxxx'， num=108},{},{}]}
-                            list = data['info'];
-                            console.log('search', list);
-
-                            oList.innerHTML = '';
-                            var item = null;
-                            for (var i = 0; i < 9; i++) {
-                                item = document.createElement('li');
-                                item.setAttribute("class", "list-group-item li_style");
-                                item.setAttribute("title", list[i]['t_name']);
-                                li_text = list[i]['t_name'] + '<span class="badge float-right">大约有' + list[i]['num'] + '套房</span>';
-                                console.log(li_text);
-                                item.innerHTML = li_text;
-                                oList.appendChild(item);
-                                info_to_txt();
-
-                            }
-                            return list;
-                        }
-                    }
-                });
+        // 添加加载成功的提示
+        console.log('地图初始化成功');
+        
+        // 添加房源标记点
+        {% for house in house_new_list1 %}
+            try {
+                var marker = new BMap.Marker(new BMap.Point({{house.longitude|default(116.404)}}, {{house.latitude|default(39.915)}}));
+                var content = `
+                    <div class="map-info-window">
+                        <h4>{{house.title|default('未命名房源')}}</h4>
+                        <p>{{house.address|default('地址未知')}}</p>
+                        <p>{{house.rooms|default('未知户型')}} - {{house.area|default('0')}}平米</p>
+                        <p class="price">￥{{house.price|default('未知')}}</p>
+                        <a href="/house/{{house.id}}" class="btn btn-primary btn-sm">查看详情</a>
+                    </div>
+                `;
+                addClickHandler(content, marker);
+                map.addOverlay(marker);
+            } catch (e) {
+                console.error('添加标记点失败:', e);
             }
-        });
+        {% endfor %}
+
+    } catch (e) {
+        console.error('地图初始化失败:', e);
+        document.getElementById('mapContainer').innerHTML = '地图加载失败: ' + e.message;
     }
+}
 
-    // 点击提交按钮进行查询
-    // oBtn.addEventListener('click', function () {
-    //     var keyWord = oTxt.value;
-    //     var resultList = searchByIndexOf(keyWord);
-    //     console.log(resultList);
-    //
-    // }, false);
-    //
-    // // 回车查询
-    // oTxt.addEventListener('keydown', function (e) {
-    //     if (e.keyCode == 13) {
-    //         var keyWord = oTxt.value;
-    //         var resultList = searchByIndexOf(keyWord);
-    //     }
-    // }, false);
+// 确保在页面完全加载后再初始化地图
+document.addEventListener('DOMContentLoaded', function() {
+    // 添加加载状态提示
+    document.getElementById('mapContainer').innerHTML = '地图加载中...';
+    
+    // 设置超时检查
+    setTimeout(function() {
+        if (!map) {
+            document.getElementById('mapContainer').innerHTML = '地图加载超时，请刷新页面重试';
+        }
+    }, 5000);
 
-    // 点击检索项 将其 填入 搜索框
-    function info_to_txt() {
-        $('.li_style').on('click', function () {
-            // 实现了 重复点击的初始化
-            if ($(this).hasClass('active')) {
-                $(this).removeClass('active');
-            }
-            $(this).addClass('active');
-            t_name = $(this).attr('title');
-            $('#txt').val('');
-            $('#txt').val(t_name);
-            $('#list').empty()
-        });
-    }
-
-
+    initMap();
+});
 </script>
 
+<!-- 添加地图相关样式 -->
+<style>
+/* 地图容器样式 */
+.map-container {
+    background-color: rgba(39, 41, 61, 0.8);
+    padding: 20px 0;
+    margin: 20px 0;
+}
+
+#mapContainer {
+    width: 100%;
+    height: 500px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(39, 41, 61, 0.9);
+    color: white;
+    font-size: 16px;
+}
+
+/* 地图信息窗口样式 */
+.map-info-window {
+    padding: 10px;
+    max-width: 250px;
+}
+
+.map-info-window h4 {
+    margin: 0 0 10px 0;
+    color: #333;
+    font-size: 16px;
+}
+
+.map-info-window p {
+    margin: 5px 0;
+    color: #666;
+    font-size: 14px;
+}
+
+.map-info-window .price {
+    color: #9a68f2;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.map-info-window .btn {
+    margin-top: 10px;
+    background: linear-gradient(45deg, #9a68f2, #7b4fc9);
+    border: none;
+    color: white;
+    padding: 5px 15px;
+    transition: all 0.3s ease;
+}
+
+.map-info-window .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(154, 104, 242, 0.3);
+}
+
+/* 地图控件样式优化 */
+.BMap_stdMpCtrl {
+    margin: 20px !important;
+}
+
+.BMap_stdMpZoom {
+    background-color: rgba(39, 41, 61, 0.9) !important;
+    border-radius: 8px !important;
+    border: 1px solid rgba(154, 104, 242, 0.3) !important;
+}
+
+.BMap_stdMpZoom .BMap_button {
+    background-color: rgba(39, 41, 61, 0.9) !important;
+    color: white !important;
+}
+
+.BMap_stdMpZoom .BMap_button:hover {
+    background-color: rgba(154, 104, 242, 0.3) !important;
+}
+</style>
 
 </body>
 

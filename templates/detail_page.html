@@ -817,10 +817,10 @@
                                         <h4><i class="fa fa-chart-line"></i>{{ house.block }} 房价走势</h4>
                                         <div class="chart-subtitle">
                                             <i class="fa fa-info-circle"></i> AI智能预测房价走势
-                                        </div>
+                            </div>
                                     </div>
                                     <div class="chart-container">
-                                        <div id="f_line" class="echarts-tu">
+                                <div id="f_line" class="echarts-tu">
                                             <div class="chart-loading">
                                                 <i class="fa fa-spinner fa-spin"></i>
                                                 <div>加载中...</div>
@@ -837,8 +837,8 @@
                                         <h4><i class="fa fa-chart-pie"></i>{{ house.block }} 户型占比</h4>
                                         <div class="chart-subtitle">
                                             <i class="fa fa-home"></i> 了解户型稀缺度
-                                        </div>
-                                    </div>
+                                </div>
+                            </div>
                                     <div class="chart-container">
                                         <div id="pie" class="echarts-tu">
                                             <div class="chart-loading">
@@ -857,8 +857,8 @@
                                         <h4><i class="fa fa-building"></i>{{ house.block }} 房源分布</h4>
                                         <div class="chart-subtitle">
                                             <i class="fa fa-fire"></i> TOP20小区房源数量
-                                        </div>
-                                    </div>
+                                </div>
+                            </div>
                                     <div class="chart-container">
                                         <div id="scolumn_line" class="echarts-tu">
                                             <div class="chart-loading">
@@ -877,8 +877,8 @@
                                         <h4><i class="fa fa-chart-area"></i>{{ house.block }} 价格分析</h4>
                                         <div class="chart-subtitle">
                                             <i class="fa fa-tags"></i> 各户型价格走势
-                                        </div>
-                                    </div>
+                                </div>
+                            </div>
                                     <div class="chart-container">
                                         <div id="broken_line" class="echarts-tu">
                                             <div class="chart-loading">
@@ -889,6 +889,13 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <h6>当前房源</h6>
+                            <div class="price-tag mb-2" style="background: linear-gradient(45deg, #7c3aed, #9a68f2);">
+                                ￥{{ house.price }}/月
+                            </div>
+                            <small class="text-muted">较小区均价{{ price_status }}{{ price_diff }}元</small>
                         </div>
                     </div>
                 </div>
@@ -1142,10 +1149,10 @@
         });
 
         // 获取价格分析数据
-        $.ajax({
-            url: "/get/brokenlinedata/{{ house.block }}",
-            type: 'get',
-            dataType: 'json',
+$.ajax({
+    url: "/get/brokenlinedata/{{ house.block }}",
+    type: 'get',
+    dataType: 'json',
             success: function(response) {
                 console.log('价格分析数据:', response);
                 try {
@@ -1162,8 +1169,8 @@
             },
             error: function(xhr, status, error) {
                 handleChartError('broken_line', error);
-            }
-        });
+    }
+});
 
         // 点击收藏
         $("#btn-collection").on("click", function () {
