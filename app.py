@@ -7,6 +7,7 @@ from use import user_page
 
 from flask_bootstrap import Bootstrap
 app = Flask(__name__)
+app.secret_key = 'your_very_secret_key'
 
 app.config.from_object(Config)
 
