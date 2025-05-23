@@ -128,7 +128,7 @@ def detail(hid):
         # 第一种情况，有推荐的返回值，就代表有推荐房源，此时返回推荐房源给用户
         if result:
             print('-----使用推荐系统，获取推荐房源给用户-----')
-            for tuijian_hid, tuijian_num in result:
+            for tuijian_hid in result:
                 tuijian_house = House.query.get(int(tuijian_hid))
                 tuijian.append(tuijian_house)
 
