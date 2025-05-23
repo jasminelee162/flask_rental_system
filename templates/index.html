@@ -308,15 +308,21 @@
     }
 }
 
-/* 修复模态框无法点击的问题 */
-.modal {
-    z-index: 9999 !important; /* 确保模态框在最上层 */
-}
+        /* 修复模态框无法点击的问题 */
+        .modal {
+            z-index: 9999 !important; /* 确保模态框在最上层 */
+        }
 
-.modal-backdrop {
-    z-index: 9998 !important; /* 确保遮罩层在模态框下方 */
-}
+        .modal-backdrop {
+            z-index: 9998 !important; /* 确保遮罩层在模态框下方 */
+        }
 
+        .img-box{
+            width: 300px;
+            height: 200px;
+            object-fit: cover;
+            object-position: center;
+        }
 
     </style>
 
@@ -393,6 +399,9 @@
                         </form>
                     </div>
 
+
+
+
                 </div>
                 <div>
 
@@ -432,8 +441,10 @@
         {% for house in house_new_list1 %}
         <div class="col-lg-4">
             <div class="course">
-                <div><a href="/house/{{ house.id }}"><img class='img-fluid img-box' src="/static/img/house-bg1.jpg"
-                                                          alt=""></a></div>
+                <div><a href="/house/{{ house.id }}">
+                                <img class='img-fluid img-box' src="/static/img/{{ house.picture }}" alt="">
+                            </a>
+                            </div>
                 <div class="course-info">
                     <span>{{ house.address }}</span>
 
@@ -464,8 +475,10 @@
         {% for house in house_hot_list1 %}
         <div class="col-lg-3">
             <div class="course">
-                <div><a href="/house/81421"><img class='img-fluid img-box' src="/static/img/house-bg1.jpg"
-                                                 alt=""></a></div>
+                <div><a href="/house/{{ house.id }}">
+                                <img class='img-fluid img-box' src="/static/img/{{ house.picture }}" alt="">
+                            </a>
+                            </div>
                 <div class="course-info">
                     <span>{{ house.address }}</span>
                 </div>
@@ -615,6 +628,165 @@
 <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
 <script src="/static/js/echarts.min.js"></script>
 
+
+<!-- 搜索功能 -->
+<script>
+    // 户型搜索 跳到 地区搜索  或者 地区搜索重复点击
+    $(".chanle1").on('click', function () {
+        // 用于地区搜索重复点击的初始化
+        if ($('.chanle1').hasClass('active')) {
+            $(".chanle1").removeClass('active');
+            $("#txt").attr('name', '');
+            $('#txt').attr('placeholder', '')
+        }
+        // 用于 户型搜索跳到地区搜索 移除 户型搜索的样式
+        $(".chanle2").removeClass('active');
+        // 重新设置 选中字段和input标签的属性
+        $(".chanle1").addClass('active');
+        $("#txt").attr('name', 'addr');
+        $('#txt').attr('placeholder', '请输入区域、商圈或小区名开始找房');
+    });
+
+    // 地区搜索跳户型搜索  或者 户型搜索重复点击
+    $(".chanle2").on('click', function () {
+        // 用于户型搜索重复点击的初始化
+        if ($('.chanle2').hasClass('active')) {
+            $(".chanle2").removeClass('active');
+            $("#txt").attr('name', '');
+            $('#txt').attr('placeholder', '')
+        }
+        // 用于 地区搜索跳户型搜索 移除 地区搜索的样式
+        $(".chanle1").removeClass('active');
+        // 重新设置 选中字段和input标签的属性
+        $(".chanle2").addClass('active');
+        $("#txt").attr('name', 'rooms');
+        $('#txt').attr('placeholder', '请输入户型开始找房，例如:1室1厅');
+    });
+
+
+    // 输入框的书写逻辑
+    var oTxt = document.getElementById('txt');  // input输入框
+    var oBtn = document.getElementById('btn');  // 提交按钮
+    var oList = document.getElementById('list');// ul 搜索列表
+
+    // 设置锁， true表示将输入框锁住 false表示打开
+    var cpLock = false;
+
+    // 中文搜索：监听compositionstart事件，如果触发，就将输入框锁起来
+    $('#txt').on('compositionstart', function () {
+        cpLock = true;
+    });
+
+    // 中文搜索：监听compositionend事件，如果触发，将输入框打开
+    $('#txt').on('compositionend', function () {
+        cpLock = false;
+        var keyWord = oTxt.value;
+        // 如果输入框为空，则不显示自动补全内容
+        if (keyWord.trim() === "") {
+            oList.innerHTML = '';  // 清空自动补全列表
+            } else {
+            var resultList = searchByIndexOf(keyWord);
+        }
+    });
+
+    // 英文搜索：监听input事件 用于处理字母搜索
+    $('#txt').on('input', function () {
+        if (!cpLock) {
+            var keyWord = oTxt.value;
+            // 如果输入框为空，则不显示自动补全内容
+        if (keyWord.trim() === "") {
+            oList.innerHTML = '';  // 清空自动补全列表
+            } else {
+            var resultList = searchByIndexOf(keyWord);
+        }
+        }
+    });
+
+
+    // 搜索关键词
+    function searchByIndexOf(keyWord) {
+
+        // 这里的li标签 代表的 两个字段 地区搜索 一个 户型搜索
+        $(".my-nav-tab li").each(function (index, element) {
+            if ($(this).hasClass("active")) {
+                var info = $(this).text();
+                data = {"kw": keyWord, "info": info};
+                $.ajax({
+                    url: "/search/keyword/",
+                    type: 'post',
+                    dataType: 'json',
+                    data: data,
+                    success: function (data) {  // {code=0, info=[]}
+                        if (data['code'] == 0) {
+                            warning_str = '未找到关于' + keyWord + '的房屋信息！';
+                            alert(warning_str)
+                        }
+                        if (data['code'] == 1) {  // {code=1, info=[{t_name='字段的名字 例如：东城-xxx-xxxx'， num=108},{},{}]}
+                            list = data['info'];
+                            console.log('search', list);
+
+                            oList.innerHTML = '';
+                            var item = null;
+                            for (var i = 0; i < 9; i++) {
+                                item = document.createElement('li');
+                                item.setAttribute("class", "list-group-item li_style");
+                                item.setAttribute("title", list[i]['t_name']);
+                                li_text = list[i]['t_name'] + '<span class="badge float-right">大约有' + list[i]['num'] + '套房</span>';
+                                console.log(li_text);
+                                item.innerHTML = li_text;
+
+                                // 添加点击事件
+                                item.addEventListener('click', function() {
+                                    var searchType = $(".my-nav-tab li.active").text();
+                                    var searchValue = this.getAttribute('title');
+                                    if (searchType === '地区搜索') {
+                                        window.location.href = '/query?addr=' + encodeURIComponent(searchValue);
+                                    } else if (searchType === '户型搜索') {
+                                        window.location.href = '/search/rooms/' + encodeURIComponent(searchValue);
+                                    }
+                                });
+                                oList.appendChild(item);
+                                info_to_txt();
+                            }
+                            return list;
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    // 点击提交按钮进行查询
+    // oBtn.addEventListener('click', function () {
+    //     var keyWord = oTxt.value;
+    //     var resultList = searchByIndexOf(keyWord);
+    //     console.log(resultList);
+    //
+    // }, false);
+    //
+    // // 回车查询
+    // oTxt.addEventListener('keydown', function (e) {
+    //     if (e.keyCode == 13) {
+    //         var keyWord = oTxt.value;
+    //         var resultList = searchByIndexOf(keyWord);
+    //     }
+    // }, false);
+
+    // 点击检索项 将其 填入 搜索框
+    function info_to_txt() {
+        $('.li_style').on('click', function () {
+            // 实现了 重复点击的初始化
+            if ($(this).hasClass('active')) {
+                $(this).removeClass('active');
+            }
+            $(this).addClass('active');
+            t_name = $(this).attr('title');
+            $('#txt').val('');
+            $('#txt').val(t_name);
+            $('#list').empty()
+        });
+    }
+</script>
 <!-- 百度地图基础API -->
 <script type="text/javascript" src="https://api.map.baidu.com/api?v=3.0&ak=nSxiPohfziUaCuONe4ViUP2N"></script>
 <!-- 百度地图点聚合库 -->
@@ -622,6 +794,7 @@
 <script type="text/javascript" src="https://api.map.baidu.com/library/MarkerClusterer/1.2/src/MarkerClusterer_min.js"></script>
 <!-- 地图初始化脚本 -->
 <script>
+
 var map = null;
 var markers = []; // 存储所有标记点
 var markerClusterer = null; // 点聚合管理器
