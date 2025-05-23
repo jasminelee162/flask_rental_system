@@ -8,7 +8,7 @@
 from pymysql import connect
 
 USERNAME = 'root'
-PASSWORD = '123456'
+PASSWORD = 'XXXXyuan17'
 HOST = 'localhost'
 PORT = 3306
 DATABASE = 'beijing_house_data'
@@ -17,7 +17,7 @@ DATABASE = 'beijing_house_data'
 def query_data(sql_str):
     try:
         # 2. 使用connect函数 获取connection对象
-        conn = connect(user=USERNAME, password=PASSWORD, host=HOST, port=PORT, database=DATABASE)
+        conn = connect(user=USERNAME, password=PASSWORD, host=HOST, port=PORT, database=DATABASE,auth_plugin='caching_sha2_password')
 
         # 3. 使用connection对象 获取游标cursor
         cur = conn.cursor()
