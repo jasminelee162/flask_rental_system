@@ -244,6 +244,13 @@
             background-color: rgba(154, 104, 242, 0.2);
             color: #9a68f2;
         }
+
+        .img-box{
+            width: 300px;
+            height: 200px;
+            object-fit: cover;
+            object-position: center;
+        }
     </style>
 
 </head>
@@ -328,7 +335,7 @@
 
                     <div class="col-lg-5 col-md-5 mx-auto">
                         <div><a href="/house/{{ house.id }}"><img class='img-fluid img-box'
-                                                                  src="/static/img/house-bg1.jpg" alt=""></a></div>
+                                                                  src="/static/img/{{ house.picture }}" alt=""></a></div>
                     </div>
                     <div class="col-lg-5 col-md-5 mx-auto">
                         <div class="collection-line-info">

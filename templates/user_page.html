@@ -29,14 +29,17 @@
 
     <style>
         body {
-            background-color: #1e1e2f;
-            color: #ffffff;
-        }
+            background: #f0f0f0;
+            color: #333; /* 文字颜色改为深色 */
+            font-family: "Microsoft YaHei", sans-serif;
+    }
 
-        #mainNav {
-            background-color: #27293d !important;
-            border-bottom: 1px solid #9a68f2;
-        }
+    #mainNav {
+        background-color: rgba(39, 41, 61, 0.95) !important;
+        backdrop-filter: blur(10px);
+        z-index: 1000;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    }
 
         #mainNav .navbar-brand, 
         #mainNav .navbar-nav > li.nav-item > a {
@@ -48,44 +51,73 @@
             color: #9a68f2 !important;
         }
 
-        .detail-body {
-            background-color: #27293d;
-        }
+    .detail-body {
+        background-color: rgba(39, 41, 61, 0.8);
+        border-radius: 15px;
+        padding: 25px;
+        margin-top: 20px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
 
-        .user-info {
-            background-color: #27293d;
-            border: 1px solid #9a68f2;
-            box-shadow: 0 4px 8px 0 rgba(154, 104, 242, 0.2);
-        }
+    .user-info {
+        background-color: rgba(39, 41, 61, 0.9);
+        border-radius: 12px;
+        padding: 20px;
+        margin: 15px 0;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    .user-info:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(154, 104, 242, 0.2);
+    }
+         .c-1 {
+        background-color: rgba(43, 53, 83, 0.9);
+        border-radius: 8px;
+        padding: 15px;
+        margin: 10px 0;
+    }
 
-        .c-1 {
-            background-color: #2b3553;
-            color: #ffffff;
-        }
+    .btn-info {
+        background: linear-gradient(45deg, #6a5acd, #9370db) !important;
+        border: none !important;
+        border-radius: 8px;
+        padding: 8px 20px;
+        transition: all 0.3s ease;
+    }
 
-        .btn-info {
-            background-color: #9a68f2 !important;
-            border-color: #9a68f2 !important;
-        }
+    .btn-info:hover {
+        background: linear-gradient(45deg, #9370db, #6a5acd) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(106, 90, 205, 0.4);
+    }
 
-        .btn-info:hover {
-            background-color: #7b4fc9 !important;
-            border-color: #7b4fc9 !important;
-        }
+    .collection-line {
+        background-color: rgba(39, 41, 61, 0.9);
+        border-radius: 12px;
+        padding: 20px;
+        margin: 15px 0;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
 
-        .collection-line {
-            background-color: #27293d;
-            border: 1px solid #9a68f2;
-            box-shadow: 0 4px 8px 0 rgba(154, 104, 242, 0.2);
-        }
+    .collection-line:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(154, 104, 242, 0.2);
+    }
 
-        .collection-line-info .attribute-text {
-            color: #9a68f2;
-        }
+    .attribute-text {
+        color: rgba(154, 104, 242, 0.8);
+        font-size: 16px;
+        font-weight: 500;
+    }
 
-        .collection-line-info .info-text {
-            color: #ffffff;
-        }
+    .info-text {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 16px;
+        font-weight: 400;
+    }
 
         .info-more a {
             color: #9a68f2;
@@ -186,11 +218,18 @@
             width: 350px;
         }
 
-        .course {
-            margin-top: 10px;
-            padding: 7px 5px 0 5px;
-            background: #fff;
-        }
+    .course {
+        background-color: rgba(39, 41, 61, 0.9);
+        border-radius: 8px;
+        padding: 15px;
+        margin: 10px 0;
+        transition: all 0.3s ease;
+    }
+
+    .course:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(154, 104, 242, 0.2);
+    }
 
         .course-info {
             height: 30px;
@@ -209,11 +248,30 @@
             line-height: 37px;
         }
 
-        .price {
-            color: #e74c3c;
-            font-size: 14px;
-        }
+    .price {
+        color: #9a68f2;
+        font-size: 16px;
+        font-weight: 500;
+    }
+    .img-fluid {
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
 
+    .img-fluid:hover {
+        transform: scale(1.02);
+    }
+
+    .del-btn span {
+        color: rgba(255, 160, 122, 0.8);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .del-btn span:hover {
+        color: rgba(255, 160, 122, 1);
+        transform: translateY(-1px);
+    }
         /* change-chanle */
         .nav-tabs > li > a {
             position: relative;
@@ -243,13 +301,15 @@
             height: 650px;
         }
 
-        .collection-line {
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-            padding: 10px;
-            margin: 20px 20px 20px 5px;
-            background: #fff;
-            border-bottom: #ecf0f1 1px solid;
-        }
+
+.collection-line {
+    background-color: rgba(39, 41, 61, 0.9);
+    border-radius: 8px;
+    padding: 15px;
+    margin: 10px 0;
+    transition: all 0.3s ease;
+}
+
 
         .collection-line-info {
             font-size: 14px;
@@ -261,17 +321,17 @@
 
         }
 
-        .collection-line-info .attribute-text {
-            font-weight: 400;
-            color: #57606f;
-            letter-spacing: 0.2px;
-        }
 
-        .collection-line-info .info-text {
-            font-weight: 400;
-            color: #333;
-            letter-spacing: 0.2px;
-        }
+.collection-line-info .attribute-text {
+    color: rgba(154, 104, 242, 0.9);
+    font-weight: 500;
+}
+
+.collection-line-info .info-text {
+    color: rgba(255, 255, 255, 0.95);
+    font-weight: 400;
+}
+
 
         /* more */
         .info-more {
@@ -309,10 +369,14 @@
         }
 
         /* browse-record */
-        .browse-record {
-            padding-bottom: 15px;
-            /*box-shadow: -5px 0 10px -2px rgba(236, 236, 236, 0.86);*/
-        }
+    .browse-record {
+        background-color: rgba(39, 41, 61, 0.8);
+        border-radius: 12px;
+        padding: 20px;
+        margin: 15px 0;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
 
         .browse-record-first-div {
             padding-bottom: 10px;
@@ -341,33 +405,31 @@
             position: relative;
         }
 
-        #collect .collect_off {
-            position: absolute;
-            top: 5px;
-            right: 25px;
-            font-size: 12px;
-            font-weight: 200;
+    .collect_off {
+        color: rgba(255, 160, 122, 0.8);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .collect_off:hover {
+        color: rgba(255, 160, 122, 1);
+        transform: translateY(-1px);
+    }
+
+    .img-box{
+            width: 300px;
+            height: 200px;
+            object-fit: cover;
+            object-position: center;
         }
 
-        #collect .collect_off:hover {
-            cursor: pointer;
-            color: red;
+    .img-box1{
+            width: 300px;
+            height: 100px;
+            object-fit: cover;
+            object-position: center;
         }
 
-        .del-btn {
-            text-align: right;
-            font-size: 13px;
-            font-weight: 300;
-        }
-
-        #del {
-            margin-right: 10px;
-        }
-
-        #del:hover {
-            cursor: pointer;
-            color: red;
-        }
 
     </style>
 
@@ -488,10 +550,9 @@
                     <div class="row collection-line" id="collect">
                         <span class="collect_off" id="{{ house.id }}">取消收藏</span>
                         <div class="col-lg-4 col-md-4 mx-auto">
-                            <div>
-                                <a href="/house/{{ house.id }}">
-                                    <img class='img-fluid img-box' src="/static/img/house-bg1.jpg" alt="">
-                                </a>
+                            <div><a href="/house/{{ house.id }}">
+                                <img class='img-fluid img-box' src="/static/img/{{ house.picture }}" alt="">
+                            </a>
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6 mx-auto">
@@ -556,9 +617,10 @@
                         {% for house in seen_house_list %}
                         <div class="col-lg-10 col-md-10 mx-auto browse-record-first-div">
                             <div class="course">
-                                <div><a href="/house/{{ house.id }}"><img class='img-fluid img-box'
-                                                                          src="/static/img/house-bg1.jpg" alt=""></a>
-                                </div>
+                                <div><a href="/house/{{ house.id }}">
+                                <img class='img-fluid img-box1' src="/static/img/{{ house.picture }}" alt="">
+                            </a>
+                            </div>
                                 <div class="course-info">
                                     <span class="glyphicon glyphicon-map-marker"></span>
                                     <span>{{ house.address }}</span>
