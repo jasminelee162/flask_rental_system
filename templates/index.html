@@ -28,41 +28,14 @@
     <!-- Custom styles for this template -->
     <link href="/static/css/clean-blog.min.css" rel="stylesheet">
 
-    <style>
+   <style>
         body {
             background: linear-gradient(to right, rgba(30, 30, 47, 0.9), rgba(42, 42, 66, 0.9));
             color: #ffffff;
             font-family: "Microsoft YaHei", sans-serif;
         }
 
-        .navbar {
-            background-color: rgba(39, 41, 61, 0.95) !important;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-        }
 
-        .navbar-light .navbar-brand,
-        .navbar-light .navbar-nav .nav-link {
-            color: #ffffff !important;
-            font-weight: 300;
-            letter-spacing: 0.5px;
-            transition: all 0.3s ease;
-        }
-
-        .navbar-light .navbar-brand:hover,
-        .navbar-light .navbar-nav .nav-link:hover {
-            color: #9a68f2 !important;
-            transform: translateY(-1px);
-        }
-
-        .container {
-            background-color: rgba(39, 41, 61, 0.8);
-            border-radius: 15px;
-            padding: 25px;
-            margin-top: 20px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
 
         .card {
             background-color: rgba(39, 41, 61, 0.9);
@@ -86,40 +59,15 @@
             transition: all 0.3s ease;
         }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 15px rgba(154, 104, 242, 0.3);
-        }
 
-        .form-control {
-            background-color: rgba(43, 53, 83, 0.8);
-            border: 1px solid rgba(154, 104, 242, 0.3);
-            border-radius: 8px;
-            color: #ffffff;
-            padding: 12px 15px;
-            transition: all 0.3s ease;
-        }
 
-        .form-control:focus {
-            background-color: rgba(43, 53, 83, 0.9);
-            border-color: #9a68f2;
-            box-shadow: 0 0 15px rgba(154, 104, 242, 0.2);
-        }
+.modal {
+    z-index: 9999 !important; /* 确保模态框在最上层 */
+}
 
-        .modal-content {
-            background-color: rgba(39, 41, 61, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            border: 1px solid rgba(154, 104, 242, 0.3);
-        }
-
-        .modal-header {
-            border-bottom: 1px solid rgba(154, 104, 242, 0.2);
-        }
-
-        .modal-footer {
-            border-top: 1px solid rgba(154, 104, 242, 0.2);
-        }
+.modal-backdrop {
+    z-index: 9998 !important; /* 确保遮罩层在模态框下方 */
+}
 
         .course {
             background-color: rgba(39, 41, 61, 0.8);
@@ -180,20 +128,7 @@
             color: rgba(255, 255, 255, 0.6) !important;
         }
 
-        /* 修复z-index语法错误 */
-        .login_form {
-            margin-top: 150px;
-            z-index: 999;
-        }
 
-        /*定位，数量*/
-        .area-info, .collection-line {
-            border-bottom: 1px solid #9a68f2;
-        }
-
-        .info-line {
-            margin: 10px 0 55px 0;
-        }
 
         .course-info1 {
             height: 20px;
@@ -209,102 +144,8 @@
             margin: 30px 0 10px;
         }
 
-        /* login */
-        .m-header {
-            padding: 10px 16px 2px;
-        }
 
-        .form-info {
-            font-size: 18px;
-            color: #2c3e50;
-        }
 
-        .switch-info {
-            font-size: 14px;
-            color: #2c3e50;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border-radius: 2px;
-        }
-
-        /* search */
-        .my-nav-tab {
-            border-bottom: none;
-        }
-
-        .chanle1, .chanle2 {
-            background-color: #ced4da;
-            font-size: 14px;
-            line-height: 30px;
-            color: #495057;
-            padding: 0 10px;
-            border-radius: 3px 3px 0 0;
-            font-family: "Hiragino Sans GB", "Microsoft Yahei UI", "Microsoft Yahei", 微软雅黑, "Segoe UI", Tahoma, 宋体b8b体, SimSun, sans-serif;
-        }
-
-        .chanle1 {
-            margin-right: 1px;
-        }
-
-        .chanle2 {
-            margin-left: 1px;
-        }
-
-        .chanle1.active, .chanle2.active {
-            background-color: #5bc0de;
-            color: #fff;
-            position: relative;
-        }
-
-        .my-btn {
-            padding: 9px 20px !important;
-            line-height: 18px;
-            border-radius: 0 !important;
-        }
-
-        #txt {
-            width: 658px !important;
-            border-radius: 0 !important;
-        }
-
-        #txt:focus {
-            box-shadow: none;
-        }
-
-        input::-webkit-input-placeholder {
-            /* placeholder字体大小  */
-            font-size: 14px;
-            font-family: "Hiragino Sans GB", "Microsoft Yahei UI", "Microsoft Yahei", 微软雅黑, "Segoe UI", Tahoma, 宋体b8b体, SimSun, sans-serif;
-
-        }
-
-        #my-form {
-            z-index: 999;
-            position: absolute;
-        }
-
-        .li_style {
-            z-index: 999;
-            color: #495057;
-            font-size: 14px;
-            font-family: "Hiragino Sans GB", "Microsoft Yahei UI", "Microsoft Yahei", 微软雅黑, "Segoe UI", Tahoma, 宋体b8b体, SimSun, sans-serif;
-            text-align: left;
-            width: 658px;
-            padding: 8px 14px;
-        }
-
-        .chart {
-            height: 340px;
-        }
-
-        .chart-describion {
-            font-size: 15px;
-            color: #333;
-            text-align: center
-
-        }
 
     </style>
 
@@ -795,7 +636,115 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <!-- 添加新的地图相关样式 -->
+<!-- 添加新的地图相关样式 -->
+<style>
+/* 搜索框样式 */
+.map-search-box {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
 
+.map-search-box input {
+    padding: 8px;
+    border: 1px solid #9a68f2;
+    border-radius: 4px;
+    margin-right: 5px;
+    width: 200px;
+}
+
+.map-search-box button {
+    padding: 8px 15px;
+    background: #9a68f2;
+    border: none;
+    border-radius: 4px;
+    color: white;
+}
+
+/* 地图容器样式 */
+.map-container {
+    background-color: rgba(39, 41, 61, 0.8);
+    padding: 20px 0;
+    margin: 20px 0;
+}
+
+#mapContainer {
+    width: 100%;
+    height: 500px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(39, 41, 61, 0.9);
+    color: white;
+    font-size: 16px;
+}
+
+/* 地图信息窗口样式 */
+.map-info-window {
+    padding: 10px;
+    max-width: 250px;
+}
+
+.map-info-window h4 {
+    margin: 0 0 10px 0;
+    color: #333;
+    font-size: 16px;
+}
+
+.map-info-window p {
+    margin: 5px 0;
+    color: #666;
+    font-size: 14px;
+}
+
+.map-info-window .price {
+    color: #9a68f2;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.map-info-window .btn {
+    margin-top: 10px;
+    background: linear-gradient(45deg, #9a68f2, #7b4fc9);
+    border: none;
+    color: white;
+    padding: 5px 15px;
+    transition: all 0.3s ease;
+}
+
+.map-info-window .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(154, 104, 242, 0.3);
+}
+
+/* 地图控件样式优化 */
+.BMap_stdMpCtrl {
+    margin: 20px !important;
+}
+
+.BMap_stdMpZoom {
+    background-color: rgba(39, 41, 61, 0.9) !important;
+    border-radius: 8px !important;
+    border: 1px solid rgba(154, 104, 242, 0.3) !important;
+}
+
+.BMap_stdMpZoom .BMap_button {
+    background-color: rgba(39, 41, 61, 0.9) !important;
+    color: white !important;
+}
+
+.BMap_stdMpZoom .BMap_button:hover {
+    background-color: rgba(154, 104, 242, 0.3) !important;
+}
+</style>
 </body>
 
 </html>
