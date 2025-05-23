@@ -125,9 +125,7 @@
         .text-muted {
             color: rgba(255, 255, 255, 0.6) !important;
         }
-
-
-
+        
         .course-info1 {
             height: 20px;
             font-weight: 300;
@@ -171,6 +169,16 @@
     padding: 30px;
 }
 
+/* 搜索框样式 */
+#txt {
+        width: 600px; /* 增加搜索框宽度 */
+        background: rgba(43, 53, 83, 0.9);
+        border: 1px solid rgba(154, 104, 242, 0.3);
+        border-radius: 8px;
+        color: #fff;
+        padding: 14px 18px;
+        transition: all 0.3s ease;
+    }
 .form-group {
     margin-bottom: 25px;
     position: relative;
@@ -205,6 +213,90 @@
     font-size: 14px;
 }
 
+/* 搜索结果容器 */
+#list.list-group {
+    position: relative;
+    width: 100%;
+    max-height: 400px;
+    overflow-y: auto;
+    margin: 10px 0 ;
+    margin-top: -5px;
+    margin-bottom: -100px;
+    border: 1px solid rgba(154, 104, 242, 0.3);
+    border-radius: 8px;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.08);
+    background: rgba(39, 41, 61, 0.95);
+}
+
+/* 列表项基础样式 */
+#list .list-group-item.li_style {
+    padding: 14px 16px;
+    border-color: #f5f5f5;
+    transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* 列表项悬停效果 */
+#list .list-group-item.li_style:hover {
+    background-color: rgba(154, 104, 242, 0.1);
+    border-left: 3px solid #9a68f2;
+    padding-left: 13px; /* 保持文字对齐 */
+}
+
+/* 地址文字样式 */
+#list .list-group-item.li_style {
+    color: #333;
+    font-size: 15px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-grow: 1;
+    padding-right: 10px;
+}
+
+/* 徽章样式改造 */
+#list .list-group-item.li_style .badge.float-right {
+    background-color: transparent;
+    color: #666;
+    font-size: 13px;
+    font-weight: normal;
+    padding: 4px 8px;
+    border-radius: 10px;
+    border: 1px solid rgba(154, 104, 242, 0.3);
+    transition: all 0.25s;
+}
+
+/* 悬停时徽章效果 */
+#list .list-group-item.li_style:hover .badge.float-right {
+    background-color: #9a68f2;
+    color: white;
+    border-color: #9a68f2;
+}
+
+/* 列表项分隔线 */
+#list .list-group-item.li_style + .list-group-item.li_style {
+    border-top-width: 1px;
+}
+
+/* 第一个和最后一个项目的圆角 */
+#list .list-group-item.li_style:first-child {
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+}
+#list .list-group-item.li_style:last-child {
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+}
+
+
+
+    /* 按钮样式 */
 .btn-group {
     display: flex;
     justify-content: space-between;
@@ -718,8 +810,13 @@
                     data: data,
                     success: function (data) {  // {code=0, info=[]}
                         if (data['code'] == 0) {
-                            warning_str = '未找到关于' + keyWord + '的房屋信息！';
-                            alert(warning_str)
+                            resultsContainer.html(`
+                            <div class="no-results">
+                                <i class="fas fa-search-minus"></i>
+                                <p>未找到关于【${keyWord}】的${searchType}信息</p>
+                            </div>
+                        `);
+                        return;
                         }
                         if (data['code'] == 1) {  // {code=1, info=[{t_name='字段的名字 例如：东城-xxx-xxxx'， num=108},{},{}]}
                             list = data['info'];
