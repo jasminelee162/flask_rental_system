@@ -35,8 +35,6 @@
             font-family: "Microsoft YaHei", sans-serif;
         }
 
-
-
         .card {
             background-color: rgba(39, 41, 61, 0.9);
             border: 1px solid rgba(154, 104, 242, 0.3);
@@ -144,7 +142,180 @@
             margin: 30px 0 10px;
         }
 
+/* 登录弹窗样式优化 */
+.modal-content {
+    background: rgba(39, 41, 61, 0.98);
+    border: 1px solid rgba(154, 104, 242, 0.4);
+    border-radius: 20px;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
 
+.modal-header {
+    border-bottom: 1px solid rgba(154, 104, 242, 0.3);
+    padding: 25px;
+    background: rgba(39, 41, 61, 0.95);
+}
+
+.modal-title {
+    color: #9a68f2;
+    font-size: 26px;
+    font-weight: 600;
+    text-align: center;
+    margin: 0;
+    letter-spacing: 0.5px;
+}
+
+.modal-body {
+    padding: 30px;
+}
+
+.form-group {
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.form-group label {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 15px;
+    margin-bottom: 10px;
+    display: block;
+    font-weight: 400;
+}
+
+.form-control {
+    background: rgba(43, 53, 83, 0.9);
+    border: 1px solid rgba(154, 104, 242, 0.3);
+    border-radius: 10px;
+    color: #fff;
+    padding: 14px 18px;
+    transition: all 0.3s ease;
+    font-size: 15px;
+}
+
+.form-control:focus {
+    background: rgba(43, 53, 83, 0.95);
+    border-color: #9a68f2;
+    box-shadow: 0 0 20px rgba(154, 104, 242, 0.3);
+}
+
+.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 14px;
+}
+
+.btn-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, #6a5acd, #9370db);
+    border: none;
+    border-radius: 10px;
+    padding: 14px 30px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    flex: 1;
+    margin-right: 10px;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(45deg, #9370db, #6a5acd);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(106, 90, 205, 0.4);
+}
+
+.btn-danger {
+    background: rgba(255, 160, 122, 0.9);
+    border: none;
+    border-radius: 10px;
+    padding: 14px 30px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    flex: 1;
+    margin-left: 10px;
+    color: #fff;
+}
+
+.btn-danger:hover {
+    background: rgba(255, 160, 122, 1);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(255, 160, 122, 0.4);
+}
+
+/* 修改关闭按钮颜色 */
+.close {
+    color: rgba(255, 160, 122, 0.8);
+    text-shadow: none;
+    opacity: 1;
+    transition: color 0.3s ease;
+}
+
+.close:hover {
+    color: rgba(255, 160, 122, 1);
+}
+
+.switch-info {
+    color: rgba(154, 104, 242, 0.8);
+    font-size: 14px;
+    text-align: center;
+    display: block;
+    margin-top: 25px;
+    transition: color 0.3s ease;
+    padding: 12px;
+    border-radius: 8px;
+}
+
+.switch-info:hover {
+    color: #9a68f2;
+    text-decoration: none;
+    background: rgba(154, 104, 242, 0.1);
+}
+
+/* 输入框图标 */
+.input-icon {
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(154, 104, 242, 0.6);
+    font-size: 16px;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .modal-content {
+        margin: 20px;
+    }
+
+    .modal-body {
+        padding: 20px;
+    }
+
+    .btn-group {
+        flex-direction: column;
+    }
+
+    .btn-primary, .btn-danger {
+        margin: 5px 0;
+        width: 100%;
+    }
+}
+
+/* 修复模态框无法点击的问题 */
+.modal {
+    z-index: 9999 !important; /* 确保模态框在最上层 */
+}
+
+.modal-backdrop {
+    z-index: 9998 !important; /* 确保遮罩层在模态框下方 */
+}
 
 
     </style>
@@ -379,13 +550,13 @@
                                     <input class="form-control" name="password" type="password" placeholder="">
                                 </div>
                                 <div class="form-group">
-                                        <label class="form-info">验证码</label>
-                                        <div style="display: flex; align-items: center;">
+                                    <label class="form-info">验证码</label>
+                                    <div style="display: flex; align-items: center;">
                                         <input class="form-control" name="captcha" type="text" style="width: 60%;">
                                         <img src="/captcha" id="captcha-img" style="cursor: pointer; margin-left: 10px; height: 38px;" onclick="this.src='/captcha?'+Math.random()">
                                     </div>
                                 </div>
-                                <div class="text-right">
+                                <div class="btn-group">
                                     <button class="btn btn-primary" id='login-btn'>登录</button>
                                     <button class="btn btn-danger" data-dismiss="modal">取消</button>
                                 </div>
