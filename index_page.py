@@ -10,6 +10,10 @@ from sqlalchemy import func
 index_page = Blueprint('index_page', __name__)
 
 @index_page.route('/')
+def welcome():
+    return render_template('welcome.html')
+
+@index_page.route('/user')
 def index():
     # 获取全部房源数量功能
     house_total_num = House.query.count()
