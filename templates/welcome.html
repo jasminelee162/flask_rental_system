@@ -112,7 +112,8 @@
 
         <!-- 底部按钮 -->
         <div class="button-group">
-            <a href="/???" class="btn btn-admin">管理员模式</a> //建议叫admin
+<!--            <a href="/???" class="btn btn-admin">管理员模式</a> //建议叫admin-->
+            <a href="{{ url_for('admin_page.dashboard') }}" class="btn btn-admin">管理员模式</a>
             <a href="/???" class="btn btn-business">商家模式</a>//建议叫business
             <a href="/user" class="btn btn-user">用户模式</a>
         </div>
