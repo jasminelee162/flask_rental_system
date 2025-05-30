@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>管理员后台</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body>
+<div class="admin-container">
+    <aside class="sidebar">
+        <h2>后台管理</h2>
+        <ul>
+            <li><a href="{{ url_for('admin_page.dashboard') }}">统计信息</a></li>
+            <li><a href="{{ url_for('admin_page.properties') }}">房屋管理</a></li>
+            <li><a href="{{ url_for('admin_page.messages') }}">消息</a></li>
+        </ul>
+    </aside>
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+</div>
+</body>
+</html>

@@ -209,25 +209,35 @@
 
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/">首页</a>
+                    <a class="nav-link" href="/user">首页</a>
                 </li>
                 <li class="nav-item" id="user">
-                    {% if request.cookies.get('name') %}
-                    <!--处于登录状态-->
-                    <!--用户名、退出登录-->
-                    <a id='u_name' class="nav-link" href="/user/{{ request.cookies.get('name') }}">{{
-                        request.cookies.get('name') }}</a>
-                    {% else %}
-                    <!--没有处于登录装填下，才显示登录按钮-->
-                    <a class="nav-link" data-toggle="modal" data-target="#login" href="">登陆</a>
-                    {% endif %}
-                </li>
-
                 {% if request.cookies.get('name') %}
-                <li class="nav-item">
-                    <a class="nav-link" id="logout" href="">退出登录</a>
-                </li>
+                <!-- 登录状态：显示用户名 -->
+                <a id="u_name" class="nav-link" href="/user/{{ request.cookies.get('name') }}">
+                    {{ request.cookies.get('name') }}
+                </a>
+                {% else %}
+                <!-- 未登录状态：显示登录按钮 -->
+                <a class="nav-link" data-toggle="modal" data-target="#login" href="">登陆</a>
                 {% endif %}
+            </li>
+
+            {% if request.cookies.get('name') %}
+            <!-- 登录状态：消息图标 -->
+            <li class="nav-item">
+                <a class="nav-link" id="message-icon" href="/messages" title="消息中心">
+                    <i class="fa fa-envelope"></i>
+                    <span id="unread-count" class="badge badge-danger" style="display: none;">0</span>
+                </a>
+            </li>
+
+            <!-- 登录状态：退出登录按钮 -->
+            <li class="nav-item">
+                <a class="nav-link" id="logout" href="/logout">退出登录</a>
+            </li>
+            {% endif %}
+
             </ul>
         </div>
     </div>

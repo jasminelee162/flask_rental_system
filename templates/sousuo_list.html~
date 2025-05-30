@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh">
-<!--list.html-->
+<!--sousuo_list.html-->
 <head>
 
     <meta charset="utf-8">
@@ -31,32 +31,6 @@
     <!-- Custom page for this template -->
     <link href="/static/css/zxf_page.css" rel="stylesheet">
     <style>
-        body {
-            background: linear-gradient(to right, rgba(30, 30, 47, 0.9), rgba(42, 42, 66, 0.9));
-            color: #ffffff;
-            font-family: "Microsoft YaHei", sans-serif;
-        }
-
-        #mainNav {
-            background-color: rgba(39, 41, 61, 0.95) !important;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .navbar-light .navbar-brand, 
-        .navbar-light .navbar-nav .nav-link {
-            color: #ffffff !important;
-            font-weight: 300;
-            letter-spacing: 0.5px;
-            transition: all 0.3s ease;
-        }
-
-        .navbar-light .navbar-brand:hover,
-        .navbar-light .navbar-nav .nav-link:hover {
-            color: #9a68f2 !important;
-            transform: translateY(-1px);
-        }
-
         .area-info {
             margin-left: 5px;
             padding-left: 5px;
@@ -108,83 +82,89 @@
 
         /* chanle */
 
-        .collection-line {
-            background-color: rgba(39, 41, 61, 0.8);
-            border: 1px solid rgba(154, 104, 242, 0.3);
-            border-radius: 12px;
-            padding: 20px;
-            margin: 15px 0;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-        }
+.collection-line {
+    padding: 15px;
+    margin: 20px 0;
+    background: rgba(39, 41, 61, 0.8);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
 
-        .collection-line:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-        }
+.collection-line:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(154, 104, 242, 0.2);
+}
 
-        .collection-line-info {
-            font-size: 14px;
-            letter-spacing: 0.5px;
-        }
+.collection-line-info {
+    font-size: 14px;
+}
 
-        .collection-line-info .title a {
-            color: #9a68f2;
-            font-size: 18px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
+.collection-line-info .title {
+    margin-bottom: 8px;
+}
 
-        .collection-line-info .title a:hover {
-            color: #7b4fc9;
-            text-decoration: none;
-        }
+.collection-line-info .title a {
+    font-size: 20px;
+    font-weight: 500;
+    color: #9a68f2;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
 
-        .collection-line-info .attribute-text {
-            color: rgba(154, 104, 242, 0.8);
-            font-weight: 300;
-        }
+.collection-line-info .title a:hover {
+    color: #7b4fc9;
+}
 
-        .collection-line-info .info-text {
-            color: rgba(255, 255, 255, 0.9);
-            font-weight: 400;
-        }
+.collection-line-info div {
+    height: 30px;
+}
+
+.collection-line-info .attribute-text {
+    font-weight: 400;
+    color: rgba(154, 104, 242, 0.8);
+}
+
+.collection-line-info .info-text {
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+}
+
 
         /* more */
         .info-more {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-        }
-
-        .info-more .price {
-            color: #9a68f2;
-            font-size: 24px;
-            font-weight: 500;
-            margin-bottom: 15px;
+            text-align: center;
         }
 
         .info-more a {
-            color: rgba(154, 104, 242, 0.8);
-            transition: all 0.3s ease;
+            font-weight: 400;
+            color: #17a2b8;
+            font-size: 16px;
+            text-decoration: none;
         }
 
-        .info-more a:hover {
-            color: #9a68f2;
-            transform: translateX(5px);
+        .info-more i {
+            padding: 65px 30px 65px 50px;
+            position: relative;
         }
 
-        .img-fluid {
-            border-radius: 10px;
-            transition: all 0.3s ease;
+        .info-more i:hover, .info-more i:focus {
+            color: #e74c3c;
+            opacity: 0;
+            animation: fadeIn 0.5s infinite linear alternate-reverse;
         }
 
-        .img-fluid:hover {
-            transform: scale(1.02);
+        @keyframes fadeIn {
+
+        .collection-line {
+            opacity: 0;
         }
 
+        to {
+            opacity: 1;
+        }
+
+        }
         /* registe login*/
         .register-login-line {
             margin: 0;
@@ -192,10 +172,9 @@
 
         /* page */
         .my-page-line {
-            background-color: rgba(39, 41, 61, 0.8);
-            border-radius: 10px;
-            padding: 15px;
-            margin: 20px 0;
+            padding: 5px 0 2px;
+            margin: 10px 0 1px;
+            background: #fff;
         }
 
         /*hr*/
@@ -203,51 +182,9 @@
             margin: 2px;
         }
 
-        .modal-content {
-            background-color: #27293d;
-            color: #ffffff;
-        }
-
-        .form-control {
-            background-color: #2b3553;
-            border: 1px solid #9a68f2;
-            color: #ffffff;
-        }
-
-        .form-control:focus {
-            background-color: #2b3553;
-            border-color: #9a68f2;
-            color: #ffffff;
-        }
-
-        .btn-primary {
-            background-color: #9a68f2 !important;
-            border-color: #9a68f2 !important;
-        }
-
-        .btn-primary:hover {
-            background-color: #7b4fc9 !important;
-            border-color: #7b4fc9 !important;
-        }
-
-        .zxf_pagediv {
-            background-color: transparent;
-        }
-
-        .zxf_pagediv a {
-            color: rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(154, 104, 242, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .zxf_pagediv a:hover {
-            background-color: rgba(154, 104, 242, 0.2);
-            color: #9a68f2;
-        }
-
         .img-box{
-            width: 300px;
-            height: 200px;
+            width: 600px;
+            height: 400px;
             object-fit: cover;
             object-position: center;
         }
@@ -272,33 +209,34 @@
 
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/user">首页</a>
+                    <a class="nav-link" href="/">首页</a>
                 </li>
-
                 <li class="nav-item" id="user">
-                    {% if request.cookies.get('name') %}
-                    <!--处于登录状态-->
-                    <!--用户名、退出登录-->
-                    <a id='u_name' class="nav-link" href="/user/{{ request.cookies.get('name') }}">{{
-                        request.cookies.get('name') }}</a>
-                    {% else %}
-                    <!--没有处于登录装填下，才显示登录按钮-->
-                    <a class="nav-link" data-toggle="modal" data-target="#login" href="">登陆</a>
-                    {% endif %}
-                </li>
-
                 {% if request.cookies.get('name') %}
-                <li class="nav-item">
-                    <a class="nav-link" id="message-icon" href="/messages" title="消息中心">
-                        <i class="fa fa-envelope"></i>
-                        <span id="unread-count" class="badge badge-danger" style="display: none;">0</span>
-                    </a>
-                </li>
-                <!-- 登录状态：退出登录按钮 -->
-                <li class="nav-item">
-                    <a class="nav-link" id="logout" href="">退出登录</a>
-                </li>
+                <!-- 登录状态：显示用户名 -->
+                <a id="u_name" class="nav-link" href="/user/{{ request.cookies.get('name') }}">
+                    {{ request.cookies.get('name') }}
+                </a>
+                {% else %}
+                <!-- 未登录状态：显示登录按钮 -->
+                <a class="nav-link" data-toggle="modal" data-target="#login" href="">登陆</a>
                 {% endif %}
+            </li>
+
+            {% if request.cookies.get('name') %}
+            <!-- 登录状态：消息图标 -->
+            <li class="nav-item">
+                <a class="nav-link" id="message-icon" href="/messages" title="消息中心">
+                    <i class="fa fa-envelope"></i>
+                    <span id="unread-count" class="badge badge-danger" style="display: none;">0</span>
+                </a>
+            </li>
+
+            <!-- 登录状态：退出登录按钮 -->
+            <li class="nav-item">
+                <a class="nav-link" id="logout" href="/logout">退出登录</a>
+            </li>
+            {% endif %}
 
             </ul>
         </div>
@@ -313,7 +251,7 @@
             <div class="col-lg-8 col-md-10 mx-auto">
                 <div class="site-heading">
                     <h1>好房不等人</h1>
-                    <span class="subheading">立刻搜索心仪好房</span>
+                    <span class="subheading">给您推荐优质房源</span>
                 </div>
             </div>
         </div>
@@ -330,71 +268,73 @@
             <h3>为你为家</h3>
             <div class="describe">
                 <span>为您精准定位，当前城市房源信息</span>
-                <span class="float-right"><a href="" style="color: #17a2b8; padding-right: 5px"></a></span>
+                <span class="float-right"><a href="#" style="color: #17a2b8; padding-right: 5px"></a></span>
             </div>
         </div>
         <!-- 模块1信息展示 -->
-        <div class="collection col-lg-12 col-md-12">
-            <div id="fill-data" class="{{page_num}}">
+        <div class="collection col-lg-10">
+            <div id="fill-data" class="1">
 
-                {% for house in house_list %}
-                <div class="row collection-line">
 
-                    <div class="col-lg-5 col-md-5 mx-auto">
-                        <div><a href="/house/{{ house.id }}"><img class='img-fluid img-box'
-                                                                  src="/static/img/{{ house.picture }}" alt=""></a></div>
-                    </div>
-                    <div class="col-lg-5 col-md-5 mx-auto">
-                        <div class="collection-line-info">
-                            <div class="title">
-                                <span><a href="/house/{{ house.id }}">{{ house.title | dealover }}</a></span>
-                            </div>
-                            <div>
-                                <span class="attribute-text">房源地址：</span>
-                                &nbsp
-                                <span class="info-text">{{ house.address }} </span>
-                            </div>
-                            <div>
-                                <span class="attribute-text">建筑面积：</span>
-                                &nbsp
-                                <span class="info-text">{{ house.area}}平米</span>
-                            </div>
-                            <div>
-                                <span class="attribute-text">房源户型：</span>
-                                &nbsp
-                                <span class="info-text">{{ house.rooms }}</span>
-                            </div>
-                            <div>
-                                <span class="attribute-text">房源朝向：</span>
-                                &nbsp
-                                <span class="info-text">{{ house.direction }}</span>
-                            </div>
-                            <div>
-                                <span class="attribute-text">交通条件：</span>
-                                &nbsp
-                                <span class="info-text">{{ house.traffic | dealdirection }}</span>
-                            </div>
 
-                            <div>
-                                <span class="attribute-text"><i class="fa fa-heart" aria-hidden="true"
-                                                                style="color: #e74c3c"></i> {{ house.page_view }}人浏览过</span>
-                                &nbsp
-                                <span class="info-text"></span>
+            {% for house in house_list %}
+            <div class="row collection-line">
+
+                <div class="col-lg-5 col-md-5 mx-auto">
+                    <div><a href="/house/{{ house.id }}">
+                                <img class='img-fluid img-box' src="/static/img/{{ house.picture }}" alt="">
+                            </a>
                             </div>
-
-                        </div>
-                    </div>
-                    <div class="col-lg-2 col-md-2 mx-auto">
-                        <div class="info-more">
-                            <span class="info-text" style="color: #e74c3c">￥&nbsp{{ house.price }}</span>
-                            <span><a href="/house/{{ house.id }}"><i class="fa fa-arrow-right"
-                                                                     aria-hidden="true"></i></a></span>
-                        </div>
-                    </div>
-
                 </div>
-                {% endfor %}
+                <div class="col-lg-5 col-md-5 mx-auto">
+                    <div class="collection-line-info">
+                        <div class="title">
+                            <span><a href="/house/{{ house.id }}">{{ house.title | dealover }}</a></span>
+                        </div>
+                        <div>
+                            <span class="attribute-text">房源地址：</span>
+                            &nbsp
+                            <span class="info-text">{{ house.address }} </span>
+                        </div>
+                        <div>
+                            <span class="attribute-text">建筑面积：</span>
+                            &nbsp
+                            <span class="info-text">{{ house.area}}平米</span>
+                        </div>
+                        <div>
+                            <span class="attribute-text">房源户型：</span>
+                            &nbsp
+                            <span class="info-text">{{ house.rooms }}</span>
+                        </div>
+                        <div>
+                            <span class="attribute-text">房源朝向：</span>
+                            &nbsp
+                            <span class="info-text">{{ house.direction | dealdirection }}</span>
+                        </div>
+                        <div>
+                            <span class="attribute-text">交通条件：</span>
+                            &nbsp
+                            <span class="info-text">{{ house.traffic }}</span>
+                        </div>
+
+                        <div>
+                    <span class="attribute-text"><i class="fa fa-heart" aria-hidden="true"
+                                                    style="color: #e74c3c"></i> {{ house.page_view }}人浏览过</span>
+                            &nbsp
+                            <span class="info-text"></span>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-2 mx-auto">
+                    <div class="info-more">
+                        <span class="info-text" style="color: #e74c3c">￥&nbsp{{ house.price }}</span>
+                        <span><a href="/house/14087"><i class="fa fa-arrow-right" aria-hidden="true"></i></a></span>
+                    </div>
+                </div>
+
             </div>
+            {% endfor %}
 
 
             <div class="row my-page-line">
@@ -405,7 +345,7 @@
         </div>
 
         <!-- 右边栏信息展示 -->
-        <div class="col-lg-2">
+        <div class="col-lg-3">
             <div class="row">
             </div>
         </div>
@@ -448,9 +388,6 @@
                                     <input class="form-control" name="email" type="email"
                                            placeholder="例如:123@123.com">
                                 </div>
-                                 <input type="checkbox" name="is_landlord" value="1"> 我是房东
-
-
                                 <div class="text-right">
                                     <button class="btn btn-primary" id='registe-btn'>提交</button>
                                     <button class="btn btn-danger" data-dismiss="modal">取消</button>
@@ -530,25 +467,6 @@
 
 <!-- Custom scripts for this template -->
 <script src="/static/js/clean-blog.min.js"></script>
-
-<script>
-    $(document).ready(function () {
-        $(".zxf_pagediv").createPage({
-            pageNum: 10,  // 总的页码数
-            current: Number($('#fill-data').attr('class')),  // 当前的页码
-            backfun: function (e) {
-                console.log(e['current']);//回调   e['current] 是我们点击的时候的页码
-                var n_current = e['current'];
-                var part_path = window.location.pathname;
-                var path_list = part_path.split('/');
-                path_list[3] = n_current;
-                var n_url = path_list.join('/');
-                console.log(n_url);
-                window.location.replace(n_url);
-            }
-        });
-    });
-</script>
 
 </body>
 
