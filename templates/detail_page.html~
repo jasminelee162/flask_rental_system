@@ -889,7 +889,7 @@
                             <!--基本信息标题-->
                             <!-- 外层加一个 flex 容器 -->
                             <div class="d-flex justify-content-between align-items-center">
-                                <h4 class="mb-0" style="color: #9a68f2;">基本信息</h4>
+                                <h4 class="mb-0" style="color: black;">基本信息</h4>
                                 <span class="contact-owner" id="btn-contact-owner">
                                     <a href="/contact/{{ house.owner_id }}">
                                         <i class="fa fa-comments" aria-hidden="true"> 联系房东</i>
