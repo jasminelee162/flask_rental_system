@@ -1,121 +1,264 @@
-<!DOCTYPE html>
-<html lang="zh">
-<head>
-    <meta charset="UTF-8">
-    <title>系统开始界面</title>
-    <style>
-        html, body {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            font-family: "Microsoft YaHei", sans-serif;
-            background: url('/static/img/welcome.png') no-repeat center center fixed;
-            background-size: cover; /* ← 关键：拉伸背景图铺满整个屏幕 */
-        }
+{% extends "base.html" %}
 
-        .overlay {
-            background-color: rgba(0, 0, 0, 0.4);
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 0;
-        }
+{% block title %}欢迎 - 租房系统{% endblock %}
 
-        .container {
-            position: relative;
-            z-index: 1;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
+{% block content %}
+<div class="welcome-overlay">
+    <div class="welcome-bg"></div>
+</div>
 
-        .center-text {
-            position: absolute;
-            top: 70px;
-            width: 100%;
-            text-align: center;
-            font-size: 60px;
-            font-weight: bold;
-            color: white;
-            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
-            z-index: 2;
-        }
+<!-- 顶部居中欢迎语 -->
+<div class="welcome-content">
+    <div class="welcome-text">
+        <h1 class="main-title">此心安处是吾乡</h1>
+        <p class="sub-title">找到属于你的理想住所</p>
+    </div>
 
-        .header {
-            display: flex;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .header img {
-            height: 50px;
-            margin-left: 20px;
-        }
-
-        .button-group {
-            display: flex;
-            justify-content: center;
-            gap: 100px;
-            margin-bottom: 80px;
-        }
-
-        .btn {
-            padding: 15px 40px;
-            font-size: 18px;
-            border: none;
-            border-radius: 8px;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-guest {
-            background-color: #3498db;
-        }
-
-        .btn-guest:hover {
-            background-color: #2980b9;
-            transform: scale(1.05);
-        }
-
-        .btn-admin {
-            background-color: #e74c3c;
-        }
-
-        .btn-admin:hover {
-            background-color: #c0392b;
-            transform: scale(1.05);
-        }
-
-        .btn-user {
-            background-color: #2ecc71;
-        }
-
-        .btn-user:hover {
-            background-color: #27ae60;
-            transform: scale(1.05);
-        }
-    </style>
-</head>
-<body>
-    <div class="overlay"></div>
-
-    <!-- 顶部居中欢迎语 -->
-    <div class="center-text">此心安处是吾乡</div>
-
-    <div class="container">
-        <!-- Logo可选保留 -->
-        <div class="header">
-            <img src="/static/img/logo.png" alt="Logo">
-        </div>
-
-        <!-- 底部按钮 -->
-        <div class="button-group">
-            <a href="{{ url_for('admin_page.dashboard') }}" class="btn btn-admin">管理员模式</a>
-            <a href="{{ url_for('user_page.login') }}" class="btn btn-business">商家模式</a>
-            <a href="/user" class="btn btn-user">用户模式</a>
+    <div class="welcome-container">
+        <!-- 功能按钮组 -->
+        <div class="welcome-buttons">
+            {% if current_user.is_authenticated %}
+                {% if current_user.is_landlord %}
+                    <a href="{{ url_for('landlord_page.my_houses') }}" class="welcome-btn landlord-btn">
+                        <i class="fas fa-home"></i>
+                        <span>我的房源</span>
+                    </a>
+                {% else %}
+                    <a href="{{ url_for('user_page.login') }}" class="welcome-btn business-btn">
+                        <i class="fas fa-store"></i>
+                        <span>商家模式</span>
+                    </a>
+                {% endif %}
+            {% else %}
+                <a href="{{ url_for('user_page.login') }}" class="welcome-btn business-btn">
+                    <i class="fas fa-store"></i>
+                    <span>商家模式</span>
+                </a>
+            {% endif %}
+            <a href="{{ url_for('admin_page.dashboard') }}" class="welcome-btn admin-btn">
+                <i class="fas fa-user-shield"></i>
+                <span>管理员模式</span>
+            </a>
+            <a href="/user" class="welcome-btn user-btn">
+                <i class="fas fa-user"></i>
+                <span>用户模式</span>
+            </a>
         </div>
     </div>
-</body>
-</html>
+</div>
+
+<style>
+    .welcome-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        overflow: hidden;
+    }
+
+    .welcome-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('/static/img/welcome.png') center center no-repeat;
+        background-size: cover;
+        opacity: 0.4;
+        transform: scale(1.1);
+    }
+
+    .welcome-content {
+        min-height: calc(100vh - 56px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        position: relative;
+        z-index: 2;
+    }
+
+    .welcome-text {
+        text-align: center;
+        margin-bottom: 3rem;
+        animation: fadeInDown 1s ease-out;
+        position: relative;
+    }
+
+    .main-title {
+        color: white;
+        font-size: 3.5rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        letter-spacing: 2px;
+    }
+
+    .sub-title {
+        color: rgba(255, 255, 255, 0.95);
+        font-size: 1.5rem;
+        font-weight: 300;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        letter-spacing: 1px;
+    }
+
+    .welcome-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3rem;
+        animation: fadeInUp 1s ease-out;
+    }
+
+    .welcome-buttons {
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        max-width: 800px;
+        position: relative;
+    }
+
+    .welcome-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem 2.5rem;
+        min-width: 200px;
+        border-radius: 12px;
+        color: white;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .welcome-btn i {
+        font-size: 2rem;
+        margin-bottom: 0.8rem;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .welcome-btn span {
+        font-size: 1.2rem;
+        font-weight: 500;
+        letter-spacing: 1px;
+    }
+
+    .welcome-btn:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+        color: white;
+        text-decoration: none;
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+
+    .business-btn {
+        background: linear-gradient(135deg, rgba(52, 152, 219, 0.9), rgba(41, 128, 185, 0.9));
+    }
+
+    .business-btn:hover {
+        background: linear-gradient(135deg, rgba(41, 128, 185, 0.95), rgba(37, 115, 167, 0.95));
+    }
+
+    .admin-btn {
+        background: linear-gradient(135deg, rgba(231, 76, 60, 0.9), rgba(192, 57, 43, 0.9));
+    }
+
+    .admin-btn:hover {
+        background: linear-gradient(135deg, rgba(192, 57, 43, 0.95), rgba(169, 50, 38, 0.95));
+    }
+
+    .user-btn {
+        background: linear-gradient(135deg, rgba(46, 204, 113, 0.9), rgba(39, 174, 96, 0.9));
+    }
+
+    .user-btn:hover {
+        background: linear-gradient(135deg, rgba(39, 174, 96, 0.95), rgba(33, 154, 82, 0.95));
+    }
+
+    .landlord-btn {
+        background: linear-gradient(135deg, rgba(155, 89, 182, 0.9), rgba(142, 68, 173, 0.9));
+    }
+
+    .landlord-btn:hover {
+        background: linear-gradient(135deg, rgba(142, 68, 173, 0.95), rgba(125, 60, 152, 0.95));
+    }
+
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* 响应式设计 */
+    @media (max-width: 768px) {
+        .main-title {
+            font-size: 2.5rem;
+        }
+
+        .sub-title {
+            font-size: 1.2rem;
+        }
+
+        .welcome-buttons {
+            gap: 1rem;
+        }
+
+        .welcome-btn {
+            min-width: 160px;
+            padding: 1.2rem 2rem;
+        }
+
+        .welcome-btn i {
+            font-size: 1.8rem;
+        }
+
+        .welcome-btn span {
+            font-size: 1.1rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .main-title {
+            font-size: 2rem;
+        }
+
+        .sub-title {
+            font-size: 1rem;
+        }
+
+        .welcome-buttons {
+            flex-direction: column;
+        }
+
+        .welcome-btn {
+            width: 100%;
+            max-width: 280px;
+        }
+    }
+</style>
+{% endblock %}

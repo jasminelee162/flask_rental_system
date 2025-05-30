@@ -1,497 +1,91 @@
-<!DOCTYPE html>
-<html lang="zh">
+{% extends "base.html" %}
 
-<head>
+{% block title %}用户中心 - {{ user.name }}{% endblock %}
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>基于Web的房屋租赁管理系统</title>
-    <!-- Icon -->
-    <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon"/>
-    <link rel="shortcut icon" href="/static/img/favicon.ico" type="image/x-icon"/>
-
-    <!-- Bootstrap core CSS -->
-    <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Black Dashboard CSS -->
-    <link href="/static/vendor/assets/css/black-dashboard.min.css" rel="stylesheet">
-    <link href="/static/vendor/assets/css/nucleo-icons.css" rel="stylesheet">
-
-    <!-- Custom fonts for this template -->
-    <link href="/static/css/font-awesome.min.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="/static/css/clean-blog.min.css" rel="stylesheet">
-
-
+{% block styles %}
+{{ super() }}
     <style>
-        body {
-            background: #f0f0f0;
-            color: #333; /* 文字颜色改为深色 */
-            font-family: "Microsoft YaHei", sans-serif;
+    .landlord-actions {
+        text-align: right;
+        padding: 10px;
+        background-color: #f8f9fa;
+        border-radius: 5px;
+        margin-bottom: 20px;
     }
 
-    #mainNav {
-        background-color: rgba(39, 41, 61, 0.95) !important;
-        backdrop-filter: blur(10px);
-        z-index: 1000;
-        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-    }
-
-        #mainNav .navbar-brand, 
-        #mainNav .navbar-nav > li.nav-item > a {
-            color: #ffffff !important;
-        }
-
-        #mainNav .navbar-brand:hover,
-        #mainNav .navbar-nav > li.nav-item > a:hover {
-            color: #9a68f2 !important;
-        }
-
-    .detail-body {
-        background-color: rgba(39, 41, 61, 0.8);
-        border-radius: 15px;
-        padding: 25px;
-        margin-top: 20px;
-        backdrop-filter: blur(10px);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    }
-
-    .user-info {
-        background-color: rgba(39, 41, 61, 0.9);
-        border-radius: 12px;
-        padding: 20px;
-        margin: 15px 0;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    }
-    .user-info:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 6px 20px rgba(154, 104, 242, 0.2);
-    }
-         .c-1 {
-        background-color: rgba(43, 53, 83, 0.9);
-        border-radius: 8px;
-        padding: 15px;
-        margin: 10px 0;
-    }
-
-    .btn-info {
-        background: linear-gradient(45deg, #6a5acd, #9370db) !important;
-        border: none !important;
-        border-radius: 8px;
-        padding: 8px 20px;
+    .btn-landlord {
+        background-color: #9a68f2;
+        color: white;
+        border: none;
+            padding: 10px 20px;
+        border-radius: 5px;
         transition: all 0.3s ease;
     }
 
-    .btn-info:hover {
-        background: linear-gradient(45deg, #9370db, #6a5acd) !important;
+    .btn-landlord:hover {
+        background-color: #7b4fc9;
+        color: white;
         transform: translateY(-2px);
-        box-shadow: 0 10px 20px rgba(106, 90, 205, 0.4);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
 
-    .collection-line {
-        background-color: rgba(39, 41, 61, 0.9);
-        border-radius: 12px;
-        padding: 20px;
-        margin: 15px 0;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    .btn-landlord i {
+        margin-right: 5px;
     }
 
-    .collection-line:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 6px 20px rgba(154, 104, 242, 0.2);
-    }
-
-    .attribute-text {
-        color: rgba(154, 104, 242, 0.8);
-        font-size: 16px;
-        font-weight: 500;
-    }
-
-    .info-text {
-        color: rgba(255, 255, 255, 0.9);
-        font-size: 16px;
-        font-weight: 400;
-    }
-
-        .info-more a {
-            color: #9a68f2;
-        }
-
-        .info-more a:hover {
-            color: #7b4fc9;
-        }
-
-        .nav-tabs > li > a {
-            background-color: #2b3553;
-            color: #ffffff;
-            border-color: #9a68f2;
-        }
-
-        .nav-tabs > li > a:hover,
-        .nav-tabs > li > a:focus {
-            background-color: #9a68f2;
-            color: #ffffff;
-        }
-
-        .form-control {
-            background-color: #2b3553;
-            border: 1px solid #9a68f2;
-            color: #ffffff;
-        }
-
-        .form-control:focus {
-            background-color: #2b3553;
-            border-color: #9a68f2;
-            color: #ffffff;
-        }
-
-        header.masthead {
-            margin-bottom: 50px;
-            background: no-repeat center center;
+    .modal-content {
             background-color: #fff;
-            background-attachment: scroll;
-            position: relative;
-            background-size: cover;
-        }
-
-        header.masthead .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 100%;
-            background-color: #fff;
-            opacity: 0.5;
-        }
-
-        /**/
-        .no-margin-bottom {
-            margin-bottom: 0 !important;
-        }
-
-        .detail-body {
-            background: #fff;
-            margin-top: 100px;
-            margin-bottom: 50px;
-
-        }
-
-        .user-info {
-            font-size: 16px;
-            color: #394043;
-            font-weight: 300;
-            line-height: 25px;
-            text-align: justify;
-            border-bottom: #ecf0f1 1px solid;
-            padding: 10px;
-            margin: 20px 20px 10px 5px;
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-        }
-
-        .c-1 {
-            padding: 1px 10px 2px 20px;
-            margin: 0 0 12px 0;
-            background-color: #ecf0f1;
-        }
-
-        .c-1 span {
-            line-height: 30px;
-        }
-
-        /* editor button */
-        .c-2 {
-            margin: 0 0 12px 0;
-            border-radius: 1px;
-            font-size: 13px;
-        }
-
-        input {
-            font-size: 12px;
-            padding-left: 8px;
-            height: 28px;
-            width: 350px;
-        }
-
-    .course {
-        background-color: rgba(39, 41, 61, 0.9);
-        border-radius: 8px;
-        padding: 15px;
-        margin: 10px 0;
-        transition: all 0.3s ease;
+        border-radius: 10px;
     }
 
-    .course:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 6px 20px rgba(154, 104, 242, 0.2);
+    .modal-header {
+        border-bottom: 1px solid #eee;
+        padding: 15px 20px;
     }
 
-        .course-info {
-            height: 30px;
-            font-weight: 500;
-            color: #333;
-            font-size: 16px;
-        }
-
-        .course-info1 {
-            height: 20px;
-            font-weight: 300;
-            font-size: 12px;
-        }
-
-        .course-info span {
-            line-height: 37px;
-        }
-
-    .price {
-        color: #9a68f2;
-        font-size: 16px;
-        font-weight: 500;
-    }
-    .img-fluid {
-        border-radius: 8px;
-        transition: all 0.3s ease;
-    }
-
-    .img-fluid:hover {
-        transform: scale(1.02);
-    }
-
-    .del-btn span {
-        color: rgba(255, 160, 122, 0.8);
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-
-    .del-btn span:hover {
-        color: rgba(255, 160, 122, 1);
-        transform: translateY(-1px);
-    }
-        /* change-chanle */
-        .nav-tabs > li > a {
-            position: relative;
-            display: block;
-            padding: 10px 15px;
-            font-size: 14px;
-            margin-right: 2px;
-            line-height: 1.42857143;
-            border-radius: 4px 4px 0 0;
-            text-decoration: none;
-            border-top: 1px solid #ddd;
-            border-left: 1px solid #ddd;
-            border-right: 1px solid #ddd;
-        }
-
-        .nav-tabs > li > a:focus, .nav-tabs > li > a:hover {
-            color: #555;
-            cursor: default;
-            background-color: #eee;
-            text-decoration: none
-        }
-
-        /* chanle */
-        .collection {
-            display: none;
-            overflow: scroll;
-            height: 650px;
-        }
-
-
-.collection-line {
-    background-color: rgba(39, 41, 61, 0.9);
-    border-radius: 8px;
-    padding: 15px;
-    margin: 10px 0;
-    transition: all 0.3s ease;
-}
-
-
-        .collection-line-info {
-            font-size: 14px;
-
-        }
-
-        .collection-line-info div {
-            height: 31px;
-
-        }
-
-
-.collection-line-info .attribute-text {
-    color: rgba(154, 104, 242, 0.9);
-    font-weight: 500;
-}
-
-.collection-line-info .info-text {
-    color: rgba(255, 255, 255, 0.95);
-    font-weight: 400;
-}
-
-
-        /* more */
-        .info-more {
-            text-align: center;
-        }
-
-        .info-more a {
-            font-weight: 400;
-            color: #3498db;
-            font-size: 14px;
-            text-decoration: none;
-        }
-
-        .info-more i {
-            padding: 65px 30px 65px 50px;
-            position: relative;
-        }
-
-        .info-more i:hover, .info-more i:focus {
-            color: #e74c3c;
-            opacity: 0;
-            animation: fadeIn 0.5s infinite linear alternate-reverse;
-        }
-
-        @keyframes fadeIn {
-
-        .collection-line {
-            opacity: 0;
-        }
-
-        to {
-            opacity: 1;
-        }
-
-        }
-
-        /* browse-record */
-    .browse-record {
-        background-color: rgba(39, 41, 61, 0.8);
-        border-radius: 12px;
+    .modal-body {
         padding: 20px;
+    }
+
+    .modal-footer {
+        border-top: 1px solid #eee;
+        padding: 15px 20px;
+    }
+
+    .modal-body ul {
+        padding-left: 20px;
         margin: 15px 0;
-        backdrop-filter: blur(10px);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     }
 
-        .browse-record-first-div {
-            padding-bottom: 10px;
-
-        }
-
-        #user {
-            position: relative;
-        }
-
-        #user input {
-            width: 65px;
-            height: 30px;
-            position: absolute;
-            top: 23px;
-            left: 21px;
-            display: none;
-            outline: none;
-        }
-
-        #user input:hover {
-            cursor: pointer;
-        }
-
-        #collect {
-            position: relative;
-        }
-
-    .collect_off {
-        color: rgba(255, 160, 122, 0.8);
-        cursor: pointer;
-        transition: all 0.3s ease;
+    .modal-body li {
+        margin-bottom: 8px;
+        color: #666;
     }
-
-    .collect_off:hover {
-        color: rgba(255, 160, 122, 1);
-        transform: translateY(-1px);
-    }
-
-    .img-box{
-            width: 300px;
-            height: 200px;
-            object-fit: cover;
-            object-position: center;
-        }
-
-    .img-box1{
-            width: 300px;
-            height: 100px;
-            object-fit: cover;
-            object-position: center;
-        }
-
-
     </style>
+{% endblock %}
 
-</head>
-
-<body>
-
-<!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+{% block content %}
+<div class="overlay"></div>
     <div class="container">
-        <a class="navbar-brand" href="/">心仪好房</a>
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
-                data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
-                aria-label="Toggle navigation">
-            Menu
-            <i class="fas fa-bars"></i>
+    <div class="row">
+        <div class="col-lg-8 col-md-8 mx-auto detail-body">
+            <!-- 房东功能按钮 -->
+            {% if current_user.is_authenticated and current_user.id == user.id %}
+                <div class="row" style="margin-bottom: 20px;">
+                    <div class="col-lg-12 text-right">
+                        {% if user.is_landlord %}
+                            <a href="{{ url_for('landlord_page.my_houses') }}" class="btn btn-info">
+                                <i class="fa fa-home"></i> 管理我的房源
+                            </a>
+                        {% else %}
+                            <button class="btn btn-info" data-toggle="modal" data-target="#becomeLandlordModal">
+                                <i class="fa fa-user-plus"></i> 成为房东
         </button>
-
-        <div class="collapse navbar-collapse " id="navbarResponsive">
-
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/user">首页</a>
-                </li>
-
-
-                <li class="nav-item" id="user">
-                    {% if request.cookies.get('name') %}
-                    <!--处于登录状态-->
-                    <!--用户名、退出登录-->
-                    <a id='u_name' class="nav-link" href="/user/{{ request.cookies.get('name') }}">{{
-                        request.cookies.get('name') }}</a>
-                    {% else %}
-                    <!--没有处于登录装填下，才显示登录按钮-->
-                    <a class="nav-link" data-toggle="modal" data-target="#login" href="">登录</a>
-                    {% endif %}
-                </li>
-
-                {% if request.cookies.get('name') %}
-                <li class="nav-item">
-                    <a class="nav-link" id="message-icon" href="/messages" title="消息中心">
-                        <i class="fa fa-envelope"></i>
-                        <span id="unread-count" class="badge badge-danger" style="display: none;">0</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="logout" href="">退出登录</a>
-                </li>
                 {% endif %}
-
-
-            </ul>
         </div>
     </div>
-</nav>
+            {% endif %}
 
-<!-- Page Header -->
-<header class="masthead no-margin-bottom" style="background-color: #fff; min-height: 500px">
-    <div class="overlay"></div>
-    <div class="container">
-        <div class="row ">
-            <div class="col-lg-8 col-md-8 mx-auto detail-body">
                 <ul class="nav nav-tabs" style="margin:10px 0 30px">
                     <li class="active chanle1"><a href="#userinfo">账号信息</a></li>
                     <li class="chanle2"><a href="#collections">房源收藏</a></li>
@@ -556,9 +150,9 @@
                     <div class="row collection-line" id="collect">
                         <span class="collect_off" id="{{ house.id }}">取消收藏</span>
                         <div class="col-lg-4 col-md-4 mx-auto">
-                            <div><a href="/house/{{ house.id }}">
-                                <img class='img-fluid img-box' src="/static/img/{{ house.picture }}" alt="">
-                            </a>
+                        <div><a href="/house/{{ house.id }}">
+                            <img class='img-fluid img-box' src="/static/img/{{ house.picture }}" alt="">
+                                </a>
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6 mx-auto">
@@ -623,10 +217,10 @@
                         {% for house in seen_house_list %}
                         <div class="col-lg-10 col-md-10 mx-auto browse-record-first-div">
                             <div class="course">
-                                <div><a href="/house/{{ house.id }}">
-                                <img class='img-fluid img-box1' src="/static/img/{{ house.picture }}" alt="">
-                            </a>
-                            </div>
+                            <div><a href="/house/{{ house.id }}">
+                            <img class='img-fluid img-box1' src="/static/img/{{ house.picture }}" alt="">
+                        </a>
+                                </div>
                                 <div class="course-info">
                                     <span class="glyphicon glyphicon-map-marker"></span>
                                     <span>{{ house.address }}</span>
@@ -646,343 +240,56 @@
         </div>
     </div>
 
-</header>
-
-<!-- Footer -->
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-md-10 mx-auto">
-                <p class="copyright text-muted">Copyright &copy; 基于Web的房屋租赁管理系统 2022</p>
+<!-- 成为房东的模态框 -->
+<div class="modal fade" id="becomeLandlordModal" tabindex="-1" role="dialog" aria-labelledby="becomeLandlordModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="becomeLandlordModalLabel">成为房东</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>成为房东后，您可以：</p>
+                <ul>
+                    <li>发布和管理您的房源</li>
+                    <li>接收租客的咨询和预约</li>
+                    <li>管理您的房源订单</li>
+                </ul>
+                <p>确定要成为房东吗？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="confirmBecomeLandlord">确认成为房东</button>
             </div>
         </div>
     </div>
-</footer>
+</div>
+{% endblock %}
 
-<!-- Bootstrap core JavaScript -->
-
-<script src="/static/vendor/jquery/jquery.min.js"></script>
-<script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-<!-- Custom scripts for this template -->
-<script src="/static/js/clean-blog.min.js"></script>
-<script src="/static/vendor/jquery/jquery.cookie.js"></script>
-
-<!-- change chanle -->
+{% block scripts %}
+{{ super() }}
 <script>
-
-    // 删除浏览记录
-    $("#del").on('click', function () {
-        var $user_name = $.cookie('name');
-        var $span = $(this);
-        if ($user_name) {
-            $.ajax({
-                url: "/del_record",
-                type: 'post',
-                data: {
-                    user_name: $user_name
-                },
-                success: function (resp) {
-                    if (resp["valid"] == '1') {
-                        $span.parent().next().remove();
-                        alert(resp["msg"])
-                    } else {
-                        alert(resp["msg"])
-                    }
-                }
-            })
-        } else {
-            alert('您还没有登录!');
-        }
-    });
-
-    //  取消收藏
-    $(".collect_off").on('click', function () {
-
-        var hid = this.id;
-        var name = $.cookie('name');
-        var $span = $(this);
-        if (name) {
-            $.ajax({
-                url: "/collect_off",
-                type: 'post',
-                data: {
-                    house_id: hid,
-                    user_name: name,
-                },
-                dataType: 'json',
-                success: function (resp) {
-                    if (resp["valid"] == '1') {
-                        alert(resp["msg"]);
-                        $span.parent().remove();
-                    } else {
-                        alert(resp["msg"]);
-                    }
-                }
-            })
-        } else {
-            alert('您还没有登录!')
-        }
-    });
-
-
-    // 登出功能
-    $("#logout").on('click', function () {
+$(document).ready(function() {
+    // 处理成为房东的确认按钮点击事件
+    $('#confirmBecomeLandlord').click(function() {
         $.ajax({
-            url: '/logout',
-            type: 'get',
-            dataType: 'json',
-            success: function (res) {
-                if (res["valid"] == '1') {
-                    alert(res["msg"]);
-                    window.location.href = '/';
+            url: '/become-landlord',
+            method: 'POST',
+            success: function(response) {
+                if (response.success) {
+                    alert(response.message);
+                    window.location.reload();
                 } else {
-                    alert(res["msg"]);
+                    alert(response.message || '操作失败，请稍后重试');
                 }
+            },
+            error: function() {
+                alert('服务器错误，请稍后重试');
             }
-        })
+        });
     });
-
-    $(".chanle1").on('click', function () {
-        $('.user-info').show();
-        $('.collection').hide();
-        if ($('.chanle1').hasClass('action')) {
-            $(".chanle1").removeClass('action');
-        }
-        $(".chanle1").addClass('action');
-        $(".chanle2").removeClass('action');
-    });
-    $(".chanle2").on('click', function () {
-        $('.user-info').hide();
-        $('.collection').show();
-        $(".chanle1").removeClass('action');
-        $(".chanle2").addClass('action')
-    });
-
-    // 修改用户名称的
-
-    // 标志位
-    var name_option = 1;
-    // 获取原来的名字
-    var y_name = $('#n-data').val();
-    $("#btn-name").on('click', function () {
-        if (name_option == 1) {
-
-            $('.nkname').html('<input id="nkname" type="text" required placeholder="6-15位字母或数字">');
-            $('#nkname').focus();
-            $("#btn-name i").text(' 提交');
-            name_option = 0
-        } else {
-            var j_data = {};
-            var v_nkname = $('#nkname').val();
-            if (5 < v_nkname.length < 16) {
-                if (/[\u4e00-\u9fa5|a-zA-Z0-9]+$/.test(v_nkname)) {
-                    j_data['name'] = v_nkname;
-                    j_data['y_name'] = y_name
-
-                } else {
-                    alert('用户名需要6-15位字母或数字');
-                    $('.nkname').html('<input id="nkname" type="text" required placeholder="6-15位字母或数字">');
-                    $('#nkname').focus();
-                    return
-                }
-            }
-
-            $.ajax({
-                url: "http://127.0.0.1:5000/modify/userinfo/name",
-                type: 'post',
-                dataType: 'json',
-                data: j_data,
-                success: function (data) {
-                    if (data['ok'] == '1') {
-                        alert('修改成功');
-                        name_option = 1;
-                        $('.nkname').html(v_nkname);
-                        $("#btn-name i").text(' 编辑');
-                        $('#n-data').attr('value', v_nkname);
-                        window.location.href = '/user/' + v_nkname
-                    } else {
-                        alert('修改失败，请重试~');
-                        $('#nkname').html(y_name);
-                        $("#btn-name i").text(' 编辑');
-                    }
-                },
-                error: function () {
-                    alert('修改失败，请重试~');
-                    $('#nkname').html(y_name);
-                    $("#btn-name i").text(' 编辑');
-                }
-
-            });
-        }
-
-    });
-
-    var addr_option = 1;
-    var y_name = $('#n-data').val();
-    var y_addr = $('#a-data').val();
-    $("#btn-addr").on('click', function () {
-        if (addr_option == 1) {
-
-            $('.nkaddr').html('<input id="nkaddr" type="text" required placeholder="6-15位中文、字母或数字">');
-            $('#nkaddr').focus();
-            $("#btn-addr i").text(' 提交');
-            addr_option = 0
-        } else {
-            var j_data = {};
-            var v_nkaddr = $('#nkaddr').val();
-            if (5 < v_nkaddr.length < 16) {
-                if (/[\u4e00-\u9fa5|a-zA-Z0-9]+$/.test(v_nkaddr)) {
-                    j_data['addr'] = v_nkaddr;
-                    j_data['y_name'] = y_name
-
-                } else {
-                    alert('用户名需要6-15位字母或数字');
-                    $('.nkaddr').html('<input id="nkaddr" type="text" required placeholder="6-15位中文、字母或数字">');
-                    $('#nkaddr').focus();
-                    return
-                }
-            }
-
-            $.ajax({
-                url: "http://127.0.0.1:5000/modify/userinfo/addr",
-                type: 'post',
-                dataType: 'json',
-                data: j_data,
-                success: function (data) {
-                    if (data['ok'] == '1') {
-                        alert('修改成功');
-                        addr_option = 1;
-                        $('.nkaddr').html(v_nkaddr);
-                        $("#btn-addr i").text(' 编辑');
-                        $('#a-data').attr('value', v_nkaddr)
-                    } else {
-                        alert('修改失败，请重试~');
-                        $('#nkaddr').html(y_addr);
-                        $("#btn-addr i").text(' 编辑');
-                    }
-                },
-                error: function () {
-                    alert('修改失败，请重试~');
-                    $('#nkpd').html(y_addr);
-                    $("#btn-pd i").text(' 编辑');
-                }
-
-            });
-        }
-
-    });
-
-    var pd_option = 1;
-    var y_name = $('#n-data').val();
-    var y_pd = $('#p-data').val();
-    $("#btn-pd").on('click', function () {
-        if (pd_option == 1) {
-            $('.nkpd').html('<input id="nkpd" type="text" required placeholder="6-15位字母或数字">');
-            $('#nkpd').focus();
-            $("#btn-pd i").text(' 提交');
-            pd_option = 0
-        } else {
-            var j_data = {};
-            var v_nkpd = $('#nkpd').val();
-            if (5 < v_nkpd.length < 16) {
-                if (/[a-zA-Z0-9]+$/.test(v_nkpd)) {
-                    j_data['pd'] = v_nkpd;
-                    j_data['y_name'] = y_name
-
-                } else {
-                    alert('用户名需要6-15位字母或数字');
-                    $('.nkpd').html('<input id="nkpd" type="text" required placeholder="6-15位字母或数字">');
-                    $('#nkpd').focus();
-                    return
-                }
-            }
-
-
-            $.ajax({
-                url: "http://127.0.0.1:5000/modify/userinfo/pd",
-                type: 'post',
-                dataType: 'json',
-                data: j_data,
-                success: function (data) {
-                    if (data['ok']) {
-                        alert('修改成功');
-                        pd_option = 1;
-                        $('.nkpd').html(v_nkpd);
-                        $("#btn-pd i").text(' 编辑');
-                        $('#p-data').attr('value', v_nkpd)
-                    } else {
-                        alert('修改失败，请重试~');
-                        $('#nkpd').html(y_pd);
-                        $("#btn-pd i").text(' 编辑');
-                    }
-                },
-                error: function () {
-                    alert('修改失败，请重试~');
-                    $('#nkpd').html(y_pd);
-                    $("#btn-pd i").text(' 编辑');
-                }
-
-            });
-        }
-
-    })
-
-    var email_option = 1;
-    var y_name = $('#n-data').val();
-    var y_email = $('#e-data').val();
-    $("#btn-email").on('click', function () {
-        if (email_option == 1) {
-            $('.nkemail').html('<input id="nkemail" type="text" required placeholder="邮箱格式错误！">');
-            $('#nkemail').focus();
-            $("#btn-email i").text(' 提交');
-            email_option = 0
-        } else {
-            var j_data = {};
-            var v_nkemail = $('#nkemail').val();
-            if (5 < v_nkemail.length < 16) {
-                if (v_nkemail.match(/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/)) {
-                    j_data['email'] = v_nkemail;
-                    j_data['y_name'] = y_name
-
-                } else {
-                    alert('邮箱格式错误！');
-                    $('.nkemail').html('<input id="nkemail" type="text" required placeholder="邮箱格式错误！">');
-                    $('#nkemail').focus();
-                    return
-                }
-            }
-
-            $.ajax({
-                url: "http://127.0.0.1:5000/modify/userinfo/email",
-                type: 'post',
-                dataType: 'json',
-                data: j_data,
-                success: function (data) {
-                    if (data['ok']) {
-                        alert('修改成功');
-                        email_option = 1;
-                        $('.nkemail').html(v_nkemail);
-                        $("#btn-email i").text(' 编辑');
-                        $('#e-data').attr('value', v_nkemail);
-                    } else {
-                        alert('修改失败，请重试~');
-                        $('#nkemail').html(y_email);
-                        $("#btn-email i").text(' 编辑');
-                    }
-                },
-                error: function () {
-                    alert('修改失败，请重试~');
-                    $('#nkemail').html(y_email);
-                    $("#btn-email i").text(' 编辑');
-                }
-
-            });
-        }
-
-    })
+});
 </script>
-
-</body>
-
-</html>
+{% endblock %}

@@ -89,7 +89,7 @@ def login():
     if captcha_input.upper() != session.get('captcha_code', '').upper():
         return jsonify({'valid': '0', 'msg': '验证码错误！'})
 
-    # 查询用户（包含房东标识）
+    # 查询用户
     user = User.query.filter(User.name == name).first()
     if not user:
         return jsonify({'valid': '0', 'msg': '用户名不存在！'})
@@ -100,19 +100,13 @@ def login():
     # 使用 flask_login 登录用户
     login_user(user)
     
-    # 打印调试信息
-    print(f"用户登录成功: {user.name}, is_landlord: {user.is_landlord}, is_authenticated: {current_user.is_authenticated}")
-
-    # 登录成功后返回房东状态
-    res = Response(json.dumps({
+    # 登录成功后返回用户信息
+    return jsonify({
         'valid': '1',
         'msg': '登录成功',
         'name': user.name,
-        'is_landlord': '1' if user.is_landlord else '0'  # 转换为字符串
-    }))
-    res.set_cookie('name', user.name, 3600 * 2)
-    res.set_cookie('is_landlord', '1' if user.is_landlord else '0', 3600 * 2)  # 存储为字符串
-    return res
+        'is_landlord': '1' if user.is_landlord else '0'
+    })
 
 
 # ================== 修改用户信息功能扩展 ==================
