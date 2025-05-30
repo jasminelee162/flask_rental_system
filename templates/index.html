@@ -58,7 +58,9 @@
         }
 
 
-
+.row info-line{
+     z-index: 9999 !important;
+}
 .modal {
     z-index: 9999 !important; /* 确保模态框在最上层 */
 }
@@ -379,7 +381,10 @@
     color: rgba(154, 104, 242, 0.6);
     font-size: 16px;
 }
-
+.modal-content {
+  max-height: calc(100vh - 100px); /* 根据需求调整 */
+  overflow-y: auto; /* 允许垂直滚动 */
+}
 /* 响应式调整 */
 @media (max-width: 768px) {
     .modal-content {
@@ -447,7 +452,7 @@
                         request.cookies.get('name') }}</a>
                     {% else %}
                     <!--没有处于登录装填下，才显示登录按钮-->
-                    <a class="nav-link" data-toggle="modal" data-target="#login" href="">登陆</a>
+                    <a class="nav-link" data-toggle="modal" data-target="#login" href="">登录</a>
                     {% endif %}
                 </li>
 
@@ -621,6 +626,7 @@
                                     <label for="" class="form-info">邮箱</label>
                                     <input class="form-control" name="email" type="email" placeholder="例如:123@123.com">
                                 </div>
+                                 <input type="checkbox" name="is_landlord" value="1"> 我是房东
                                 <div class="text-right">
                                     <button class="btn btn-primary" id='registe-btn'>提交</button>
                                     <button class="btn btn-danger" data-dismiss="modal">取消</button>

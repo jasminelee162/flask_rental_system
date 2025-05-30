@@ -1,4 +1,5 @@
 from settings import db
+from flask_login import UserMixin
 
 
 # soufang 表的模型类
@@ -19,14 +20,12 @@ class House(db.Model):
     traffic = db.Column(db.String(100))
     publish_time = db.Column(db.Integer)
     sheshi = db.Column(db.TEXT)
-    #liangdian = db.Column(db.TEXT)
-    #peitao = db.Column(db.TEXT)
-    #chuxing = db.Column(db.TEXT)
     page_view = db.Column(db.Integer)
-    #people_name = db.Column(db.String(100))
     phone_num = db.Column(db.String(100))
-    #house_num = db.Column(db.String(100))
     picture = db.Column(db.String(255))
+    
+    # 房东ID(关联用户表)，使用与 user_info.id 相同的类型
+    landlord_id = db.Column(db.Integer, db.ForeignKey('user_info.id', ondelete='SET NULL'))
 
     # 重写__repr__方法， 方便我们查看对象的输出内容
     def __repr__(self):
@@ -47,7 +46,7 @@ class Tuijian(db.Model):
 
 
 # userinfo表的模型类
-class User(db.Model):
+class User(UserMixin, db.Model):
     __tablename__ = 'user_info'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -57,6 +56,26 @@ class User(db.Model):
     addr = db.Column(db.String(100))
     collect_id = db.Column(db.String(250))
     seen_id = db.Column(db.String(250))
+    is_landlord = db.Column(db.Boolean, default=False)  # 是否是房东
+
+    # 与房源的一对多关系
+    houses = db.relationship('House', backref='landlord', lazy=True)
+
+    def get_id(self):
+        """返回用户ID"""
+        return str(self.id)
+
+    def is_active(self):
+        """用户是否激活"""
+        return True
+
+    def is_authenticated(self):
+        """用户是否已认证"""
+        return True
+
+    def is_anonymous(self):
+        """是否是匿名用户"""
+        return False
 
     # 重写__repr__方法， 方便我们查看对象的输出内容
     def __repr__(self):

@@ -145,9 +145,14 @@ $(document).ready(function () {
                             $('#loginform').data('bootstrapValidator', null);
                         }
                     } else {
-                        href_str = "/user/" + result['msg'];
-
-                        window.location.replace(href_str);
+                        // 根据用户类型决定跳转页面
+                        if (result['is_landlord'] == '1') {
+                            // 房东用户跳转到房东管理页面
+                            window.location.replace("/my/houses");
+                        } else {
+                            // 普通用户跳转到用户中心
+                            window.location.replace("/user/" + result['name']);
+                        }
                     }
                 },
 
