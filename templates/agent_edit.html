@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>编辑房东信息</h2>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <form method="POST" action="{{ url_for('agent_page.edit_agent', id=landlord.id) }}">
+        <div class="form-group">
+            <label for="name">姓名 *</label>
+            <input type="text" class="form-control" id="name" name="name" value="{{ landlord.name }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="email">邮箱</label>
+            <input type="email" class="form-control" id="email" name="email" value="{{ landlord.email }}">
+        </div>
+        
+        <div class="form-group">
+            <label for="address">地址</label>
+            <input type="text" class="form-control" id="address" name="address" value="{{ landlord.addr }}">
+        </div>
+        
+        <div class="mt-3">
+            <button type="submit" class="btn btn-primary">更新</button>
+            <a href="{{ url_for('agent_page.agent_list') }}" class="btn btn-secondary">返回</a>
+        </div>
+    </form>
+</div>
+{% endblock %} 
