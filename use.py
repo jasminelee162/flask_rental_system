@@ -1,7 +1,7 @@
-from flask import Blueprint, request, Response, jsonify, render_template, redirect, session, send_file
+from flask import Blueprint, request, Response, jsonify, render_template, redirect, session, send_file, url_for
 from models import User, House
 from settings import db
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required, current_user
 import json
 import random
 import string
@@ -17,7 +17,7 @@ def register():
     name = request.form['username']
     password = request.form['password']
     email = request.form['email']
-    is_landlord = request.form.get('is_landlord', '0')  # 默认为普通用户（0），勾选后为1
+    is_landlord = request.form.get('is_landlord') == '1'  # 转换为布尔值
 
     # 校验用户名是否存在
     user_exists = User.query.filter(User.name == name).first()
@@ -29,15 +29,15 @@ def register():
         name=name,
         password=password,
         email=email,
-        is_landlord=is_landlord  # 存储房东标识
+        is_landlord=is_landlord  # 使用布尔值
     )
     db.session.add(new_user)
     db.session.commit()
 
     # 构造响应
-    res = Response(json.dumps({'valid': '1', 'msg': '注册成功', 'is_landlord': is_landlord}))
+    res = Response(json.dumps({'valid': '1', 'msg': '注册成功', 'is_landlord': '1' if is_landlord else '0'}))
     res.set_cookie('name', name, 3600 * 2)
-    res.set_cookie('is_landlord', is_landlord, 3600 * 2)  # 存储登录状态下的房东标识
+    res.set_cookie('is_landlord', '1' if is_landlord else '0', 3600 * 2)  # 存储为字符串
     return res
 
 
@@ -71,8 +71,16 @@ def user(name):
 
 
 # ================== 登录功能修改 ==================
-@user_page.route('/login', methods=['POST'])
+@user_page.route('/login', methods=['GET', 'POST'])
 def login():
+    if request.method == 'GET':
+        # 如果用户已登录，重定向到首页
+        if current_user.is_authenticated:
+            return redirect(url_for('index_page.index'))
+        # 否则显示登录页面
+        return render_template('login.html')
+        
+    # POST 请求处理登录逻辑
     name = request.form['username']
     password = request.form['password']
     captcha_input = request.form.get('captcha', '').strip()
@@ -91,16 +99,19 @@ def login():
 
     # 使用 flask_login 登录用户
     login_user(user)
+    
+    # 打印调试信息
+    print(f"用户登录成功: {user.name}, is_landlord: {user.is_landlord}, is_authenticated: {current_user.is_authenticated}")
 
     # 登录成功后返回房东状态
     res = Response(json.dumps({
         'valid': '1',
         'msg': '登录成功',
         'name': user.name,
-        'is_landlord': user.is_landlord  # 返回房东标识
+        'is_landlord': '1' if user.is_landlord else '0'  # 转换为字符串
     }))
     res.set_cookie('name', user.name, 3600 * 2)
-    res.set_cookie('is_landlord', str(user.is_landlord), 3600 * 2)  # 存储房东状态到Cookie
+    res.set_cookie('is_landlord', '1' if user.is_landlord else '0', 3600 * 2)  # 存储为字符串
     return res
 
 

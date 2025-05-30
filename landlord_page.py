@@ -9,6 +9,7 @@ landlord_page = Blueprint('landlord_page', __name__)
 
 def check_landlord():
     """检查当前用户是否是房东"""
+    print(f"检查房东权限: is_authenticated={current_user.is_authenticated}, is_landlord={current_user.is_landlord}")
     if not current_user.is_authenticated or not current_user.is_landlord:
         flash('您没有房东权限!', 'error')
         return False
@@ -18,6 +19,7 @@ def check_landlord():
 @login_required
 def my_houses():
     """房东查看自己的房源列表"""
+    print(f"访问我的房源: is_authenticated={current_user.is_authenticated}, is_landlord={current_user.is_landlord}")
     if not check_landlord():
         return redirect(url_for('index_page.index'))
         
