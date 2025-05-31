@@ -40,7 +40,7 @@ def register():
 
         res = Response(json_str)  # 实例化的过程中  需要给他传入响应内容
         res.set_cookie('name', user.name, 3600 * 2)  # key value 过期时间 单位秒
-
+        res.set_cookie('userId', str(user.id))  # 确保 user.id 是 int
         return res
 
     # 用户名已经被注册过
@@ -154,6 +154,7 @@ def login():
             result_json = json.dumps(result)
             res = Response(result_json)
             res.set_cookie('name', user.name, 3600 * 2)
+            res.set_cookie('userId', str(user.id))  # 确保 user.id 是 int
             return res
         else:
             return jsonify({'valid': '0', 'msg': '密码不正确！'})
@@ -185,6 +186,7 @@ def logout():
         res = Response(json_str)
         # 删除用户的cookie
         res.delete_cookie('name')  # 需要传入一个参数 用来指定删除那条cookie
+        res.delete_cookie('uerId')  # 需要传入一个参数 用来指定删除那条cookie
 
         return res
 
@@ -227,7 +229,7 @@ def mofity_info(option):
             # 创建响应对象
             res = Response(json_str)
             res.set_cookie('name', user.name, 3600 * 2)
-
+            res.set_cookie('userId', str(user.id))  # 确保 user.id 是 int
             return res
 
         # 用户不存在

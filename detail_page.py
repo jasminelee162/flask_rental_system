@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, jsonify, request
 from models import House, User, Tuijian
 from utils.connect_to_database import query_data
 from settings import db
-from sqlalchemy import func
+from sqlalchemy import func, text
 from utils.regression_data import linear_model_main
 from utils.pearson_tuijian import recommed
 
@@ -50,6 +50,7 @@ detail_page = Blueprint('detail_page', __name__)
 def detail(hid):
     house = House.query.get(hid)
     page_view = house.page_view
+    # id = House.query.get(hid)
     id = str(house.id)
     # sql_list = ['use beijing_house_data;', f'update soufang set liulanliang=liulanliang+1 where id={id}']
     # for sql in sql_list:
@@ -59,9 +60,14 @@ def detail(hid):
     sheshi_str = house.sheshi  # 床-宽带-洗衣机-空调-热水器-暖气
     sheshi_list = sheshi_str.split('-')
 
+
     # 判断用户是否处于登录状态下
     name = request.cookies.get('name')
-
+    print("house.id =", id)
+    print("id =", id)
+    print("house.landlord_id =", house.landlord_id)
+    result = db.session.execute(text("SELECT id, landlord_id FROM house_info WHERE id = 12")).fetchone()
+    print("zheshiyige result = ", result);
     # 定义一个用来盛放推荐房源的列表容器
     tuijian = []
 
@@ -153,7 +159,7 @@ def detail(hid):
         else:
             tuijian = putong_tuijian
 
-    return render_template('detail_page.html', house=house, sheshi=sheshi_list, tuijian=tuijian, picture=house.picture)
+    return render_template('detail_page.html', house=house, sheshi=sheshi_list, tuijian=tuijian, picture=house.picture,user=user)
 
 
 # 实现户型占比功能
