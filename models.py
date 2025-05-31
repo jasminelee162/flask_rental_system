@@ -1,5 +1,7 @@
 from settings import db
 from flask_login import UserMixin
+from datetime import datetime
+
 
 # soufang 表的模型类
 class House(db.Model):
@@ -95,3 +97,16 @@ class MessageInfo(db.Model):
 
     def __repr__(self):
         return f'<Message from {self.userId} to {self.landlordId}: {self.message}>'
+
+# viewing_appointment表的模型块
+class Appointment(db.Model):
+    __tablename__ = 'viewing_appointment'
+
+    id = db.Column(db.Integer, primary_key=True)
+    house_id = db.Column(db.Integer, db.ForeignKey('house_info.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user_info.id'))
+    landlord_id = db.Column(db.Integer, db.ForeignKey('user_info.id'))
+    appointment_time = db.Column(db.DateTime, nullable=False)
+    status = db.Column(db.String(20), default='pending')
+    note = db.Column(db.Text)
+    # 移除 created_at 字段

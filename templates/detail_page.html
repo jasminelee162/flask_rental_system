@@ -918,7 +918,46 @@
           color: #9a68f2; /* hover 更亮一点 */
         }
 
+/* 预约按钮样式 */
+.appointment {
+    margin-left: 10px;
+    background-color: rgba(39, 41, 61, 0.9);
+    border-radius: 3px;
+    border: 1px solid rgba(106, 176, 76, 0.3);
+    display: inline-block;
+    position: absolute;
+    padding: 8px 16px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(106, 176, 76, 0.2);
+    cursor: pointer;
+}
 
+.appointment:hover {
+    background-color: rgba(106, 176, 76, 0.9);
+    border: 0.5px solid rgba(106, 176, 76, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(106, 176, 76, 0.3);
+}
+
+.appointment i {
+    color: #6ab04c;
+    padding: 5px 10px;
+    transition: color 0.3s ease;
+}
+
+.appointment:hover i {
+    color: #fff;
+}
+
+/* 已预约状态 */
+.appointment.appointed {
+    background-color: rgba(106, 176, 76, 0.7);
+    border-color: rgba(106, 176, 76, 0.5);
+}
+
+.appointment.appointed i {
+    color: #fff;
+}
     </style>
 
 </head>
@@ -1068,11 +1107,18 @@
                                 <img class='img-fluid img-box' src="/static/img/{{ house.picture }}" alt="房源图片">
                             </a>
                             </div>
+
                             <!--价格-->
                             <div class="house-info">
                                 <span class="price">￥&nbsp{{ house.price }}/月</span>
                                 <span class="collection" id="btn-collection"><a><i class="fa fa-heart"
                                                                                    aria-hidden="true"> 收藏</i></a></span>
+
+                                 <span class="appointment" id="btn-appointment" data-house-id="{{ house.id }}">
+                                     <a><i class="fa fa-calendar-check" aria-hidden="true">
+                                        {% if is_appointed %}已预约{% else %}预约看房{% endif %}
+                                    </i></a>
+                                </span>
                             </div>
 
                             <!--基本信息标题-->
@@ -1449,6 +1495,35 @@
                         </div>
                     </div>
                 </div>
+
+
+                <!-- 预约看房模态框 -->
+                <div id="appointmentModal" class="modal fade">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">预约看房</h5>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label>选择预约时间</label>
+                                    <input type="datetime-local" id="appointmentTime" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>备注信息</label>
+                                    <textarea id="appointmentNote" class="form-control" rows="3" placeholder="可选"></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" id="confirmAppointment">确认预约</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
             </div>
 
         </div>
@@ -1486,6 +1561,7 @@
 <script src="/static/js/f_data.js"></script>
 <script src="/static/js/show_column_data.js"></script>
 <script src="/static/js/show_broken_line_data.js"></script>
+<script src="/static/js/appointment.js"></script>
 
 
 <script>

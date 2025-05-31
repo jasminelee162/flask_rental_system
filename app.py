@@ -15,6 +15,7 @@ from flask_login import LoginManager
 from models import User
 from flask_caching import Cache
 
+
 app = Flask(__name__)
 app.secret_key = 'your_very_secret_key'
 

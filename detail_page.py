@@ -5,7 +5,9 @@ from settings import db
 from sqlalchemy import func, text
 from utils.regression_data import linear_model_main
 from utils.pearson_tuijian import recommed
-
+from datetime import datetime
+from models import db, Appointment
+from flask_login import login_required, current_user
 
 detail_page = Blueprint('detail_page', __name__)
 
@@ -60,6 +62,9 @@ def detail(hid):
     sheshi_str = house.sheshi  # 床-宽带-洗衣机-空调-热水器-暖气
     sheshi_list = sheshi_str.split('-')
 
+    # 初始化预约状态
+    is_appointed = False
+    name = request.cookies.get('name')
 
     # 判断用户是否处于登录状态下
     name = request.cookies.get('name')
@@ -75,6 +80,12 @@ def detail(hid):
     if name:
         # 获取用户对象
         user = User.query.filter(User.name == name).first()
+
+        # 检查预约状态
+        is_appointed = Appointment.query.filter_by(
+            house_id=hid,
+            user_id=user.id
+        ).first() is not None
 
         # 获取用户对象的浏览记录
         seen_id_str = user.seen_id  # 浏览记录的格式：'123，234，345' 或着 null
@@ -160,7 +171,7 @@ def detail(hid):
         else:
             tuijian = putong_tuijian
 
-    return render_template('detail_page.html', house=house, sheshi=sheshi_list, tuijian=tuijian, picture=house.picture,user=user)
+    return render_template('detail_page.html', house=house, sheshi=sheshi_list, tuijian=tuijian, picture=house.picture,user=user,is_appointed=is_appointed)
 
 
 # 实现户型占比功能
@@ -303,6 +314,81 @@ def return_brokenline_data(block):
     return jsonify({'data': {'1室1厅': data, '2室1厅': data1, '2室2厅': data2, '3室2厅': data3}})
 
 
+# ... 文件顶部已有代码保持不变 ...
+
+# 在detail_page.py中添加预约相关路由
+@detail_page.route('/appointment/create', methods=['POST'])
+@login_required
+def create_appointment():
+    house_id = request.form.get('house_id')
+    time_str = request.form.get('appointment_time')
+    note = request.form.get('note', '')
+
+    try:
+        appointment_time = datetime.strptime(time_str, '%Y-%m-%dT%H:%M')
+    except ValueError:
+        return jsonify({'success': False, 'message': '无效的时间格式'})
+
+    # 检查是否已存在预约
+    existing = Appointment.query.filter_by(
+        house_id=house_id,
+        user_id=current_user.id
+    ).first()
+
+    if existing:
+        return jsonify({'success': False, 'message': '您已经预约过此房源'})
+
+    # 创建新预约
+    appointment = Appointment(
+        house_id=house_id,
+        user_id=current_user.id,
+        landlord_id=House.query.get(house_id).landlord_id,
+        appointment_time=appointment_time,
+        note=note,
+        status='pending'
+    )
+
+    db.session.add(appointment)
+    db.session.commit()
+
+    return jsonify({'success': True})
+
+
+@detail_page.route('/appointment/cancel', methods=['POST'])
+@login_required
+def cancel_appointment():
+    house_id = request.form.get('house_id')
+
+    appointment = Appointment.query.filter_by(
+        house_id=house_id,
+        user_id=current_user.id
+    ).first()
+
+    if not appointment:
+        return jsonify({'success': False, 'message': '未找到预约记录'})
+
+    db.session.delete(appointment)
+    db.session.commit()
+
+    return jsonify({'success': True})
+
+
+@detail_page.route('/appointment/status')
+@login_required
+def appointment_status():
+    house_id = request.args.get('house_id')
+    is_appointed = Appointment.query.filter_by(
+        house_id=house_id,
+        user_id=current_user.id
+    ).first() is not None
+
+    return jsonify({
+        'success': True,
+        'is_appointed': is_appointed
+    })
+
+
+# ... 文件底部已有代码保持不变 ...
 # 过滤器--用来实现 交通字段 无数据的时候 显示 暂无数据！
 def deal_traffic_txt(word):
     if len(word) == 0 or word is None:
