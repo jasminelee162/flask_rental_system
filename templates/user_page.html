@@ -430,6 +430,109 @@
             object-position: center;
         }
 
+        /**
+            消息列表框
+         */
+        #chat-dropdown a {
+            display: block;
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+            color: #333;
+            text-decoration: none;
+        }
+        #chat-dropdown a:hover {
+            background-color: #f5f5f5;
+        }
+
+
+       #chat-dropdown {
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        width: 300px;
+        max-height: 400px;
+        overflow-y: auto;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        z-index: 9999;
+        padding: 10px;
+      }
+
+          /* 聊天用户列表样式 */
+          #chat-user-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+          }
+
+          #chat-user-list li {
+            padding: 10px 15px;
+            margin-bottom: 5px;
+            background-color: #f9f9f9;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            font-size: 16px;
+            color: #333;
+          }
+
+
+        #chat-messages .my-message {
+          background-color: #8e44ad; /* 紫色 */
+          color: white;
+          padding: 8px 12px;
+          margin: 5px 0;
+          border-radius: 12px;
+          max-width: 100%;
+          display: inline-block;
+          align-self: flex-end;
+          text-align: left;
+        }
+
+        #chat-messages .other-message {
+          background-color: #444;
+          color: white;
+          padding: 8px 12px;
+          margin: 5px 0;
+          border-radius: 12px;
+          max-width: 100%;
+          display: inline-block;
+          align-self: flex-start;
+          text-align: left;
+        }
+
+        #chat-messages .message-row {
+          display: flex;
+          justify-content: flex-start;
+        }
+
+        #chat-messages .message-row.self {
+          justify-content: flex-end;
+        }
+        /* 通用滚动条样式：灰黑风格（兼容大多数 Chromium 浏览器） */
+        #chat-user-list::-webkit-scrollbar,
+        #chat-messages::-webkit-scrollbar {
+          width: 8px; /* 滚动条宽度 */
+        }
+
+        #chat-user-list::-webkit-scrollbar-track,
+        #chat-messages::-webkit-scrollbar-track {
+          background: #1e1e1e; /* 滚动条轨道背景 */
+        }
+
+        #chat-user-list::-webkit-scrollbar-thumb,
+        #chat-messages::-webkit-scrollbar-thumb {
+          background-color: #555;  /* 滚动条滑块颜色 */
+          border-radius: 4px;
+        }
+
+        #chat-user-list::-webkit-scrollbar-thumb:hover,
+        #chat-messages::-webkit-scrollbar-thumb:hover {
+          background-color: #777;
+        }
 
     </style>
 
@@ -469,12 +572,81 @@
                 </li>
 
                 {% if request.cookies.get('name') %}
-                <li class="nav-item">
-                    <a class="nav-link" id="message-icon" href="/messages" title="消息中心">
-                        <i class="fa fa-envelope"></i>
-                        <span id="unread-count" class="badge badge-danger" style="display: none;">0</span>
-                    </a>
-                </li>
+                <!-- 聊天图标区域 -->
+                <li class="nav-item dropdown" style="position: relative;">
+                  <a class="nav-link" id="msg-icon" href="#" title="消息中心" onclick="return false;">
+                    <i class="fa fa-envelope"></i>
+                    <span id="unread-count" class="badge badge-danger" style="display: none;">0</span>
+                  </a>
+
+             <!-- 整合后的  聊天弹窗 -->
+                <div id="chat-dropdown" style="
+                    display: none;
+                    position: absolute;
+                    top: 100%;
+                    right: 0;
+                    width: 600px;
+                    height: 400px;
+                    background: #1e1e1e; /* 深色背景 */
+                    border: 1px solid #444;
+                    z-index: 9999;
+                    /*display: flex;*/
+                    flex-direction: row;
+                    color: white;
+                    font-family: sans-serif;
+                ">
+
+                  <!-- 左侧：联系人列表 -->
+                  <div id="chat-user-list" style="
+                      width: 30%;
+                      border-right: 1px solid #444;
+                      overflow-y: auto;
+                      padding: 10px;
+                      background-color: #2c2c2c;
+                  ">
+                    <!-- JS填充 -->
+                  </div>
+
+                  <!-- 右侧：聊天窗口 -->
+                  <div id="chat-window" style="
+                      width: 70%;
+                      display: flex;
+                      flex-direction: column;
+                      padding: 10px;
+                      background-color: #1e1e1e;
+                  ">
+                    <h5 id="chat-user-name" style="margin-bottom: 10px; color: #fff;">请选择联系人</h5>
+
+                    <!-- 聊天记录 -->
+                    <div id="chat-messages" style="
+                        flex: 1;
+                        overflow-y: auto;
+                        border: 1px solid #333;
+                        padding: 10px;
+                        margin-bottom: 10px;
+                        margin-left: 10px;
+                        background-color: #2a2a2a;
+                        border-radius: 5px;
+                    ">
+                      <!-- JS填充 -->
+                    </div>
+
+                    <!-- 输入框 + 按钮 -->
+                    <div style="display: flex; gap: 10px;">
+                      <input id="chat-input-text" class="form-control" placeholder="输入消息" style="
+                          flex: 1;
+                          background-color: #333;
+                          border: 1px solid #555;
+                          color: white;
+                      ">
+                      <button id="send-message" class="btn" style="
+                          background-color: #8e44ad;
+                          color: white;
+                          border: none;
+                          padding: 6px 12px;
+                      ">发送</button>
+                    </div>
+
                 <li class="nav-item">
                     <a class="nav-link" id="logoutBtn" href="">退出登录</a>
                 </li>
@@ -667,6 +839,10 @@
 <!-- Custom scripts for this template -->
 <script src="/static/js/clean-blog.min.js"></script>
 <script src="/static/vendor/jquery/jquery.cookie.js"></script>
+
+//  聊天chat.js文件
+<script src="/static/js/chat.js"></script>
+
 
 <!-- change chanle -->
 <script>

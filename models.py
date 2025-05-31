@@ -1,7 +1,6 @@
 from settings import db
 from flask_login import UserMixin
 
-
 # soufang 表的模型类
 class House(db.Model):
     # 定义表名
@@ -23,7 +22,8 @@ class House(db.Model):
     page_view = db.Column(db.Integer)
     phone_num = db.Column(db.String(100))
     picture = db.Column(db.String(255))
-    
+    landlord_id = db.Column(db.Integer)
+
     # 房东ID(关联用户表)，使用与 user_info.id 相同的类型
     landlord_id = db.Column(db.Integer, db.ForeignKey('user_info.id', ondelete='SET NULL'))
 
@@ -80,3 +80,18 @@ class User(UserMixin, db.Model):
     # 重写__repr__方法， 方便我们查看对象的输出内容
     def __repr__(self):
         return 'User: %s, %s' % (self.name, self.id)
+
+
+# message_info 表的模型类
+class MessageInfo(db.Model):
+    __tablename__ = 'message_info'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)  # 这里要有主键
+    userId = db.Column(db.Integer, nullable=False)         # 发送者 user_id
+    landlordId = db.Column(db.Integer, nullable=False)     # 接收者 landlord_id，字段名必须和数据库一致
+    message = db.Column(db.String(500), nullable=False)    # 消息内容
+    user_flag = db.Column(db.Integer, default=0)
+    landlord_flag = db.Column(db.Integer, default=0)
+
+    def __repr__(self):
+        return f'<Message from {self.userId} to {self.landlordId}: {self.message}>'
