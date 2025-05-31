@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>管理员后台</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    {% block head_css %}{% endblock %}
 </head>
 <body>
 <div class="admin-container">
@@ -11,7 +12,7 @@
         <h2>后台管理</h2>
         <ul>
             <li><a href="{{ url_for('admin_page.dashboard') }}">统计信息</a></li>
-            <li><a href="{{ url_for('admin_page.properties') }}">房屋管理</a></li>
+            <li><a class="page-link" href="{{ url_for('admin_page.admin_properties', page=i) }}">房屋管理</a></li>
             <li><a href="{{ url_for('admin_page.messages') }}">消息</a></li>
         </ul>
     </aside>

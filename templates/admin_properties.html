@@ -1,0 +1,327 @@
+{% extends "admin_base.html" %}
+{% block head_css %}
+
+    <style>
+        body {
+            background: linear-gradient(to right, rgba(30, 30, 47, 0.9), rgba(42, 42, 66, 0.9));
+            color: #ffffff;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+
+        #mainNav {
+            background-color: rgba(39, 41, 61, 0.95) !important;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-light .navbar-brand,
+        .navbar-light .navbar-nav .nav-link {
+            color: #ffffff !important;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-light .navbar-brand:hover,
+        .navbar-light .navbar-nav .nav-link:hover {
+            color: #9a68f2 !important;
+            transform: translateY(-1px);
+        }
+
+        .area-info {
+            margin-left: 5px;
+            padding-left: 5px;
+            font-size: 16px;
+            padding-bottom: 10px;
+            border-bottom: #ecf0f1 1px solid;
+        }
+
+        .info-line {
+            margin: 10px 0 55px 0;
+        }
+
+        .course-info span {
+            line-height: 37px;
+        }
+.pagination {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding-left: 0;
+}
+
+.pagination .page-item {
+    margin: 0 4px;
+}
+
+        .tj-header {
+            margin: 30px 0 10px;
+        }
+
+        .describe {
+            font-size: 15px;
+            color: #bdc3c7;
+        }
+
+        /* login */
+        .m-header {
+            padding: 10px 16px 2px;
+        }
+
+        .login_form {
+            margin-top: 150px;
+        }
+
+        .form-info {
+            font-size: 18px;
+            color: #2c3e50;
+        }
+
+        .switch-info {
+            font-size: 14px;
+            color: #2c3e50;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 2px;
+        }
+
+        /* chanle */
+
+        .collection-line {
+            display: flex;
+            flex-wrap: wrap;  /* 如果你希望在小屏也不溢出可加这个 */
+            align-items: center;
+            justify-content: space-between;
+            background-color: rgba(39, 41, 61, 0.8);
+            border: 1px solid rgba(154, 104, 242, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+
+        .collection-line:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .collection-line-info {
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        .collection-line-info .title a {
+            color: #9a68f2;
+            font-size: 18px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .collection-line-info .title a:hover {
+            color: #7b4fc9;
+            text-decoration: none;
+        }
+
+        .collection-line-info .attribute-text {
+            color: rgba(154, 104, 242, 0.8);
+            font-weight: 300;
+        }
+
+        .collection-line-info .info-text {
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 400;
+        }
+
+        /* more */
+        .info-more {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .info-more .price {
+            color: #9a68f2;
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .info-more a {
+            color: rgba(154, 104, 242, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .info-more a:hover {
+            color: #9a68f2;
+            transform: translateX(5px);
+        }
+
+        .img-fluid {
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .img-fluid:hover {
+            transform: scale(1.02);
+        }
+
+        /* registe login*/
+        .register-login-line {
+            margin: 0;
+        }
+
+        /* page */
+        .my-page-line {
+            background-color: rgba(39, 41, 61, 0.8);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        /*hr*/
+        hr {
+            margin: 2px;
+        }
+
+        .modal-content {
+            background-color: #27293d;
+            color: #ffffff;
+        }
+
+        .form-control {
+            background-color: #2b3553;
+            border: 1px solid #9a68f2;
+            color: #ffffff;
+        }
+
+        .form-control:focus {
+            background-color: #2b3553;
+            border-color: #9a68f2;
+            color: #ffffff;
+        }
+
+        .btn-primary {
+            background-color: #9a68f2 !important;
+            border-color: #9a68f2 !important;
+        }
+
+        .btn-primary:hover {
+            background-color: #7b4fc9 !important;
+            border-color: #7b4fc9 !important;
+        }
+
+        .zxf_pagediv {
+            background-color: transparent;
+        }
+
+        .zxf_pagediv a {
+            color: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(154, 104, 242, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .zxf_pagediv a:hover {
+            background-color: rgba(154, 104, 242, 0.2);
+            color: #9a68f2;
+        }
+
+        .img-box{
+            width: 300px;
+            height: 200px;
+            object-fit: cover;
+            object-position: center;
+        }
+    </style>
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <h2 class="my-4">房源列表</h2>
+
+    <div class="collection col-lg-12 col-md-12">
+        <div id="fill-data" class="{{ page_num }}">
+
+            {% for house in house_list %}
+            <div class="collection-line d-flex align-items-center">
+                <!-- 左侧图片 -->
+                <div class="col-lg-4 col-md-4 p-2">
+                    <a href="/house/{{ house.id }}">
+                        <img class="img-fluid img-box" src="/static/img/{{ house.picture }}" alt="{{ house.title }}">
+                    </a>
+                </div>
+
+                <!-- 中间文字 -->
+                <div class="col-lg-6 col-md-6 p-2">
+                    <div class="collection-line-info">
+                        <div class="title">
+                            <span><a href="/house/{{ house.id }}">{{ house.title | dealover }}</a></span>
+                        </div>
+                        <div><span class="attribute-text">房源地址：</span><span class="info-text">{{ house.address }}</span></div>
+                        <div><span class="attribute-text">建筑面积：</span><span class="info-text">{{ house.area }}平米</span></div>
+                        <div><span class="attribute-text">房源户型：</span><span class="info-text">{{ house.rooms }}</span></div>
+                        <div><span class="attribute-text">房源朝向：</span><span class="info-text">{{ house.direction }}</span></div>
+                        <div><span class="attribute-text">交通条件：</span><span class="info-text">{{ house.traffic | dealdirection }}</span></div>
+                        <div><span class="attribute-text"><i class="fa fa-heart" style="color:#e74c3c"></i> {{ house.page_view }}人浏览过</span></div>
+                    </div>
+                </div>
+
+                <!-- 右侧价格和跳转 -->
+                <div class="col-lg-2 col-md-2 p-2 text-center">
+                    <div class="info-more">
+                        <span class="info-text" style="color: #e74c3c">￥&nbsp{{ house.price }}</span>
+                        <span><a href="/house/{{ house.id }}"><i class="fa fa-arrow-right" aria-hidden="true"></i></a></span>
+                    </div>
+                </div>
+            </div>
+
+            {% endfor %}
+        </div>
+
+        <div class="row my-page-line">
+<div class="row my-page-line">
+    <div class="col-lg-12 col-md-12 mx-auto">
+
+        <!-- 分页按钮：横向排列 -->
+        <nav aria-label="Page navigation">
+            <ul class="pagination d-flex justify-content-center flex-wrap">
+                {% if page_num > 1 %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_num - 1 }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+
+                {% for num in page_range %}
+                <li class="page-item {% if num == page_num %}active{% endif %}">
+                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                </li>
+                {% endfor %}
+
+                {% if page_num < total_pages %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_num + 1 }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+
+    </div>
+</div>
+
+</div>
+
+    </div>
+</div>
+
+
+{% endblock %}
