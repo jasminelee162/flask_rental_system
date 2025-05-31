@@ -110,3 +110,7 @@ class Appointment(db.Model):
     status = db.Column(db.String(20), default='pending')
     note = db.Column(db.Text)
     # 移除 created_at 字段
+    # 添加关系属性
+    house = db.relationship('House', backref='appointments')
+    user = db.relationship('User', foreign_keys=[user_id])
+    landlord = db.relationship('User', foreign_keys=[landlord_id])

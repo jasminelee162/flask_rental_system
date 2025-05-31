@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block title %}预约管理 - 租房系统{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>预约管理</h2>
+
+    <ul class="nav nav-tabs mb-4">
+        <li class="nav-item">
+            <a class="nav-link active" href="#pending" data-toggle="tab">待处理预约</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#confirmed" data-toggle="tab">已确认/已取消</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <!-- 待处理预约 -->
+        <div class="tab-pane fade show active" id="pending">
+            {% if pending_appointments %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>房源</th>
+                            <th>租客</th>
+                            <th>预约时间</th>
+                            <th>备注</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for appt in pending_appointments %}
+                        <tr>
+                            <td>
+                                <a href="{{ url_for('detail_page.detail', hid=appt.house.id) }}">
+                                    {{ appt.house.title }}
+                                </a>
+                            </td>
+                            <td>{{ appt.user.name }}</td>
+                            <td>{{ appt.appointment_time.strftime('%Y-%m-%d %H:%M') }}</td>
+                            <td>{{ appt.note or '无' }}</td>
+                            <td>
+                                <button class="btn btn-sm btn-success confirm-btn"
+                                        data-id="{{ appt.id }}">
+                                    确认
+                                </button>
+                                <button class="btn btn-sm btn-danger reject-btn"
+                                        data-id="{{ appt.id }}">
+                                    拒绝
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="alert alert-info">暂无待处理的预约请求</div>
+            {% endif %}
+        </div>
+
+        <!-- 已确认/已取消预约 -->
+        <div class="tab-pane fade" id="confirmed">
+            {% if confirmed_appointments %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>房源</th>
+                            <th>租客</th>
+                            <th>预约时间</th>
+                            <th>状态</th>
+                            <th>备注</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for appt in confirmed_appointments %}
+                        <tr>
+                            <td>
+                                <a href="{{ url_for('detail_page.detail', hid=appt.house.id) }}">
+                                    {{ appt.house.title }}
+                                </a>
+                            </td>
+                            <td>{{ appt.user.name }}</td>
+                            <td>{{ appt.appointment_time.strftime('%Y-%m-%d %H:%M') }}</td>
+                            <td>
+                                {% if appt.status == 'confirmed' %}
+                                <span class="badge bg-success">已确认</span>
+                                {% else %}
+                                <span class="badge bg-secondary">已取消</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ appt.note or '无' }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="alert alert-info">暂无已确认或已取消的预约</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% block scripts %}
+{{ super() }}
+<script>
+$(document).ready(function() {
+    // 确认预约
+    $('.confirm-btn').click(function() {
+        const apptId = $(this).data('id');
+        updateAppointmentStatus(apptId, 'confirmed', '预约已确认');
+    });
+
+    // 拒绝预约
+    $('.reject-btn').click(function() {
+        const apptId = $(this).data('id');
+        updateAppointmentStatus(apptId, 'canceled', '预约已拒绝');
+    });
+
+    function updateAppointmentStatus(apptId, status, successMsg) {
+        $.ajax({
+            url: '/landlord/appointment/update',
+            method: 'POST',
+            data: {
+                id: apptId,
+                status: status
+            },
+            success: function(response) {
+                if(response.success) {
+                    alert(successMsg);
+                    location.reload();
+                } else {
+                    alert(response.message || '操作失败');
+                }
+            },
+            error: function() {
+                alert('网络错误，请重试');
+            }
+        });
+    }
+});
+</script>
+{% endblock %}
+{% endblock %}

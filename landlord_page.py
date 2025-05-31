@@ -5,6 +5,10 @@ from datetime import datetime
 import os
 from werkzeug.utils import secure_filename
 from flask_caching import Cache
+from models import House, User, Appointment  # 添加Appointment
+from utils.connect_to_database import query_data
+from settings import db
+from sqlalchemy import func, text
 
 landlord_page = Blueprint('landlord_page', __name__)
 cache = Cache()
@@ -171,4 +175,51 @@ def delete_house(house_id):
         return jsonify({'success': True, 'message': '房源删除成功!'})
     except Exception as e:
         db.session.rollback()
-        return jsonify({'success': False, 'message': '删除失败,请重试!'}) 
+        return jsonify({'success': False, 'message': '删除失败,请重试!'})
+
+
+@landlord_page.route('/appointment/requests')
+@login_required
+def appointment_requests():
+    from sqlalchemy.orm import joinedload
+
+    # 获取待处理的预约
+    pending = Appointment.query.options(
+        joinedload(Appointment.house),
+        joinedload(Appointment.user)
+    ).filter(
+        Appointment.landlord_id == current_user.id,
+        Appointment.status == 'pending'
+    ).order_by(Appointment.appointment_time.asc()).all()
+
+    # 获取已确认的预约
+    confirmed = Appointment.query.options(
+        joinedload(Appointment.house),
+        joinedload(Appointment.user)
+    ).filter(
+        Appointment.landlord_id == current_user.id,
+        Appointment.status.in_(['confirmed', 'canceled'])
+    ).order_by(Appointment.appointment_time.desc()).all()
+
+    return render_template(
+        'landlord/appointment_requests.html',
+        pending_appointments=pending,
+        confirmed_appointments=confirmed
+    )
+
+
+@landlord_page.route('/appointment/update', methods=['POST'])
+@login_required
+def update_appointment():
+    appt_id = request.form.get('id')
+    new_status = request.form.get('status')
+
+    appointment = Appointment.query.filter_by(
+        id=appt_id,
+        landlord_id=current_user.id
+    ).first_or_404()
+
+    appointment.status = new_status
+    db.session.commit()
+
+    return jsonify({'success': True})
