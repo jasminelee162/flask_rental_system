@@ -65,6 +65,7 @@ def sign_contract():
             return jsonify({'success': False, 'message': '房源不存在'}), 404
 
         house.rental_status = '已出租'
+        current_user.rent_id = house.id
         db.session.commit()
 
         return jsonify({

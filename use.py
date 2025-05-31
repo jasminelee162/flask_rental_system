@@ -75,12 +75,23 @@ def user(name):
                 if house:
                     lst.append(house)
 
+    # 解析我的已租
+    rent_house_list = []
+    if user.rent_id:
+        try:
+            rented_ids = [int(hid.strip()) for hid in user.rent_id.split(',') if hid.strip()]
+            rented_houses = House.query.filter(House.id.in_(rented_ids)).all()
+        except Exception as e:
+            print(f"解析rent_id出错: {str(e)}")
+
     # 传递房东标识到模板
     return render_template(
         'user_page.html',
         user=user,
         collect_house_list=collect_house_list,
         seen_house_list=seen_house_list,
+        rent_house_list=rent_house_list,
+        rented_houses=rented_houses,
         is_landlord=user.is_landlord  # 传递房东状态
     )
 

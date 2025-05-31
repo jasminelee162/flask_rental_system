@@ -61,6 +61,7 @@ class User(UserMixin, db.Model):
     collect_id = db.Column(db.String(250))
     seen_id = db.Column(db.String(250))
     is_landlord = db.Column(db.Boolean, default=False)  # 是否是房东
+    rent_id = db.Column(db.String(250))
 
     # 与房源的一对多关系
     houses = db.relationship('House', backref='landlord', lazy=True)
