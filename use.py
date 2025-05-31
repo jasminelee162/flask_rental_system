@@ -88,10 +88,17 @@ def user(name):
 # ================== 登录功能修改 ==================
 @user_page.route('/login', methods=['GET', 'POST'])
 def login():
-    # 获取用户提交的信息
-    name = request.form['username']
-    password = request.form['password']
+    if request.method == 'GET':
+        return render_template('login.html')
+        
+    # 获取用户提交的信息，使用 get() 方法安全地获取表单数据
+    name = request.form.get('username', '').strip()
+    password = request.form.get('password', '').strip()
     captcha_input = request.form.get('captcha', '').strip()
+
+    # 验证表单数据是否完整
+    if not name or not password:
+        return jsonify({'valid': '0', 'msg': '用户名和密码不能为空！'})
 
     # 验证码校验
     if captcha_input.upper() != session.get('captcha_code', '').upper():
