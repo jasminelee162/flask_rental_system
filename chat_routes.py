@@ -1,6 +1,7 @@
 # chat_routes.py
 from flask import Blueprint, request, jsonify
 from models import db, MessageInfo, User  # 根据项目实际导入
+from flask import render_template
 
 chat_bp = Blueprint('chat', __name__)
 
@@ -86,3 +87,6 @@ def send_message():
     db.session.commit()
     return jsonify({'status': 'ok'})
 
+@chat_bp.route('/chat')
+def chat_page():
+    return render_template('landlord/chat_partial.html')  # 注意这里不是整个页面

@@ -11,6 +11,11 @@
     <!-- Custom CSS -->
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
     {% block extra_css %}{% endblock %}
+
+    <style>
+
+
+    </style>
 </head>
 <body>
     <!-- 导航栏 -->
@@ -35,6 +40,10 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('landlord_page.appointment_requests') }}">预约管理</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('chat.chat_page') }}" id="chatNav">消息列表</a>
+                    </li>
+
                     {% endif %}
                 </ul>
                 <ul class="navbar-nav">
@@ -160,6 +169,7 @@
     <script src="https://cdn.bootcdn.net/ajax/libs/bootstrap-validator/0.5.3/js/bootstrapValidator.min.js"></script>
     <!-- Custom JavaScript -->
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/chat_landlord.js') }}"></script>
     {% block scripts %}{% endblock %}
 </body>
 </html> 
