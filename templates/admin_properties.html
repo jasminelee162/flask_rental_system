@@ -1,22 +1,16 @@
 {% extends "admin_base.html" %}
 {% block head_css %}
-
     <style>
         body {
-            background: linear-gradient(to right, rgba(30, 30, 47, 0.9), rgba(42, 42, 66, 0.9));
-            color: #ffffff;
+            margin: 0;
             font-family: "Microsoft YaHei", sans-serif;
-        }
-
-        #mainNav {
-            background-color: rgba(39, 41, 61, 0.95) !important;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(to right, rgba(20, 20, 30, 0.95), rgba(28, 28, 44, 0.95));
+            color: #f5f5f5;
         }
 
         .navbar-light .navbar-brand,
         .navbar-light .navbar-nav .nav-link {
-            color: #ffffff !important;
+            color: #f8f8f8 !important;
             font-weight: 300;
             letter-spacing: 0.5px;
             transition: all 0.3s ease;
@@ -24,89 +18,28 @@
 
         .navbar-light .navbar-brand:hover,
         .navbar-light .navbar-nav .nav-link:hover {
-            color: #9a68f2 !important;
+            color: #d4af37 !important; /* 金色 */
             transform: translateY(-1px);
         }
 
-        .area-info {
-            margin-left: 5px;
-            padding-left: 5px;
-            font-size: 16px;
-            padding-bottom: 10px;
-            border-bottom: #ecf0f1 1px solid;
-        }
-
-        .info-line {
-            margin: 10px 0 55px 0;
-        }
-
-        .course-info span {
-            line-height: 37px;
-        }
-.pagination {
-    display: flex;
-    justify-content: center;
-    list-style: none;
-    padding-left: 0;
-}
-
-.pagination .page-item {
-    margin: 0 4px;
-}
-
-        .tj-header {
-            margin: 30px 0 10px;
-        }
-
-        .describe {
-            font-size: 15px;
-            color: #bdc3c7;
-        }
-
-        /* login */
-        .m-header {
-            padding: 10px 16px 2px;
-        }
-
-        .login_form {
-            margin-top: 150px;
-        }
-
-        .form-info {
-            font-size: 18px;
-            color: #2c3e50;
-        }
-
-        .switch-info {
-            font-size: 14px;
-            color: #2c3e50;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border-radius: 2px;
-        }
-
-        /* chanle */
-
         .collection-line {
             display: flex;
-            flex-wrap: wrap;  /* 如果你希望在小屏也不溢出可加这个 */
+            flex-wrap: wrap;
             align-items: center;
             justify-content: space-between;
-            background-color: rgba(39, 41, 61, 0.8);
-            border: 1px solid rgba(154, 104, 242, 0.3);
+            background-color: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(212, 175, 55, 0.3); /* 金色边框 */
             border-radius: 12px;
             padding: 20px;
             margin: 15px 0;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
             transition: all 0.3s ease;
         }
 
-
         .collection-line:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 12px 24px rgba(212, 175, 55, 0.3); /* 金色光影 */
         }
 
         .collection-line-info {
@@ -115,19 +48,19 @@
         }
 
         .collection-line-info .title a {
-            color: #9a68f2;
+            color: #FF9800; /* 金色 */
             font-size: 18px;
-            font-weight: 500;
+            font-weight: 600;
             transition: all 0.3s ease;
         }
 
         .collection-line-info .title a:hover {
-            color: #7b4fc9;
+            color: #ffe27a; /* 更亮金色 */
             text-decoration: none;
         }
 
         .collection-line-info .attribute-text {
-            color: rgba(154, 104, 242, 0.8);
+            color: #bca97d; /* 柔和金棕 */
             font-weight: 300;
         }
 
@@ -136,7 +69,6 @@
             font-weight: 400;
         }
 
-        /* more */
         .info-more {
             display: flex;
             flex-direction: column;
@@ -146,19 +78,19 @@
         }
 
         .info-more .price {
-            color: #9a68f2;
+            color: #d4af37;
             font-size: 24px;
-            font-weight: 500;
+            font-weight: 600;
             margin-bottom: 15px;
         }
 
         .info-more a {
-            color: rgba(154, 104, 242, 0.8);
+            color: rgba(212, 175, 55, 0.7);
             transition: all 0.3s ease;
         }
 
         .info-more a:hover {
-            color: #9a68f2;
+            color: #ffe27a;
             transform: translateX(5px);
         }
 
@@ -168,77 +100,53 @@
         }
 
         .img-fluid:hover {
-            transform: scale(1.02);
+            transform: scale(1.03);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
         }
 
-        /* registe login*/
-        .register-login-line {
-            margin: 0;
-        }
-
-        /* page */
         .my-page-line {
-            background-color: rgba(39, 41, 61, 0.8);
+            background-color: rgba(0, 0, 0, 0.5);
             border-radius: 10px;
             padding: 15px;
             margin: 20px 0;
         }
 
-        /*hr*/
-        hr {
-            margin: 2px;
+        .pagination {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            padding-left: 0;
         }
 
-        .modal-content {
-            background-color: #27293d;
-            color: #ffffff;
-        }
-
-        .form-control {
-            background-color: #2b3553;
-            border: 1px solid #9a68f2;
-            color: #ffffff;
-        }
-
-        .form-control:focus {
-            background-color: #2b3553;
-            border-color: #9a68f2;
-            color: #ffffff;
-        }
-
-        .btn-primary {
-            background-color: #9a68f2 !important;
-            border-color: #9a68f2 !important;
-        }
-
-        .btn-primary:hover {
-            background-color: #7b4fc9 !important;
-            border-color: #7b4fc9 !important;
-        }
-
-        .zxf_pagediv {
-            background-color: transparent;
+        .pagination .page-item {
+            margin: 0 4px;
         }
 
         .zxf_pagediv a {
             color: rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(154, 104, 242, 0.3);
+            border: 1px solid rgba(212, 175, 55, 0.3);
             transition: all 0.3s ease;
         }
 
         .zxf_pagediv a:hover {
-            background-color: rgba(154, 104, 242, 0.2);
-            color: #9a68f2;
+            background-color: rgba(212, 175, 55, 0.2);
+            color: #d4af37;
         }
 
-        .img-box{
+        .img-box {
             width: 300px;
             height: 200px;
             object-fit: cover;
             object-position: center;
         }
+
+        hr {
+            margin: 2px;
+            border-color: rgba(255, 255, 255, 0.1);
+        }
     </style>
 {% endblock %}
+
 
 
 {% block content %}

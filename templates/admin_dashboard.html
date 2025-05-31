@@ -1,8 +1,28 @@
 {% extends 'admin_base.html' %}
+{% block head_css %}
+
+    <style>
+        body {
+            background:
+                radial-gradient(circle at center, rgba(255,255,255,0.3) 1px, transparent 1px),
+                linear-gradient(135deg, #f7f8fa 0%, #e1e4ea 100%);
+            background-size: 20px 20px;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
+        }
+
+    </style>
+{% endblock %}
 {% block content %}
-    <h1>统计信息</h1>
-    <div class="stat-box">
-        <p>🏠 房屋出租率：75%</p>
-        <p>👥 用户活跃度：日活跃用户 120人</p>
+    <h1 class="page-title">统计信息</h1>
+    <div class="stat-container">
+        <div class="stat-box">
+            <p>🏠 房屋出租率：<span>75%</span></p>
+        </div>
+        <div class="stat-box">
+            <p>👥 用户活跃度：<span>日活跃用户 120人</span></p>
+        </div>
     </div>
 {% endblock %}
+

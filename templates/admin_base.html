@@ -8,14 +8,15 @@
 </head>
 <body>
 <div class="admin-container">
-    <aside class="sidebar">
-        <h2>后台管理</h2>
-        <ul>
-            <li><a href="{{ url_for('admin_page.dashboard') }}">统计信息</a></li>
-            <li><a class="page-link" href="{{ url_for('admin_page.admin_properties', page=i) }}">房屋管理</a></li>
-            <li><a href="{{ url_for('admin_page.messages') }}">消息</a></li>
-        </ul>
-    </aside>
+<aside class="sidebar">
+  <h2 class="sidebar-title">后台管理</h2>
+  <ul class="sidebar-menu">
+        <li><a href="{{ url_for('admin_page.dashboard') }}">统计信息</a></li>
+        <li><a href="{{ url_for('admin_page.admin_properties', page=1) }}">房屋管理</a></li>
+        <li><a href="{{ url_for('admin_page.messages') }}">消息</a></li>
+    </ul>
+</aside>
+
     <main class="main-content">
         {% block content %}{% endblock %}
     </main>
