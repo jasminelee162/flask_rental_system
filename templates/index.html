@@ -524,6 +524,33 @@
         #chat-messages::-webkit-scrollbar-thumb:hover {
           background-color: #777;
         }
+
+        .my-nav-tab {
+          display: flex;
+          gap: 3px; /* 控制两项之间的间距 */
+        }
+
+        .my-nav-tab li {
+          list-style: none;
+          background-color: #007bff; /* 蓝底 */
+          color: white;
+          padding: 8px 16px;
+          border-radius: 6px;
+          cursor: pointer;
+          transition: background-color 0.2s ease;
+        }
+
+        .my-nav-tab li:hover {
+          background-color: #0056b3;
+        }
+
+        .my-nav-tab li.active {
+          background-color: #0056b3; /* 激活态颜色更深 */
+        }
+
+
+
+
     </style>
 
 </head>
