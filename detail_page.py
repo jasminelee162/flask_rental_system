@@ -151,6 +151,7 @@ def detail(hid):
 
     # 没有在登陆状态下
     else:
+        user = None
         print('-----使用普通推荐系统，获取同小区的房源给用户-----')
         putong_tuijian = House.query.filter(House.address == house.address).order_by(House.page_view.desc()).all()
 
