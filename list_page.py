@@ -1,4 +1,4 @@
-#最新房源和最热房源的展示通过@list_page.route('/list/pattern/<int:page>')实现，list_page
+#最新房源和最热房源的展示通过@list_page.route('/pattern/<int:page>')实现，list_page
 #搜索结果展示@list_page.route('/query') 实现，sousuo_page
 from flask import Blueprint, request, render_template
 from models import House
@@ -16,7 +16,7 @@ list_page = Blueprint('list_page', __name__)
 """
 
 #在这里可以增加分页功能
-@list_page.route('/query')  # http://127.0.0.1:5000/query?request.args
+@list_page.route('/query')  # http://127.0.0.1:5000/list/query?request.args
 def search_txt_info():
     # 获取地区字段的查询
     if request.args.get('addr'):
@@ -34,14 +34,14 @@ def search_txt_info():
 
 # 获取最新房源列表页的功能
 """
-1. 去定义一个视图函数 /list/pattern/<int:page>  method=get
+1. 去定义一个视图函数 /pattern/<int:page>  method=get
 2. 获取全部的房源数据，再根据房源的发布时间 publish_time 字段进行降序排序
 3. 实现分页功能 借助分页插件 和 paginate函数来完成
 4. 使用render_template进行渲染
 """
 
 
-@list_page.route('/list/pattern/<int:page>')
+@list_page.route('/pattern/<int:page>')
 def return_new_list(page):
     # 对列表的数据进行保护，只能查看前10页的数据，当请求的页码数大于10 或者页码数 小于0的时候，我们返回page=1
     if page > 10 or page <= 0:
@@ -56,14 +56,14 @@ def return_new_list(page):
 
 # 获取最热房源列表页的功能
 """
-1. 去定义一个视图函数 /list/pattern1/<int:page>  method=get
+1. 去定义一个视图函数 /pattern1/<int:page>  method=get
 2. 获取全部的房源数据，再根据房源的浏览量 liulanliang 字段进行降序排序
 3. 实现分页功能 借助分页插件 和 paginate函数来完成
 4. 使用render_template进行渲染
 """
 
 
-@list_page.route('/list/pattern1/<int:page>')
+@list_page.route('/pattern1/<int:page>')
 def return_hot_list(page):
     if page > 10 or page <= 0:
         page=1

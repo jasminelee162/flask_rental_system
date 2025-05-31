@@ -1,4 +1,5 @@
 # 1. 导入线性回归模型
+import numpy as np
 from sklearn.linear_model import LinearRegression
 # 2. 进行线性回归的预测
 def linear_model_main(X_parameter, Y_paramter, predict_value):
@@ -10,7 +11,8 @@ def linear_model_main(X_parameter, Y_paramter, predict_value):
     regr.fit(X_parameter, Y_paramter)
 
     # 2.3 预测新的样本
-    predict_outcome = regr.predict(predict_value)
+    # predict_outcome = regr.predict(predict_value)
+    predict_outcome = regr.predict(np.array(predict_value).reshape(1, -1))
 
     # 2.4 返回预测新值
     return predict_outcome
