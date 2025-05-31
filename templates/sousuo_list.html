@@ -378,7 +378,7 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form id="loginform">
+                            <form id="loginform" action="/user/login" method="post">
                                 <div class="form-group">
                                     <label for="login-username">用户名</label>
                                     <input class="form-control" id="login-username" name="username" type="text" placeholder="请输入用户名">
@@ -465,7 +465,7 @@ $(document).ready(function() {
         if (bv.isValid()) {
             $.ajax({
                 type: 'POST',
-                url: '/login',
+                url: '/user/login',
                 data: $form.serialize(),
                 dataType: 'json',
                 success: function(response) {

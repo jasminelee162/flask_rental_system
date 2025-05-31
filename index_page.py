@@ -1,4 +1,3 @@
-
 # 后端检查满足要求的所有房源
 # 渲染列表页
 from flask import Flask,Blueprint, render_template, request, jsonify

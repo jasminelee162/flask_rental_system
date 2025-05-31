@@ -42,7 +42,7 @@ def register():
 
 
 # ================== 用户中心页修改 ==================
-@user_page.route('/user/<name>')
+@user_page.route('/<name>')
 def user(name):
     user = User.query.filter(User.name == name).first()
 
@@ -89,7 +89,7 @@ def login():
     if captcha_input.upper() != session.get('captcha_code', '').upper():
         return jsonify({'valid': '0', 'msg': '验证码错误！'})
 
-    # 查询用户
+    # 查询用户（包含房东标识）
     user = User.query.filter(User.name == name).first()
     if not user:
         return jsonify({'valid': '0', 'msg': '用户名不存在！'})
@@ -100,13 +100,19 @@ def login():
     # 使用 flask_login 登录用户
     login_user(user)
     
-    # 登录成功后返回用户信息
-    return jsonify({
+    # 打印调试信息
+    print(f"用户登录成功: {user.name}, is_landlord: {user.is_landlord}, is_authenticated: {current_user.is_authenticated}")
+
+    # 登录成功后返回房东状态
+    res = Response(json.dumps({
         'valid': '1',
         'msg': '登录成功',
         'name': user.name,
-        'is_landlord': '1' if user.is_landlord else '0'
-    })
+        'is_landlord': '1' if user.is_landlord else '0'  # 转换为字符串
+    }))
+    res.set_cookie('name', user.name, 3600 * 2)
+    res.set_cookie('is_landlord', '1' if user.is_landlord else '0', 3600 * 2)  # 存储为字符串
+    return res
 
 
 # ================== 修改用户信息功能扩展 ==================
@@ -134,7 +140,7 @@ def modify_info(option):
 
 
 # ================== 辅助功能（保持原有逻辑） ==================
-@user_page.route('/logout')
+@user_page.route('/logout', methods=['GET', 'POST'])
 @login_required
 def logout():
     logout_user()  # 使用 flask_login 登出用户

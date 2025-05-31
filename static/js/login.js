@@ -94,7 +94,7 @@ $(document).ready(function () {
     });
 
     // 登录表单验证器
-    $('#loginForm').bootstrapValidator({
+    $('#loginform').bootstrapValidator({
         message: 'This value is not valid',
         feedbackIcons: {
             valid: 'glyphicon glyphicon-ok',
@@ -156,7 +156,7 @@ $(document).ready(function () {
     // 处理登录按钮点击
     $('#login-btn').click(function(e) {
         e.preventDefault();
-        var $form = $('#loginForm');
+        var $form = $('#loginform');
         var validator = $form.data('bootstrapValidator');
         
         validator.validate();
@@ -175,9 +175,9 @@ $(document).ready(function () {
                     } else {
                         // 登录成功，根据用户类型跳转
                         if (response.is_landlord === '1') {
-                            window.location.href = '/landlord/' + response.msg;
+                            window.location.href = '/landlord/my/houses';  // 房东跳转到房源管理页面
                         } else {
-                            window.location.href = '/user/' + response.msg;
+                            window.location.href = '/user/' + response.name;  // 普通用户跳转到个人中心
                         }
                     }
                 },
@@ -193,7 +193,7 @@ $(document).ready(function () {
     $("#logoutBtn").click(function(e) {
         e.preventDefault();
         if (confirm('确定要退出登录吗？')) {
-            $.post('/logout', function(response) {
+            $.post('/user/logout', function(response) {
                 if (response.valid === '1') {
                     window.location.href = '/';
                 } else {

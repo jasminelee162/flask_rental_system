@@ -464,7 +464,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="logout" href="">退出登录</a>
+                    <a class="nav-link" id="logoutBtn" href="javascript:void(0)">退出登录</a>
                 </li>
                 {% endif %}
 
@@ -657,7 +657,7 @@
                             <h1 class="text-center">登录</h1>
                         </div>
                         <div class="modal-body">
-                            <form class="form-group" id="loginform" action="/login" method="post">
+                            <form class="form-group" id="loginform" action="/user/login" method="post">
                                 <div class="form-group">
                                     <label for="" class="form-info">用户名</label>
                                     <input class="form-control" name="username" type="text" placeholder="">
@@ -670,7 +670,7 @@
                                     <label class="form-info">验证码</label>
                                     <div style="display: flex; align-items: center;">
                                         <input class="form-control" name="captcha" type="text" style="width: 60%;">
-                                        <img src="/captcha" id="captcha-img" style="cursor: pointer; margin-left: 10px; height: 38px;" onclick="this.src='/captcha?'+Math.random()">
+                                        <img src="/user/captcha" class="captcha-img" alt="验证码" style="cursor: pointer; margin-left: 10px; height: 38px;" onclick="this.src='/user/captcha?'+Math.random()">
                                     </div>
                                 </div>
                                 <div class="btn-group">

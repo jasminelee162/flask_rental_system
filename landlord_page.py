@@ -27,87 +27,23 @@ def my_houses():
     page = request.args.get('page', 1, type=int)
     per_page = 9  # 每页显示9个房源
     
-    # 使用缓存获取房源列表
-    cache_key = f'landlord_houses_{current_user.id}_page_{page}'
-    houses_data = cache.get(cache_key)
+    # 打印调试信息
+    print(f"当前用户ID: {current_user.id}")
+    print(f"当前用户是否是房东: {current_user.is_landlord}")
     
-    if houses_data is None:
-        # 如果缓存中没有，从数据库获取
-        query = House.query.filter_by(landlord_id=current_user.id)\
-            .order_by(House.publish_time.desc())
-        houses = query.paginate(page=page, per_page=per_page, error_out=False)
-        
-        # 缓存查询结果
-        houses_data = {
-            'items': [{
-                'id': house.id,
-                'title': house.title,
-                'rooms': house.rooms,
-                'area': house.area,
-                'price': house.price,
-                'direction': house.direction,
-                'rent_type': house.rent_type,
-                'region': house.region,
-                'block': house.block,
-                'address': house.address,
-                'traffic': house.traffic,
-                'sheshi': house.sheshi,
-                'picture': house.picture,
-                'publish_time': house.publish_time,
-                'page_view': house.page_view
-            } for house in houses.items],
-            'total': houses.total,
-            'pages': houses.pages,
-            'page': houses.page,
-            'has_prev': houses.has_prev,
-            'has_next': houses.has_next,
-            'prev_num': houses.prev_num,
-            'next_num': houses.next_num
-        }
-        # 设置缓存，有效期5分钟
-        cache.set(cache_key, houses_data, timeout=300)
+    # 直接从数据库获取当前房东的房源
+    query = House.query.filter_by(landlord_id=current_user.id)\
+        .order_by(House.publish_time.desc())
     
-    # 创建分页对象
-    class SimplePagination:
-        def __init__(self, items, page, per_page, total, pages):
-            self.items = items
-            self.page = page
-            self.per_page = per_page
-            self.total = total
-            self.pages = pages
-            self.has_prev = page > 1
-            self.has_next = page < pages
-            self.prev_num = page - 1 if page > 1 else None
-            self.next_num = page + 1 if page < pages else None
-            
-        def iter_pages(self, left_edge=2, left_current=2, right_current=3, right_edge=2):
-            last = 0
-            for num in range(1, self.pages + 1):
-                if (num <= left_edge or
-                    (num > self.page - left_current - 1 and
-                     num < self.page + right_current) or
-                    num > self.pages - right_edge + 1):
-                    if last + 1 != num:
-                        yield None
-                    yield num
-                    last = num
+    # 打印SQL查询语句
+    print(f"SQL查询: {query}")
     
-    # 从缓存数据创建房源对象列表
-    houses_items = []
-    for item in houses_data['items']:
-        house = House()
-        for key, value in item.items():
-            setattr(house, key, value)
-        houses_items.append(house)
+    houses = query.paginate(page=page, per_page=per_page, error_out=False)
     
-    # 创建分页对象
-    houses = SimplePagination(
-        items=houses_items,
-        page=houses_data['page'],
-        per_page=per_page,
-        total=houses_data['total'],
-        pages=houses_data['pages']
-    )
+    # 打印查询结果
+    print(f"查询到的房源数量: {houses.total}")
+    for house in houses.items:
+        print(f"房源ID: {house.id}, 房东ID: {house.landlord_id}, 标题: {house.title}")
     
     return render_template('landlord/house_list.html', houses=houses)
 
