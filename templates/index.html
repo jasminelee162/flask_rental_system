@@ -536,7 +536,7 @@
             <h3>为您为家</h3>
             <div class="describe">
                 <span>为您精准定位，当前城市房源信息</span>
-                <span class="float-right"><a href="/list/pattern/1"
+                <span class="float-right"><a href="{{ url_for('list_page.return_new_list', page=1) }}"
                                              style="color: #3498db; padding-right: 5px">最新推荐</a></span>
             </div>
         </div>
@@ -570,7 +570,7 @@
             <h3>为您推荐</h3>
             <div class="describe">
                 <span>热点房源，我们为你精选</span>
-                <span class="float-right"><a href="/list/pattern1/1"
+                <span class="float-right"><a href="{{ url_for('list_page.return_hot_list', page=1) }}"
                                              style="color: #3498db; padding-right: 5px">最热推荐</a></span>
             </div>
         </div>
