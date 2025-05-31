@@ -30,14 +30,14 @@ def admin_properties():
     # 每页显示10条
     per_page = 10
 
-    # 分页查询
-    pagination = House.query.order_by(House.publish_time.desc()).paginate(page=page_num, per_page=per_page)
+    # 分页查询（不按时间排序，按id升序排序）
+    pagination = House.query.order_by(House.id.asc()).paginate(page=page_num, per_page=per_page)
     house_list = pagination.items
 
-    # 转换时间戳为 datetime 对象，方便模板使用 strftime
-    for house in house_list:
-        if isinstance(house.publish_time, int):
-            house.publish_time = datetime.fromtimestamp(house.publish_time)
+    # 如果你模板需要publish_time作为datetime对象，这里可以保留，不需要的话可以注释掉
+    # for house in house_list:
+    #     if isinstance(house.publish_time, int):
+    #         house.publish_time = datetime.fromtimestamp(house.publish_time)
 
     # 生成页码范围，最多显示10页（或者实际总页数）
     total_pages = pagination.pages
@@ -49,6 +49,7 @@ def admin_properties():
                            page_num=page_num,
                            page_range=page_range,
                            total_pages=total_pages)
+
 
 
 

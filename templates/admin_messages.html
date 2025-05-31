@@ -1,0 +1,69 @@
+{% extends 'admin_base.html' %}
+
+{% block head_css %}
+<style>
+    .message-section {
+        margin: 30px auto;
+        width: 80%;
+        background-color: #f9f9f9;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .section-title {
+        font-size: 22px;
+        font-weight: bold;
+        color: #333;
+        border-bottom: 2px solid #ddd;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+    }
+
+    .message-item {
+        padding: 10px 0;
+        border-bottom: 1px dashed #ccc;
+    }
+
+    .message-item:last-child {
+        border-bottom: none;
+    }
+
+    .message-type {
+        font-weight: bold;
+        color: #444;
+    }
+
+    .message-content {
+        margin-top: 4px;
+        color: #666;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="message-section">
+    <div class="section-title">投诉消息</div>
+    <div class="message-item">
+        <div class="message-type">住户 302</div>
+        <div class="message-content">楼道灯经常坏，晚上出入很不安全。</div>
+    </div>
+    <div class="message-item">
+        <div class="message-type">住户 506</div>
+        <div class="message-content">隔壁装修噪音太大，影响正常休息。</div>
+    </div>
+</div>
+
+<div class="message-section">
+    <div class="section-title">维修消息</div>
+    <div class="message-item">
+        <div class="message-type">住户 208</div>
+        <div class="message-content">厨房水龙头漏水，请尽快安排维修人员。</div>
+    </div>
+    <div class="message-item">
+        <div class="message-type">住户 401</div>
+        <div class="message-content">空调无法启动，疑似电路故障。</div>
+    </div>
+</div>
+{% endblock %}
