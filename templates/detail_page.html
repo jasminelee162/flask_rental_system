@@ -1097,6 +1097,15 @@
                         <div class="describe">
                             <span>为您精准定位，当前城市房源信息</span>
                         </div>
+
+                            <div>
+                                {% if house.rental_status == '已出租' %}
+                                <span class="btn btn-success disabled">正在出租</span>
+                                {% else %}
+                                <a href="{{ url_for('contract.show_contract', house_id=house.id, user_id=user.id) }}"
+                                   class="btn btn-primary">立即签约</a>
+                                {% endif %}
+                            </div>
                     </div>
                     <!--左详情-->
                     <div class="col-lg-8 col-md-8">

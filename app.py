@@ -15,6 +15,8 @@ from flask_login import LoginManager
 from models import User
 from flask_caching import Cache
 
+from utils.contract_confirmation import contract_bp
+
 
 app = Flask(__name__)
 app.secret_key = 'your_very_secret_key'
@@ -56,6 +58,8 @@ app.register_blueprint(landlord_page, url_prefix='/landlord')
 app.register_blueprint(admin_page, url_prefix='/admin')
 app.register_blueprint(index_page)  # 首页蓝图不需要 url_prefix
 app.register_blueprint(chat_bp)
+
+app.register_blueprint(contract_bp,url_prefix='/contract')
 
 
 if __name__ == '__main__':

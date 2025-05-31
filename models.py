@@ -25,9 +25,11 @@ class House(db.Model):
     phone_num = db.Column(db.String(100))
     picture = db.Column(db.String(255))
     landlord_id = db.Column(db.Integer)
+    rental_status = db.Column(db.String(100))
 
     # 房东ID(关联用户表)，使用与 user_info.id 相同的类型
     landlord_id = db.Column(db.Integer, db.ForeignKey('user_info.id', ondelete='SET NULL'))
+
 
     # 重写__repr__方法， 方便我们查看对象的输出内容
     def __repr__(self):

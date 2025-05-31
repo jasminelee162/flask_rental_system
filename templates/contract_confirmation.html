@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>房屋租赁合同</title>
+    <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/vendor/assets/css/black-dashboard.min.css" rel="stylesheet">
+    <link href="/static/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+        body { background: linear-gradient(to right, rgba(30, 30, 47, 0.9), rgba(42, 42, 66, 0.9)); color: #ffffff; font-family: "Microsoft YaHei", sans-serif; line-height: 1.8; }
+        .contract-container { background: rgba(39, 41, 61, 0.98); border: 1px solid rgba(154, 104, 242, 0.4); border-radius: 20px; backdrop-filter: blur(15px); box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3); padding: 40px; margin: 50px auto; max-width: 900px; }
+        .contract-title { color: #9a68f2; font-size: 28px; font-weight: 600; text-align: center; margin-bottom: 40px; }
+        .contract-content { max-height: 600px; overflow-y: auto; padding-right: 15px; }
+        .contract-section { margin-bottom: 25px; }
+        .contract-section h4 { color: #9a68f2; border-bottom: 1px solid rgba(154, 104, 242, 0.3); padding-bottom: 8px; font-size: 18px; }
+        .contract-info { display: flex; justify-content: space-between; flex-wrap: wrap; margin-bottom: 30px; }
+        .info-item { flex: 0 0 48%; margin-bottom: 15px; }
+        .info-label { color: #9a68f2; font-weight: 500; }
+        .signature-area { display: flex; justify-content: space-between; margin-top: 40px; }
+        .signature-box { flex: 0 0 45%; border-top: 1px dashed rgba(154, 104, 242, 0.5); padding-top: 20px; text-align: center; }
+        .confirm-btn { background: linear-gradient(45deg, #6a5acd, #9370db); border: none; border-radius: 10px; padding: 14px 30px; font-weight: 500; letter-spacing: 0.5px; transition: all 0.3s ease; color: #fff; margin: 40px auto 0; display: block; width: 200px; }
+        .confirm-btn:hover { background: linear-gradient(45deg, #9370db, #6a5acd); transform: translateY(-2px); box-shadow: 0 10px 20px rgba(106, 90, 205, 0.4); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="contract-container">
+            <h2 class="contract-title">房屋租赁合同</h2>
+
+            <div class="contract-info">
+                <div class="info-item">
+                    <span class="info-label">合同编号：</span>
+                    <span id="contractId">HT-{{ now.strftime('%Y%m%d') }}-{{ house.id }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">签订日期：</span>
+                    <span id="signDate">{{ now.strftime('%Y年%m月%d日') }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">房源名称：</span>
+                    <span>{{ house.title }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">房屋地址：</span>
+                    <span>{{ house.region }}{{ house.block }}{{ house.address }}</span>
+                </div>
+            </div>
+
+            <div class="contract-content">
+                <div class="contract-section">
+                    <h4>第一条 合同双方</h4>
+                    <p>出租方（甲方）：房东姓名</p>
+                    <p>承租方（乙方）：{{ user.name }}</p>
+                </div>
+
+                <div class="contract-section">
+                    <h4>第二条 租赁房屋基本情况</h4>
+                    <p>1. 甲方出租给乙方的房屋位于：{{ house.region }}{{ house.block }}{{ house.address }}</p>
+                    <p>2. 房屋户型：{{ house.rooms }}，建筑面积：{{ house.area }}平方米</p>
+                    <p>3. 房屋朝向：{{ house.direction }}</p>
+                    <p>4. 房屋设施：{{ house.sheshi or '基础家具家电' }}</p>
+                </div>
+
+                <div class="contract-section">
+                    <h4>第三条 租赁期限</h4>
+                    <p>1. 该房屋租赁期共12个月，自<span id="startDate">{{ (now + timedelta(days=3)).strftime('%Y年%m月%d日') }}</span>至<span id="endDate">{{ (now + timedelta(days=3) + timedelta(days=365)).strftime('%Y年%m月%d日') }}</span>。</p>
+                    <p>2. 租赁期满，甲方有权收回出租房屋，乙方应如期交还。</p>
+                </div>
+
+                <div class="contract-section">
+                    <h4>第四条 租金及支付方式</h4>
+                    <p>1. 该房屋每月租金为人民币{{ house.price }}元（¥{{ house.price }}）。</p>
+                    <p>2. 租金按季支付，乙方应于每季度开始前5日内支付下一季度租金。</p>
+                    <p>3. 押金为人民币{{ house.price }}元（相当于一个月租金），租赁期满无违约情况全额退还。</p>
+                </div>
+
+                <div class="contract-section">
+                    <h4>第五条 房屋使用要求和维修责任</h4>
+                    <p>1. 租赁期间，乙方应合理使用房屋及其附属设施，如因使用不当造成损坏，乙方应负责维修或赔偿。</p>
+                    <p>2. 房屋主体结构、公共设施的自然损坏由甲方负责维修。</p>
+                </div>
+
+                <div class="contract-section">
+                    <h4>第六条 违约责任</h4>
+                    <p>1. 租赁期间，任何一方提出终止合同，需提前30天书面通知对方，违约方应向守约方支付一个月租金作为违约金。</p>
+                    <p>2. 乙方逾期支付租金，每逾期一日，应按日租金的1%支付滞纳金。</p>
+                </div>
+
+                <div class="contract-section">
+                    <h4>第七条 其他约定</h4>
+                    <p>1. 本合同未尽事宜，经双方协商一致，可订立补充条款。</p>
+                    <p>2. 本合同一式两份，甲乙双方各执一份，具有同等法律效力。</p>
+                </div>
+            </div>
+
+            <div class="signature-area">
+                <div class="signature-box">
+                    <p>甲方（出租方）签字：房东姓名</p>
+                    <p>日期：{{ now.strftime('%Y年%m月%d日') }}</p>
+                </div>
+                <div class="signature-box">
+                    <p>乙方（承租方）签字：{{ user.name }}</p>
+                    <p>日期：{{ now.strftime('%Y年%m月%d日') }}</p>
+                </div>
+            </div>
+
+            <button class="btn confirm-btn" id="confirmContract">确认并签署合同</button>
+        </div>
+    </div>
+
+    <script>
+    document.getElementById('confirmContract').addEventListener('click', async function() {
+        if (!confirm('确定签署？')) return;
+
+        try {
+            const response = await fetch('/contract/api/sign', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    house_id: {{ house.id|tojson }}  // 安全传递房源ID
+                })
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                this.disabled = true;
+                this.textContent = '已出租';
+                this.classList.replace('btn-primary', 'btn-success');
+                alert('合同签署成功!');
+
+                // 3秒后自动跳转（可根据需要调整时间）
+            setTimeout(() => {
+                window.location.href = result.redirect_url || document.referrer;
+            }, 1500);
+
+            } else {
+                alert('操作失败: ' + result.message);
+            }
+        } catch (error) {
+            console.error('签署错误:', error);
+            alert('网络错误' + error.message);
+        }
+    });
+</script>
+</body>
+</html>
