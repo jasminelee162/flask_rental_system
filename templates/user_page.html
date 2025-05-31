@@ -648,7 +648,7 @@
                     </div>
 
                 <li class="nav-item">
-                    <a class="nav-link" id="logout" href="">退出登录</a>
+                    <a class="nav-link" id="logoutBtn" href="">退出登录</a>
                 </li>
                 {% endif %}
 
@@ -903,20 +903,23 @@
 
 
     // 登出功能
-    $("#logout").on('click', function () {
-        $.ajax({
-            url: '/logout',
-            type: 'get',
-            dataType: 'json',
-            success: function (res) {
-                if (res["valid"] == '1') {
-                    alert(res["msg"]);
-                    window.location.href = '/';
-                } else {
-                    alert(res["msg"]);
+    $("#logoutBtn").on('click', function (e) {
+        e.preventDefault();
+        if (confirm('确定要退出登录吗？')) {
+            $.ajax({
+                url: '/user/logout',
+                type: 'post',
+                dataType: 'json',
+                success: function (res) {
+                    if (res["valid"] == '1') {
+                        alert(res["msg"]);
+                        window.location.href = '/';
+                    } else {
+                        alert(res["msg"]);
+                    }
                 }
-            }
-        })
+            });
+        }
     });
 
     $(".chanle1").on('click', function () {

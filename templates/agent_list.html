@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>房东列表</h2>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <div class="row">
+        {% for landlord in landlords %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ landlord.name }}</h5>
+                    <p class="card-text">
+                        <strong>邮箱:</strong> {{ landlord.email }}<br>
+                        <strong>地址:</strong> {{ landlord.addr }}<br>
+                        <strong>房源数量:</strong> {{ landlord.houses|length }}
+                    </p>
+                    <div class="btn-group">
+                        <a href="{{ url_for('agent_page.agent_detail', id=landlord.id) }}" class="btn btn-info btn-sm">查看房源</a>
+                        <a href="{{ url_for('agent_page.edit_agent', id=landlord.id) }}" class="btn btn-warning btn-sm">编辑信息</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    {% if not landlords %}
+    <div class="alert alert-info">
+        暂无房东信息
+    </div>
+    {% endif %}
+</div>
+{% endblock %} 

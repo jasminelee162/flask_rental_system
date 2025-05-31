@@ -23,14 +23,14 @@
 
 <!-- ... 其他代码保持不变 ... -->
 
-<style>
+    <style>
     body {
         background: linear-gradient(to right, rgba(30, 30, 47, 0.9), rgba(42, 42, 66, 0.9));
         color: #ffffff;
         font-family: "Microsoft YaHei", sans-serif;
     }
 
-    #mainNav {
+        #mainNav {
         background-color: rgba(39, 41, 61, 0.95) !important;
         backdrop-filter: blur(10px);
         z-index: 1000;
@@ -93,7 +93,7 @@
 
 .form-group {
     margin-bottom: 25px;
-    position: relative;
+            position: relative;
 }
 
 .form-group label {
@@ -206,7 +206,7 @@
 
 /* 输入框图标 */
 .input-icon {
-    position: absolute;
+            position: absolute;
     right: 18px;
     top: 50%;
     transform: translateY(-50%);
@@ -230,7 +230,7 @@
 
     .btn-primary, .btn-danger {
         margin: 5px 0;
-        width: 100%;
+            width: 100%;
     }
 }
 
@@ -391,7 +391,7 @@
         /* 属性 */
 
 /* 基本信息容器 */
-.attribute-info {
+        .attribute-info {
     background: rgba(39, 41, 61, 0.8);
     border-radius: 12px;
     padding: 25px;
@@ -406,7 +406,7 @@
 }
 
 /* 属性标签 */
-.attribute-text {
+        .attribute-text {
     color: rgba(154, 104, 242, 0.8);
     font-size: 16px;
     font-weight: 500;
@@ -414,10 +414,10 @@
 }
 
 /* 属性值 */
-.info-text {
+        .info-text {
     color: rgba(255, 255, 255, 0.9);
     font-size: 16px;
-    font-weight: 400;
+            font-weight: 400;
     line-height: 1.6;
 }
 
@@ -1032,7 +1032,7 @@
                     </div>
 
                 <li class="nav-item">
-                    <a class="nav-link" id="logout" href="">退出登录</a>
+                    <a class="nav-link" id="logoutBtn" href="">退出登录</a>
                 </li>
                 {% endif %}
 
@@ -1282,10 +1282,10 @@
                                         <h4><i class="fa fa-chart-line"></i>{{ house.block }} 房价走势</h4>
                                         <div class="chart-subtitle">
                                             <i class="fa fa-info-circle"></i> AI智能预测房价走势
-                                        </div>
+                            </div>
                                     </div>
                                     <div class="chart-container">
-                                        <div id="f_line" class="echarts-tu">
+                                <div id="f_line" class="echarts-tu">
                                             <div class="chart-loading">
                                                 <i class="fa fa-spinner fa-spin"></i>
                                                 <div>加载中...</div>
@@ -1302,8 +1302,8 @@
                                         <h4><i class="fa fa-chart-pie"></i>{{ house.block }} 户型占比</h4>
                                         <div class="chart-subtitle">
                                             <i class="fa fa-home"></i> 了解户型稀缺度
-                                        </div>
-                                    </div>
+                                </div>
+                            </div>
                                     <div class="chart-container">
                                         <div id="pie" class="echarts-tu">
                                             <div class="chart-loading">
@@ -1322,8 +1322,8 @@
                                         <h4><i class="fa fa-building"></i>{{ house.block }} 房源分布</h4>
                                         <div class="chart-subtitle">
                                             <i class="fa fa-fire"></i> TOP20小区房源数量
-                                        </div>
-                                    </div>
+                                </div>
+                            </div>
                                     <div class="chart-container">
                                         <div id="scolumn_line" class="echarts-tu">
                                             <div class="chart-loading">
@@ -1342,8 +1342,8 @@
                                         <h4><i class="fa fa-chart-area"></i>{{ house.block }} 价格分析</h4>
                                         <div class="chart-subtitle">
                                             <i class="fa fa-tags"></i> 各户型价格走势
-                                        </div>
-                                    </div>
+                                </div>
+                            </div>
                                     <div class="chart-container">
                                         <div id="broken_line" class="echarts-tu">
                                             <div class="chart-loading">
@@ -1421,7 +1421,7 @@
                                 <h1 class="text-center">登录</h1>
                             </div>
                             <div class="modal-body">
-                                <form class="form-group" id="loginform" action="/login" method="post">
+                                <form class="form-group" id="loginform" action="/user/login" method="post">
                                     <div class="form-group">
                                         <label for="" class="form-info">用户名</label>
                                         <input class="form-control" name="username" type="text" placeholder="">
@@ -1433,10 +1433,10 @@
                                     <div class="form-group">
                                         <label class="form-info">验证码</label>
                                         <div style="display: flex; align-items: center;">
-                                        <input class="form-control" name="captcha" type="text" style="width: 60%;">
-                                        <img src="/captcha" id="captcha-img" style="cursor: pointer; margin-left: 10px; height: 38px;" onclick="this.src='/captcha?'+Math.random()">
+                                            <input class="form-control" name="captcha" type="text" style="width: 60%;">
+                                            <img src="/user/captcha" class="captcha-img" alt="验证码" style="cursor: pointer; margin-left: 10px; height: 38px;" onclick="this.src='/user/captcha?'+Math.random()">
+                                        </div>
                                     </div>
-                                </div>
 
                                     <div class="text-right">
                                         <button class="btn btn-primary" id='login-btn'>登录</button>
@@ -1616,10 +1616,10 @@
         });
 
         // 获取价格分析数据
-        $.ajax({
-            url: "/get/brokenlinedata/{{ house.block }}",
-            type: 'get',
-            dataType: 'json',
+$.ajax({
+    url: "/get/brokenlinedata/{{ house.block }}",
+    type: 'get',
+    dataType: 'json',
             success: function(response) {
                 console.log('价格分析数据:', response);
                 try {

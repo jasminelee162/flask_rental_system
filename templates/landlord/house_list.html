@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block title %}我的房源 - 租房系统{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>我的房源</h2>
+        <a href="{{ url_for('landlord_page.add_house') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> 添加新房源
+        </a>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% if houses.items %}
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for house in houses.items %}
+            <div class="col">
+                <div class="card h-100">
+                    {% if house.picture %}
+                    <img src="{{ url_for('static', filename='img/' + house.picture) }}" 
+                         class="card-img-top" 
+                         alt="{{ house.title }}"
+                         loading="lazy"
+                         style="height: 200px; object-fit: cover;">
+                    {% else %}
+                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" 
+                         style="height: 200px;">
+                        <i class="fas fa-home fa-3x text-muted"></i>
+                    </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ house.title }}</h5>
+                        <p class="card-text">
+                            <small class="text-muted">
+                                <i class="fas fa-map-marker-alt"></i> {{ house.region }}{{ house.block }}
+                            </small>
+                        </p>
+                        <p class="card-text">
+                            <span class="badge bg-primary">{{ house.rooms }}室</span>
+                            <span class="badge bg-info">{{ house.area }}㎡</span>
+                            <span class="badge bg-success">¥{{ house.price }}/月</span>
+                        </p>
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ url_for('landlord_page.edit_house', house_id=house.id) }}" 
+                               class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-edit"></i> 编辑
+                            </a>
+                            <button class="btn btn-sm btn-outline-danger" 
+                                    onclick="deleteHouse({{ house.id }})">
+                                <i class="fas fa-trash"></i> 删除
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- 分页导航 -->
+        {% if houses.pages > 1 %}
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if houses.has_prev %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('landlord_page.my_houses', page=houses.prev_num) }}">
+                        上一页
+                    </a>
+                </li>
+                {% endif %}
+
+                {% for page_num in houses.iter_pages(left_edge=2, left_current=2, right_current=3, right_edge=2) %}
+                    {% if page_num %}
+                        {% if page_num == houses.page %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ page_num }}</span>
+                        </li>
+                        {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('landlord_page.my_houses', page=page_num) }}">
+                                {{ page_num }}
+                            </a>
+                        </li>
+                        {% endif %}
+                    {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">...</span>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if houses.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('landlord_page.my_houses', page=houses.next_num) }}">
+                        下一页
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    {% else %}
+        <div class="alert alert-info">
+            您还没有发布任何房源，点击"添加新房源"开始发布吧！
+        </div>
+    {% endif %}
+</div>
+
+{% block scripts %}
+{{ super() }}
+<script>
+function deleteHouse(houseId) {
+    if (confirm('确定要删除这个房源吗？此操作不可恢复！')) {
+        fetch(`/house/delete/${houseId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert(data.message || '删除失败，请重试！');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('删除失败，请重试！');
+        });
+    }
+}
+</script>
+{% endblock %}
+{% endblock %} 
