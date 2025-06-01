@@ -48,6 +48,12 @@
                             <span class="badge bg-info">{{ house.area }}㎡</span>
                             <span class="badge bg-success">¥{{ house.price }}/月</span>
                         </p>
+                        <!-- 新增：出租状态显示 -->
+                        <p class="card-text">
+                            <span class="badge {% if house.rental_status == '已出租' %}bg-danger{% else %}bg-secondary{% endif %}">
+                                {{ house.rental_status }}
+                            </span>
+                        </p>
                         <div class="d-flex justify-content-between">
                             <a href="{{ url_for('landlord_page.edit_house', house_id=house.id) }}" 
                                class="btn btn-sm btn-outline-primary">
