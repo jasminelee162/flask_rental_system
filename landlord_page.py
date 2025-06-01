@@ -239,13 +239,16 @@ def tenant_feedback():
         House, RepairComplaintMessage.house_id == House.id
     ).filter(
         House.landlord_id == current_user.id,
-        RepairComplaintMessage.admin_reply == 0
+        RepairComplaintMessage.admin_reply == 1
     ).order_by(
             RepairComplaintMessage.status.asc(),  # 先按status升序（0在前）
             RepairComplaintMessage.created_at.desc()  # 再按创建时间降序
     ).all()
 
-    unread_feedback_messages = [msg for msg in feedback_messages if msg.status == 0]
+    unread_feedback_messages = [
+        msg for msg in feedback_messages
+        if msg.status == 0 and msg.admin_reply == 1
+    ]
     has_unread_feedback = len(unread_feedback_messages) > 0
 
     return render_template('landlord/tenant_feedback.html',

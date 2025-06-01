@@ -67,9 +67,9 @@
                     <p><strong>房源ID：</strong> {{ message.house_id }}</p>
                     <p><strong>维修内容：</strong> {{ message.message_text }}</p>
                     <p><strong>状态：</strong>
-                        {% if message.admin_reply == 0 %}
+                        {% if message.admin_reply == 1 %}
                             已通过
-                        {% elif message.admin_reply == 1 %}
+                        {% elif message.admin_reply == 0 %}
                             已拒绝
                         {% else %}
                             未处理
@@ -77,7 +77,7 @@
                     </p>
                     <p><strong>提交时间：</strong> {{ message.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
                 </div>
-                {% if message.admin_reply != 0 %}
+                {% if message.admin_reply == null %}
                 <div class="action-buttons">
                     <button class="btn-approve" onclick="updateAdminReply({{ message.id }}, 0)">同意</button>
                     <button class="btn-reject" onclick="updateAdminReply({{ message.id }}, 1)">拒绝</button>
@@ -103,9 +103,9 @@
                     <p><strong>房源ID：</strong> {{ message.house_id }}</p>
                     <p><strong>投诉内容：</strong> {{ message.message_text }}</p>
                     <p><strong>状态：</strong>
-                        {% if message.admin_reply == 0 %}
+                        {% if message.admin_reply == 1 %}
                             已通过
-                        {% elif message.admin_reply == 1 %}
+                        {% elif message.admin_reply == 0 %}
                             已拒绝
                         {% else %}
                             未处理
@@ -115,8 +115,8 @@
                 </div>
                 {% if message.admin_reply is none %}
                 <div class="action-buttons">
-                    <button class="btn-approve" onclick="updateAdminReply({{ message.id }}, 0)">同意</button>
-                    <button class="btn-reject" onclick="updateAdminReply({{ message.id }}, 1)">拒绝</button>
+                    <button class="btn-approve" onclick="updateAdminReply({{ message.id }}, 1)">同意</button>
+                    <button class="btn-reject" onclick="updateAdminReply({{ message.id }}, 0)">拒绝</button>
                 </div>
                 {% endif %}
             </div>
@@ -131,7 +131,7 @@
 {% block scripts %}
 <script>
 function updateAdminReply(messageId, adminReply) {
-    if (confirm('确定要' + (adminReply === 0 ? '同意' : '拒绝') + '这条消息吗？')) {
+    if (confirm('确定要' + (adminReply === 1 ? '同意' : '拒绝') + '这条消息吗？')) {
         fetch(`/admin/update_reply/${messageId}`, {
             method: 'POST',
             headers: {

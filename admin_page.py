@@ -101,7 +101,7 @@ def messages():
 @admin_page.route('/update_reply/<int:message_id>', methods=['POST'])
 def update_admin_reply(message_id):
     data = request.get_json()
-    admin_reply = data.get('admin_reply')  # 0=同意，1=拒绝
+    admin_reply = data.get('admin_reply')  # 1=同意，0=拒绝
 
     if admin_reply not in [0, 1]:
         return jsonify({'success': False, 'message': '无效的回复状态'}), 400

@@ -1064,7 +1064,7 @@
                             <div class="feedback-card">
                                 <div class="feedback-house">
                                     <i class="fa fa-home"></i>
-                                    <strong>{{ feedback.house_region }} - {{ feedback.house_block }} - {{ feedback.house_address }}</strong>
+                                    <strong>{{ feedback.house_address }}</strong>
                                 </div>
 
                                 <div class="feedback-content">
@@ -1081,9 +1081,9 @@
 
                                         <div class="feedback-status">
                                             <span class="status-label">审核状态:</span>
-                                            {% if feedback.admin_reply == 0 %}
+                                            {% if feedback.admin_reply == 1 %}
                                             <span class="badge badge-approved"><i class="fa fa-check"></i> 已通过</span>
-                                            {% elif feedback.admin_reply == 1 %}
+                                            {% elif feedback.admin_reply == 0 %}
                                             <span class="badge badge-rejected"><i class="fa fa-times"></i> 已拒绝</span>
                                             {% else %}
                                             <span class="badge badge-pending"><i class="fa fa-hourglass-half"></i> 待审核</span>
