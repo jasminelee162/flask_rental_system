@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
-from models import House, User, Tuijian
+from models import House, User, Tuijian, RepairComplaintMessage
 from datetime import datetime
 from utils.connect_to_database import query_data
 from settings import db
@@ -10,9 +10,9 @@ from datetime import date
 from flask import session, redirect, url_for, render_template
 from models import UserLoginLog
 from sqlalchemy import func
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request, jsonify
 
-admin_page = Blueprint('admin_page', __name__, template_folder='templates')
+admin_page = Blueprint('admin_page', __name__, template_folder='templates', url_prefix='/admin')
 
 
 @admin_page.route('/admin/login', methods=['GET', 'POST'])
@@ -79,9 +79,42 @@ def admin_properties():
                            total_pages=total_pages)
 
 
-
-
-
-@admin_page.route('/admin/messages')
+@admin_page.route('/admin/messages', methods=['GET'])
 def messages():
-    return render_template('admin_messages.html')  # 暂未实现
+    """
+    获取并展示维修和投诉消息
+    :return: 渲染模板，传递维修和投诉消息
+    """
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('admin_page.admin_login'))
+
+    # 获取所有维修消息
+    repair_messages = RepairComplaintMessage.query.filter_by(message_type='repair').all()
+
+    # 获取所有投诉消息
+    complaint_messages = RepairComplaintMessage.query.filter_by(message_type='complaint').all()
+
+    return render_template('admin_messages.html',
+                           repair_messages=repair_messages,
+                           complaint_messages=complaint_messages)
+
+@admin_page.route('/update_reply/<int:message_id>', methods=['POST'])
+def update_admin_reply(message_id):
+    data = request.get_json()
+    admin_reply = data.get('admin_reply')  # 0=同意，1=拒绝
+
+    if admin_reply not in [0, 1]:
+        return jsonify({'success': False, 'message': '无效的回复状态'}), 400
+
+    try:
+        message = RepairComplaintMessage.query.get(message_id)
+        if not message:
+            return jsonify({'success': False, 'message': '消息不存在'}), 404
+
+        message.admin_reply = admin_reply
+        db.session.commit()
+        return jsonify({'success': True, 'message': '操作成功'})
+    except Exception as e:
+        db.session.rollback()
+        print(f"更新管理员回复失败: {e}")
+        return jsonify({'success': False, 'message': '操作失败'}), 500

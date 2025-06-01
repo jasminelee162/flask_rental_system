@@ -157,3 +157,24 @@ class UserLoginLog(db.Model):
     login_date = db.Column(db.Date, nullable=False)
 
     __table_args__ = (db.UniqueConstraint('user_id', 'login_date', name='unique_user_login'),)
+
+# 添加维修或投诉信息
+class RepairComplaintMessage(db.Model):
+    __tablename__ = 'repair_complaint_messages'
+
+    id = db.Column(db.Integer, primary_key=True)  # 序号（自增主键）
+    region = db.Column(db.String(100))  # 区域
+    block = db.Column(db.String(100))  # 楼栋
+    address = db.Column(db.String(100))  # 地址
+    tenant_name = db.Column(db.String(100))  # 租户姓名
+    message_type = db.Column(db.String(20))  # 消息类型（'repair' 或 'complaint'）
+    message_text = db.Column(db.Text)  # 消息文本
+    admin_reply = db.Column(db.Integer)  # 管理员回复（0=同意，1=拒绝）
+    created_at = db.Column(db.DateTime, default=datetime.now)  # 创建时间
+    house_id = db.Column(db.Integer,db.ForeignKey('house_info.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user_info.id'))
+    status = db.Column(db.Integer) #商家回复（0=未处理，1=已处理，2=已收到）
+
+    # 关系
+    house = db.relationship('House', backref='repair_complaints')
+    user = db.relationship('User', backref='repair_complaints')

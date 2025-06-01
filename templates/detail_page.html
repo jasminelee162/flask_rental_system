@@ -1102,9 +1102,19 @@
                                 {% if house.rental_status == '已出租' %}
                                 <span class="btn btn-success disabled">正在出租</span>
                                 {% else %}
-                                <a href="{{ url_for('contract.show_contract', house_id=house.id, user_id=user.id) }}"
-                                   class="btn btn-primary">立即签约</a>
+                                {% if user is not none %}
+                                    <!-- 用户已登录：显示带user_id的签约链接 -->
+                                    <a href="{{ url_for('contract.show_contract', house_id=house.id, user_id=user.id) }}"
+                                       class="btn btn-primary">立即签约</a>
+                                {% else %}
+                                    <!-- 用户未登录：显示提示或替代链接 -->
+                                    <a href="{{ url_for('user_page.login') }}"
+                                       class="btn btn-primary"
+                                       onclick="alert('请先登录以签约'); return false;">
+                                        立即签约
+                                    </a>
                                 {% endif %}
+                            {% endif %}
                             </div>
                     </div>
                     <!--左详情-->

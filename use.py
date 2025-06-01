@@ -2,7 +2,7 @@ import random
 import string
 from captcha.image import ImageCaptcha
 from flask import Blueprint, request, Response, jsonify, render_template, redirect, session, send_file, url_for
-from models import User, House
+from models import User, House, RepairComplaintMessage
 from settings import db
 from flask_login import login_user, logout_user, login_required, current_user
 import json
@@ -86,10 +86,33 @@ def user(name):
         except Exception as e:
             print(f"解析rent_id出错: {str(e)}")
 
+        # 获取反馈信息
+        feedback_messages = RepairComplaintMessage.query.join(
+            House, RepairComplaintMessage.house_id == House.id
+        ).filter(
+            RepairComplaintMessage.user_id == current_user.id
+        ).order_by(
+            RepairComplaintMessage.created_at.desc()
+        ).all()
+
+        user_feedback = []
+        for feedback in feedback_messages:
+            user_feedback.append({
+                'house_region': feedback.house.region,
+                'house_block': feedback.house.block,
+                'house_address': feedback.house.address,
+                'message_text': feedback.message_text,
+                'created_at': feedback.created_at,
+                'admin_reply': feedback.admin_reply,
+                'status': feedback.status,
+                'house': feedback.house  # 传递整个house对象以便访问图片
+            })
+
     # 传递房东标识到模板
     return render_template(
         'user_page.html',
         user=user,
+        user_feedback=user_feedback,
         collect_house_list=collect_house_list,
         seen_house_list=seen_house_list,
         rent_house_list=rent_house_list,
@@ -196,3 +219,61 @@ def get_captcha():
     image = ImageCaptcha()
     data = image.generate(code)
     return send_file(data, mimetype='image/png')
+
+#反馈（维护/投诉）功能
+@user_page.route('/feedback/<int:house_id>')
+def feedback_form(house_id):
+    if not current_user.is_authenticated:
+        return redirect(url_for('user_page.login'))
+
+    house = House.query.get(house_id)
+    if not house:
+        return "房源不存在", 404
+
+    # 检查用户是否租了此房源
+    if not current_user.rent_id or str(house_id) not in current_user.rent_id.split(','):
+        return "您未租赁此房源", 403
+
+    return render_template('feedback.html', house=house)
+
+
+@user_page.route('/submit_feedback', methods=['POST'])
+def submit_feedback():
+    if not current_user.is_authenticated:
+        return redirect(url_for('user_page.login'))
+
+    house_id = request.form.get('house_id')
+    message_type = request.form.get('message_type')
+    message_text = request.form.get('message_text')
+
+    house = House.query.get(house_id)
+    if not house:
+        return "房源不存在", 404
+
+    # 验证用户是否租了此房源
+    if not current_user.rent_id or str(house_id) not in current_user.rent_id.split(','):
+        return "您未租赁此房源", 403
+
+    # 创建反馈记录
+    new_message = RepairComplaintMessage(
+        house_id=house_id,
+        message_type=message_type,
+        message_text=message_text,
+        region=house.region,
+        block=house.block,
+        address=house.address,
+        tenant_name=current_user.name,
+        user_id=current_user.id,
+        status=0
+    )
+
+    db.session.add(new_message)
+    db.session.commit()
+
+    return redirect(url_for('user_page.user', name=current_user.name))
+
+
+@user_page.route('/my_feedback')
+@login_required
+def my_feedback():
+    return redirect(url_for('user_page.user', name=current_user.name, _anchor='feedback'))

@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app, jsonify
 from flask_login import login_required, current_user
-from models import db, House
+from models import db, House, RepairComplaintMessage
 from datetime import datetime
 import os
 from werkzeug.utils import secure_filename
@@ -110,7 +110,7 @@ def edit_house(house_id):
         return redirect(url_for('index_page.index'))
         
     house = House.query.get_or_404(house_id)
-    
+
     # 验证是否是房源的所有者
     if house.landlord_id != current_user.id:
         flash('您没有权限编辑该房源!', 'error')
@@ -229,3 +229,75 @@ def update_appointment():
 def rented_houses():
     rented_houses = current_user.rented_houses()
     return render_template('landlord/rented_houses.html', houses=rented_houses)
+
+
+@landlord_page.route('/feedback')
+@login_required
+def tenant_feedback():
+    # 获取与当前房东相关的未处理反馈
+    feedback_messages = RepairComplaintMessage.query.join(
+        House, RepairComplaintMessage.house_id == House.id
+    ).filter(
+        House.landlord_id == current_user.id,
+        RepairComplaintMessage.admin_reply == 0
+    ).order_by(
+            RepairComplaintMessage.status.asc(),  # 先按status升序（0在前）
+            RepairComplaintMessage.created_at.desc()  # 再按创建时间降序
+    ).all()
+
+    unread_feedback_messages = [msg for msg in feedback_messages if msg.status == 0]
+    has_unread_feedback = len(unread_feedback_messages) > 0
+
+    return render_template('landlord/tenant_feedback.html',
+                           feedback_messages=feedback_messages,
+                           has_unread_feedback=has_unread_feedback)
+
+
+@landlord_page.route('/feedback/handle/<int:feedback_id>', methods=['POST'])
+@login_required
+def handle_feedback(feedback_id):
+    """处理反馈（维修或投诉）"""
+    if not current_user.is_landlord:
+        return jsonify({'success': False, 'message': '无权限操作'}), 403
+
+    feedback = RepairComplaintMessage.query.get_or_404(feedback_id)
+
+    # 验证该反馈是否属于当前房东的房源
+    if feedback.house.landlord_id != current_user.id:
+        return jsonify({'success': False, 'message': '无权限操作此反馈'}), 403
+
+    try:
+        data = request.get_json()
+        action_type = data.get('action_type')
+
+        if action_type == 'repair':
+            feedback.status = 1  # 标记为已解决
+        elif action_type == 'complaint':
+            feedback.status = 2  # 标记为已收到
+
+        db.session.commit()
+        return jsonify({
+            'success': True,
+            'message': '反馈状态已更新'
+        })
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'success': False, 'message': str(e)}), 500
+
+
+@landlord_page.context_processor
+def inject_has_unread_feedback():
+    if current_user.is_authenticated and current_user.is_landlord:
+        # 获取与当前房东相关的未处理反馈
+        feedback_messages = RepairComplaintMessage.query.join(
+            House, RepairComplaintMessage.house_id == House.id
+        ).filter(
+            House.landlord_id == current_user.id,
+            RepairComplaintMessage.status == 0  # 只查询未处理的
+        ).all()
+
+        unread_feedback_messages = [msg for msg in feedback_messages if msg.status == 0]
+        has_unread_feedback = len(unread_feedback_messages) > 0
+    else:
+        has_unread_feedback = False
+    return dict(has_unread_feedback=has_unread_feedback)

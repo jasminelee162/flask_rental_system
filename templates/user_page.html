@@ -41,7 +41,7 @@
         box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
     }
 
-        #mainNav .navbar-brand, 
+        #mainNav .navbar-brand,
         #mainNav .navbar-nav > li.nav-item > a {
             color: #ffffff !important;
         }
@@ -537,6 +537,189 @@
           background-color: #777;
         }
 
+        /* 反馈部分专用样式 */
+    .feedback-container {
+        background: #fff;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .feedback-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .feedback-header h3 {
+        margin: 0;
+        color: #333;
+        font-weight: 600;
+    }
+
+    .feedback-scroll-container {
+        max-height: 600px;
+        overflow-y: auto;
+        padding-right: 10px;
+    }
+
+    .feedback-card {
+        background: #f9f9f9;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 15px;
+        transition: all 0.3s ease;
+        border-left: 4px solid #9a68f2;
+    }
+
+    .feedback-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .feedback-house {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        color: #555;
+    }
+
+    .feedback-house i {
+        margin-right: 8px;
+        color: #9a68f2;
+    }
+
+    .feedback-content {
+        padding-left: 25px;
+    }
+
+    .feedback-message {
+        display: flex;
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px dashed #ddd;
+    }
+
+    .feedback-message i {
+        margin-right: 10px;
+        color: #666;
+        margin-top: 3px;
+    }
+
+    .feedback-message p {
+        margin: 0;
+        color: #444;
+        line-height: 1.6;
+    }
+
+    .feedback-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .feedback-time,
+    .feedback-status,
+    .feedback-response {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        color: #666;
+    }
+
+    .feedback-time i,
+    .feedback-status i,
+    .feedback-response i {
+        margin-right: 5px;
+    }
+
+    .status-label {
+        margin-right: 5px;
+        font-weight: 500;
+    }
+
+    /* 徽章样式 */
+    .badge {
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+    .badge-approved {
+        background: #e3f7e8;
+        color: #28a745;
+    }
+
+    .badge-rejected {
+        background: #feeceb;
+        color: #dc3545;
+    }
+
+    .badge-pending {
+        background: #fff8e6;
+        color: #ffc107;
+    }
+
+    .badge-waiting {
+        background: #e9ecef;
+        color: #6c757d;
+    }
+
+    .badge-resolved {
+        background: #e3f7e8;
+        color: #28a745;
+    }
+
+    .badge-received {
+        background: #e7f1ff;
+        color: #007bff;
+    }
+
+    /* 空状态样式 */
+    .feedback-empty {
+        text-align: center;
+        padding: 40px 20px;
+    }
+
+    .empty-icon {
+        font-size: 60px;
+        color: #ddd;
+        margin-bottom: 20px;
+    }
+
+    .feedback-empty h4 {
+        color: #666;
+        margin-bottom: 10px;
+    }
+
+    .feedback-empty p {
+        color: #999;
+        margin-bottom: 20px;
+    }
+
+    /* 滚动条样式 */
+    .feedback-scroll-container::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .feedback-scroll-container::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+
+    .feedback-scroll-container::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 10px;
+    }
+
+    .feedback-scroll-container::-webkit-scrollbar-thumb:hover {
+        background: #9a68f2;
+    }
+
 /*.nkaddr {*/
 /*  display: inline-block;*/
 /*  max-width: 150px; !* 控制最大宽度 *!*/
@@ -683,6 +866,7 @@
                     <li class="active chanle1"><a href="#userinfo">账号信息</a></li>
                     <li class="chanle2"><a href="#collections">房源收藏</a></li>
                     <li class="chanle3"><a href="#rents">我的已租</a></li>
+                    <li class="chanle4"><a href="#feedback">我的反馈</a></li>
                 </ul>
                 <div class="user-info">
                     <input value="{{ user.name }}" id="n-data" style="display: none">
@@ -794,65 +978,146 @@
                 <!-- 我的已租 -->
                 <div class="rented-houses tab-content" id="rents" style="display:none;">
                     {% if rented_houses %}
-                        {% for house in rented_houses %}
-                        <div class="row collection-line">
-                            <div class="col-lg-4 col-md-4 mx-auto">
-                                <div><a href="/house/{{ house.id }}">
-                                    <img class='img-fluid img-box' src="/static/img/{{ house.picture }}" alt="">
-                                </a>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-md-6 mx-auto">
-                                <div class="collection-line-info">
-                                    <div>
-                                        <span class="attribute-text">房源地址：</span>
-                                        &nbsp
-                                        <span class="info-text">{{ house.address }}</span>
-                                    </div>
-                                    <div>
-                                        <span class="attribute-text">建筑面积：</span>
-                                        &nbsp
-                                        <span class="info-text">{{ house.area }}平米</span>
-                                    </div>
-                                    <div>
-                                        <span class="attribute-text">房源户型：</span>
-                                        &nbsp
-                                        <span class="info-text">{{ house.rooms }}</span>
-                                    </div>
-                                    <div>
-                                        <span class="attribute-text">房源朝向：</span>
-                                        &nbsp
-                                        <span class="info-text">{{ house.direction }}</span>
-                                    </div>
-                                    <div>
-                                        <span class="attribute-text">房源价格：</span>
-                                        &nbsp
-                                        <span class="info-text" style="color: #e74c3c">￥&nbsp{{ house.price }}</span>
+                        <div style="overflow: scroll; height:680px;">
+                            {% for house in rented_houses %}
+                            <div class="row collection-line">
+                                <div class="col-lg-4 col-md-4 mx-auto">
+                                    <div><a href="/house/{{ house.id }}">
+                                        <img class='img-fluid img-box' src="/static/img/{{ house.picture }}" alt="">
+                                    </a>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-lg-2 col-md-2 mx-auto" style="height: 100px; margin-top: 40px;">
-                                <div class="info-more"
-                                     style="width: 100%; height: 100%; position: relative; overflow: hidden;">
-                                    <span><a href="/house/{{ house.id }}"
-                                             style="position: absolute; top:-30px; left: -1px; height: 20px;"><i
-                                            class="fa fa-arrow-right"
-                                            aria-hidden="true"></i></a></span>
+                                <div class="col-lg-6 col-md-6 mx-auto">
+                                    <div class="collection-line-info">
+                                        <div>
+                                            <span class="attribute-text">房源地址：</span>
+                                            &nbsp
+                                            <span class="info-text">{{ house.address }}</span>
+                                        </div>
+                                        <div>
+                                            <span class="attribute-text">建筑面积：</span>
+                                            &nbsp
+                                            <span class="info-text">{{ house.area }}平米</span>
+                                        </div>
+                                        <div>
+                                            <span class="attribute-text">房源户型：</span>
+                                            &nbsp
+                                            <span class="info-text">{{ house.rooms }}</span>
+                                        </div>
+                                        <div>
+                                            <span class="attribute-text">房源朝向：</span>
+                                            &nbsp
+                                            <span class="info-text">{{ house.direction }}</span>
+                                        </div>
+                                        <div>
+                                            <span class="attribute-text">房源价格：</span>
+                                            &nbsp
+                                            <span class="info-text" style="color: #e74c3c">￥&nbsp{{ house.price }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-2 mx-auto" style="height: 100px; margin-top: 40px;">
+                                    <div class="info-more"
+                                         style="width: 100%; height: 100%; position: relative; overflow: hidden;">
+                                        <span><a href="/house/{{ house.id }}"
+                                                 style="position: absolute; top:-30px; left: -1px; height: 20px;"><i
+                                                class="fa fa-arrow-right"
+                                                aria-hidden="true"></i></a></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-2 mx-auto" style="height: 100px; margin-top: 40px;">
+                                    <div class="info-more" style="width: 100%; height: 100%; position: relative; overflow: hidden;">
+                                        <span>
+                                            <a href="/house/{{ house.id }}" style="position: absolute; top:-30px; left: -1px; height: 20px;">
+                                                <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                                            </a>
+                                            <button onclick="location.href='{{ url_for('user_page.feedback_form', house_id=house.id) }}'"
+                                                    style="position: absolute; top: 30px; left: -1px; background: #3498db; color: white; border: none; padding: 5px 10px; border-radius: 4px;">
+                                                反馈
+                                            </button>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
+                            {% endfor %}
                         </div>
-                        {% endfor %}
                     {% else %}
                         <div class="no-data-hint" style="text-align: center; padding: 30px; color: #fff;">
                             <p>您还没有租赁任何房源</p>
                         </div>
                     {% endif %}
                 </div>
+
+                <!-- 我的反馈 -->
+                <div class="feedback tab-content" id="feedback" style="display:none;">
+                    <div class="feedback-container">
+                        {% if user_feedback %}
+                        <div class="feedback-header">
+                            <h3><i class="fa fa-comments"></i> 我的反馈记录</h3>
+                            <div class="feedback-summary">
+                                <span class="badge badge-info">{{ user_feedback|length }}条反馈</span>
+                            </div>
+                        </div>
+
+                        <div class="feedback-scroll-container">
+                            {% for feedback in user_feedback %}
+                            <div class="feedback-card">
+                                <div class="feedback-house">
+                                    <i class="fa fa-home"></i>
+                                    <strong>{{ feedback.house_region }} - {{ feedback.house_block }} - {{ feedback.house_address }}</strong>
+                                </div>
+
+                                <div class="feedback-content">
+                                    <div class="feedback-message">
+                                        <i class="fa fa-comment"></i>
+                                        <p>{{ feedback.message_text }}</p>
+                                    </div>
+
+                                    <div class="feedback-meta">
+                                        <div class="feedback-time">
+                                            <i class="fa fa-clock-o"></i>
+                                            {{ feedback.created_at.strftime('%Y-%m-%d %H:%M') }}
+                                        </div>
+
+                                        <div class="feedback-status">
+                                            <span class="status-label">审核状态:</span>
+                                            {% if feedback.admin_reply == 0 %}
+                                            <span class="badge badge-approved"><i class="fa fa-check"></i> 已通过</span>
+                                            {% elif feedback.admin_reply == 1 %}
+                                            <span class="badge badge-rejected"><i class="fa fa-times"></i> 已拒绝</span>
+                                            {% else %}
+                                            <span class="badge badge-pending"><i class="fa fa-hourglass-half"></i> 待审核</span>
+                                            {% endif %}
+                                        </div>
+
+                                        <div class="feedback-response">
+                                            <span class="status-label">房东回复:</span>
+                                            {% if feedback.status == 0 %}
+                                            <span class="badge badge-waiting"><i class="fa fa-clock-o"></i> 未处理</span>
+                                            {% elif feedback.status == 1 %}
+                                            <span class="badge badge-resolved"><i class="fa fa-thumbs-up"></i> 已解决</span>
+                                            {% elif feedback.status == 2 %}
+                                            <span class="badge badge-received"><i class="fa fa-check-circle"></i> 已收到</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <div class="feedback-empty">
+                            <div class="empty-icon">
+                                <i class="fa fa-commenting-o"></i>
+                            </div>
+                            <h4>暂无反馈记录</h4>
+                            <p>您还没有提交过任何反馈</p>
+                            <a href="/user" class="btn btn-primary">去首页看看</a>
+                        </div>
+                        {% endif %}
+                    </div>
                 </div>
-
-
-
-
+            </div>
             <!--浏览记录-->
             <div class="col-lg-4 col-md-4 mx-auto detail-body">
                 <div class="row browse-record">
@@ -1001,8 +1266,9 @@
             $('.user-info').show();
             $('.collection').hide();
             $('.rented-houses').hide();
+            $('.feedback').hide();
             $(".chanle1").addClass('active');
-            $(".chanle2, .chanle3").removeClass('active');
+            $(".chanle2, .chanle3, .chanle4").removeClass('active');
         });
 
         // 房源收藏选项卡
@@ -1010,8 +1276,9 @@
             $('.user-info').hide();
             $('.collection').show();
             $('.rented-houses').hide();
+            $('.feedback').hide();
             $(".chanle2").addClass('active');
-            $(".chanle1, .chanle3").removeClass('active');
+            $(".chanle1, .chanle3, .chanle4").removeClass('active');
         });
 
         // 我的已租选项卡
@@ -1019,8 +1286,19 @@
             $('.user-info').hide();
             $('.collection').hide();
             $('.rented-houses').show();
+            $('.feedback').hide();
             $(".chanle3").addClass('active');
-            $(".chanle1, .chanle2").removeClass('active');
+            $(".chanle1, .chanle2, .chanle4").removeClass('active');
+        });
+
+        // 我的反馈选项卡
+        $(".chanle4").on('click', function() {
+            $('.user-info').hide();
+            $('.collection').hide();
+            $('.rented-houses').hide();
+            $('.feedback').show();
+            $(".chanle1, .chanle2, .chanle3").removeClass('active');
+            $(".chanle4").addClass('active');
         });
 
     // 修改用户名称的

@@ -39,31 +39,121 @@
         margin-top: 4px;
         color: #666;
     }
+
+    .no-messages {
+        padding: 20px;
+        text-align: center;
+        color: #666;
+        font-style: italic;
+    }
+    .message-status {
+        margin-top: 5px;
+        font-size: 14px;
+        color: #28a745;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="message-section">
-    <div class="section-title">投诉消息</div>
-    <div class="message-item">
-        <div class="message-type">住户 302</div>
-        <div class="message-content">楼道灯经常坏，晚上出入很不安全。</div>
-    </div>
-    <div class="message-item">
-        <div class="message-type">住户 506</div>
-        <div class="message-content">隔壁装修噪音太大，影响正常休息。</div>
-    </div>
+    <div class="section-title">维修消息</div>
+    {% if repair_messages %}
+        {% for message in repair_messages %}
+        <div class="message-item">
+            <div>
+                <div class="message-type">租户姓名：{{ message.tenant_name }}</div>
+                <div class="message-content">
+                    <p><strong>房源地址：</strong> {{ message.region }} - {{ message.block }} - {{ message.address}} </p>
+                    <p><strong>房源ID：</strong> {{ message.house_id }}</p>
+                    <p><strong>维修内容：</strong> {{ message.message_text }}</p>
+                    <p><strong>状态：</strong>
+                        {% if message.admin_reply == 0 %}
+                            已通过
+                        {% elif message.admin_reply == 1 %}
+                            已拒绝
+                        {% else %}
+                            未处理
+                        {% endif %}
+                    </p>
+                    <p><strong>提交时间：</strong> {{ message.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                </div>
+                {% if message.admin_reply != 0 %}
+                <div class="action-buttons">
+                    <button class="btn-approve" onclick="updateAdminReply({{ message.id }}, 0)">同意</button>
+                    <button class="btn-reject" onclick="updateAdminReply({{ message.id }}, 1)">拒绝</button>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="no-messages">暂时还没有维修消息</div>
+    {% endif %}
 </div>
 
 <div class="message-section">
-    <div class="section-title">维修消息</div>
-    <div class="message-item">
-        <div class="message-type">住户 208</div>
-        <div class="message-content">厨房水龙头漏水，请尽快安排维修人员。</div>
-    </div>
-    <div class="message-item">
-        <div class="message-type">住户 401</div>
-        <div class="message-content">空调无法启动，疑似电路故障。</div>
-    </div>
+    <div class="section-title">投诉消息</div>
+    {% if complaint_messages %}
+        {% for message in complaint_messages %}
+        <div class="message-item">
+            <div>
+                <div class="message-type">租户姓名： {{ message.tenant_name }}</div>
+                <div class="message-content">
+                    <p><strong>房源地址：</strong> {{ message.region }} - {{ message.block }} - {{ message.address}} </p>
+                    <p><strong>房源ID：</strong> {{ message.house_id }}</p>
+                    <p><strong>投诉内容：</strong> {{ message.message_text }}</p>
+                    <p><strong>状态：</strong>
+                        {% if message.admin_reply == 0 %}
+                            已通过
+                        {% elif message.admin_reply == 1 %}
+                            已拒绝
+                        {% else %}
+                            未处理
+                        {% endif %}
+                    </p>
+                    <p><strong>提交时间：</strong> {{ message.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                </div>
+                {% if message.admin_reply is none %}
+                <div class="action-buttons">
+                    <button class="btn-approve" onclick="updateAdminReply({{ message.id }}, 0)">同意</button>
+                    <button class="btn-reject" onclick="updateAdminReply({{ message.id }}, 1)">拒绝</button>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="no-messages">暂时还没有投诉消息</div>
+    {% endif %}
 </div>
 {% endblock %}
+
+{% block scripts %}
+<script>
+function updateAdminReply(messageId, adminReply) {
+    if (confirm('确定要' + (adminReply === 0 ? '同意' : '拒绝') + '这条消息吗？')) {
+        fetch(`/admin/update_reply/${messageId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ admin_reply: adminReply })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('操作成功！');
+                location.reload(); // 刷新页面以显示更新后的状态
+            } else {
+                alert('操作失败：' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('操作失败，请重试！');
+        });
+    }
+}
+</script>
+{% endblock %}
+
