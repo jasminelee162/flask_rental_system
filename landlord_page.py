@@ -223,3 +223,9 @@ def update_appointment():
     db.session.commit()
 
     return jsonify({'success': True})
+
+@landlord_page.route('/rented_houses')
+@login_required
+def rented_houses():
+    rented_houses = current_user.rented_houses()
+    return render_template('landlord/rented_houses.html', houses=rented_houses)

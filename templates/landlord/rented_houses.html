@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}正在出租的房源 - 租房系统{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>正在出租的房源</h2>
+        <a href="{{ url_for('landlord_page.my_houses') }}" class="btn btn-outline-secondary">
+            <i class="fas fa-list"></i> 返回房源列表
+        </a>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% if houses %}
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for house in houses %}
+            <div class="col">
+                <div class="card h-100">
+                    {% if house.picture %}
+                    <img src="{{ url_for('static', filename='img/' + house.picture) }}"
+                         class="card-img-top"
+                         alt="{{ house.title }}"
+                         loading="lazy"
+                         style="height: 200px; object-fit: cover;">
+                    {% else %}
+                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center"
+                         style="height: 200px;">
+                        <i class="fas fa-home fa-3x text-muted"></i>
+                    </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ house.title }}</h5>
+                        <p class="card-text">
+                            <small class="text-muted">
+                                <i class="fas fa-map-marker-alt"></i> {{ house.region }}{{ house.block }}
+                            </small>
+                        </p>
+                        <p class="card-text">
+                            <span class="badge bg-primary">{{ house.rooms }}室</span>
+                            <span class="badge bg-info">{{ house.area }}㎡</span>
+                            <span class="badge bg-success">¥{{ house.price }}/月</span>
+                            <span class="badge bg-warning text-dark">已出租</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            您当前没有正在出租的房源
+        </div>
+    {% endif %}
+</div>
+
+{% block scripts %}
+{{ super() }}
+{% endblock %}
+{% endblock %}

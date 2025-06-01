@@ -15,10 +15,14 @@ def show_contract(house_id, user_id):
     if not all([user, house]):
         return "用户或房源不存在", 404
 
+    # 获取房东信息
+    landlord = User.query.get(house.landlord_id) if house.landlord_id else None
+
     return render_template(
         'contract_confirmation.html',
         house=house,
         user=user,
+        landlord_user=landlord, #传递房东对象
         current_user=current_user,
         now=datetime.now(),
         timedelta=timedelta
@@ -64,8 +68,12 @@ def sign_contract():
         if not house:
             return jsonify({'success': False, 'message': '房源不存在'}), 404
 
+        landlord_user = User.query.get(house.landlord_id)
+
+
         house.rental_status = '已出租'
-        current_user.rent_id = house.id
+        current_user.add_rental(house.id)
+        landlord_user.add_rental(house.id)
         db.session.commit()
 
         return jsonify({

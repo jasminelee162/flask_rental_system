@@ -50,7 +50,7 @@
             <div class="contract-content">
                 <div class="contract-section">
                     <h4>第一条 合同双方</h4>
-                    <p>出租方（甲方）：房东姓名</p>
+                    <p>出租方（甲方）：{{ landlord_user.name }}</p>
                     <p>承租方（乙方）：{{ user.name }}</p>
                 </div>
 
@@ -96,7 +96,7 @@
 
             <div class="signature-area">
                 <div class="signature-box">
-                    <p>甲方（出租方）签字：房东姓名</p>
+                    <p>甲方（出租方）签字：{{ landlord_user.name }}</p>
                     <p>日期：{{ now.strftime('%Y年%m月%d日') }}</p>
                 </div>
                 <div class="signature-box">

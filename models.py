@@ -86,6 +86,37 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return 'User: %s, %s' % (self.name, self.id)
 
+    @property
+    def rented_houses(self):
+        """获取用户租赁的所有房源"""
+        if not self.rent_id:
+            return []
+        try:
+            house_ids = [int(hid) for hid in self.rent_id.split(',') if hid.strip()]
+            return House.query.filter(House.id.in_(house_ids)).all()
+        except Exception as e:
+            print(f"解析rent_id出错: {str(e)}")
+            return []
+
+    def add_rental(self, house_id):
+        """添加租赁关系"""
+        current_ids = set()
+        if self.rent_id:
+            current_ids = {hid for hid in self.rent_id.split(',') if hid.strip()}
+        current_ids.add(str(house_id))
+        self.rent_id = ','.join(current_ids)
+
+    def rented_houses(self):
+        """获取用户所有出租的房源"""
+        if not self.rent_id:
+            return []
+        try:
+            house_ids = [int(hid) for hid in self.rent_id.split(',') if hid.strip()]
+            return House.query.filter(House.id.in_(house_ids)).all()
+        except Exception as e:
+            print(f"解析rent_id出错: {str(e)}")
+            return []
+
 
 # message_info 表的模型类
 class MessageInfo(db.Model):
