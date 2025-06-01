@@ -1,6 +1,7 @@
 from settings import db
 from flask_login import UserMixin
 from datetime import datetime
+from datetime import date
 
 
 # soufang 表的模型类
@@ -148,3 +149,11 @@ class Appointment(db.Model):
     house = db.relationship('House', backref='appointments')
     user = db.relationship('User', foreign_keys=[user_id])
     landlord = db.relationship('User', foreign_keys=[landlord_id])
+
+class UserLoginLog(db.Model):
+    __tablename__ = 'user_login_log'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user_info.id'))
+    login_date = db.Column(db.Date, nullable=False)
+
+    __table_args__ = (db.UniqueConstraint('user_id', 'login_date', name='unique_user_login'),)

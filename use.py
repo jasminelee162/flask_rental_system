@@ -9,6 +9,8 @@ import json
 import random
 import string
 from captcha.image import ImageCaptcha
+from datetime import date
+from models import UserLoginLog
 
 user_page = Blueprint('user_page', __name__)
 
@@ -125,6 +127,13 @@ def login():
 
     # 使用 flask_login 登录用户
     login_user(user)
+
+    today = date.today()
+    existing = UserLoginLog.query.filter_by(user_id=user.id, login_date=today).first()
+    if not existing:
+        log = UserLoginLog(user_id=user.id, login_date=today)
+        db.session.add(log)
+        db.session.commit()
 
     # 打印调试信息
     print(f"用户登录成功: {user.name}, is_landlord: {user.is_landlord}, is_authenticated: {current_user.is_authenticated}")
