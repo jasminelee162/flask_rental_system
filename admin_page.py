@@ -6,8 +6,10 @@ from settings import db
 from sqlalchemy import func
 from utils.regression_data import linear_model_main
 from utils.pearson_tuijian import recommed
-# admin_page.py
-
+from datetime import date
+from flask import session, redirect, url_for, render_template
+from models import UserLoginLog
+from sqlalchemy import func
 from flask import Blueprint, render_template
 
 admin_page = Blueprint('admin_page', __name__, template_folder='templates')
@@ -34,7 +36,13 @@ def dashboard():
     if not session.get('admin_logged_in'):
         return redirect(url_for('admin_page.admin_login'))
 
-    return render_template('admin_dashboard.html')
+    today = date.today()
+    # 查询当天活跃用户数量，去重统计
+    active_user_count = db.session.query(func.count(UserLoginLog.user_id.distinct())) \
+                                  .filter(UserLoginLog.login_date == today) \
+                                  .scalar()
+
+    return render_template('admin_dashboard.html', active_user_count=active_user_count)
 
 
 
