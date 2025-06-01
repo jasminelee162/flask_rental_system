@@ -682,6 +682,7 @@
                 <ul class="nav nav-tabs" style="margin:10px 0 30px">
                     <li class="active chanle1"><a href="#userinfo">账号信息</a></li>
                     <li class="chanle2"><a href="#collections">房源收藏</a></li>
+                    <li class="chanle3"><a href="#rents">我的已租</a></li>
                 </ul>
                 <div class="user-info">
                     <input value="{{ user.name }}" id="n-data" style="display: none">
@@ -789,9 +790,67 @@
                         </div>
                     </div>
                     {% endfor %}
-
                 </div>
-            </div>
+                <!-- 我的已租 -->
+                <div class="rented-houses tab-content" id="rents" style="display:none;">
+                    {% if rented_houses %}
+                        {% for house in rented_houses %}
+                        <div class="row collection-line">
+                            <div class="col-lg-4 col-md-4 mx-auto">
+                                <div><a href="/house/{{ house.id }}">
+                                    <img class='img-fluid img-box' src="/static/img/{{ house.picture }}" alt="">
+                                </a>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 mx-auto">
+                                <div class="collection-line-info">
+                                    <div>
+                                        <span class="attribute-text">房源地址：</span>
+                                        &nbsp
+                                        <span class="info-text">{{ house.address }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="attribute-text">建筑面积：</span>
+                                        &nbsp
+                                        <span class="info-text">{{ house.area }}平米</span>
+                                    </div>
+                                    <div>
+                                        <span class="attribute-text">房源户型：</span>
+                                        &nbsp
+                                        <span class="info-text">{{ house.rooms }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="attribute-text">房源朝向：</span>
+                                        &nbsp
+                                        <span class="info-text">{{ house.direction }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="attribute-text">房源价格：</span>
+                                        &nbsp
+                                        <span class="info-text" style="color: #e74c3c">￥&nbsp{{ house.price }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-2 mx-auto" style="height: 100px; margin-top: 40px;">
+                                <div class="info-more"
+                                     style="width: 100%; height: 100%; position: relative; overflow: hidden;">
+                                    <span><a href="/house/{{ house.id }}"
+                                             style="position: absolute; top:-30px; left: -1px; height: 20px;"><i
+                                            class="fa fa-arrow-right"
+                                            aria-hidden="true"></i></a></span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="no-data-hint" style="text-align: center; padding: 30px; color: #fff;">
+                            <p>您还没有租赁任何房源</p>
+                        </div>
+                    {% endif %}
+                </div>
+                </div>
+
+
 
 
             <!--浏览记录-->
@@ -937,21 +996,32 @@
         }
     });
 
-    $(".chanle1").on('click', function () {
-        $('.user-info').show();
-        $('.collection').hide();
-        if ($('.chanle1').hasClass('action')) {
-            $(".chanle1").removeClass('action');
-        }
-        $(".chanle1").addClass('action');
-        $(".chanle2").removeClass('action');
-    });
-    $(".chanle2").on('click', function () {
-        $('.user-info').hide();
-        $('.collection').show();
-        $(".chanle1").removeClass('action');
-        $(".chanle2").addClass('action')
-    });
+        // 账号信息选项卡
+        $(".chanle1").on('click', function () {
+            $('.user-info').show();
+            $('.collection').hide();
+            $('.rented-houses').hide();
+            $(".chanle1").addClass('active');
+            $(".chanle2, .chanle3").removeClass('active');
+        });
+
+        // 房源收藏选项卡
+        $(".chanle2").on('click', function () {
+            $('.user-info').hide();
+            $('.collection').show();
+            $('.rented-houses').hide();
+            $(".chanle2").addClass('active');
+            $(".chanle1, .chanle3").removeClass('active');
+        });
+
+        // 我的已租选项卡
+        $(".chanle3").on('click', function() {
+            $('.user-info').hide();
+            $('.collection').hide();
+            $('.rented-houses').show();
+            $(".chanle3").addClass('active');
+            $(".chanle1, .chanle2").removeClass('active');
+        });
 
     // 修改用户名称的
 

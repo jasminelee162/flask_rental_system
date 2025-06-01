@@ -1,5 +1,7 @@
 from settings import db
 from flask_login import UserMixin
+from datetime import datetime
+
 
 # soufang 表的模型类
 class House(db.Model):
@@ -23,9 +25,11 @@ class House(db.Model):
     phone_num = db.Column(db.String(100))
     picture = db.Column(db.String(255))
     landlord_id = db.Column(db.Integer)
+    rental_status = db.Column(db.String(100))
 
     # 房东ID(关联用户表)，使用与 user_info.id 相同的类型
     landlord_id = db.Column(db.Integer, db.ForeignKey('user_info.id', ondelete='SET NULL'))
+
 
     # 重写__repr__方法， 方便我们查看对象的输出内容
     def __repr__(self):
@@ -57,6 +61,7 @@ class User(UserMixin, db.Model):
     collect_id = db.Column(db.String(250))
     seen_id = db.Column(db.String(250))
     is_landlord = db.Column(db.Boolean, default=False)  # 是否是房东
+    rent_id = db.Column(db.String(250))
 
     # 与房源的一对多关系
     houses = db.relationship('House', backref='landlord', lazy=True)
@@ -95,3 +100,20 @@ class MessageInfo(db.Model):
 
     def __repr__(self):
         return f'<Message from {self.userId} to {self.landlordId}: {self.message}>'
+
+# viewing_appointment表的模型块
+class Appointment(db.Model):
+    __tablename__ = 'viewing_appointment'
+
+    id = db.Column(db.Integer, primary_key=True)
+    house_id = db.Column(db.Integer, db.ForeignKey('house_info.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user_info.id'))
+    landlord_id = db.Column(db.Integer, db.ForeignKey('user_info.id'))
+    appointment_time = db.Column(db.DateTime, nullable=False)
+    status = db.Column(db.String(20), default='pending')
+    note = db.Column(db.Text)
+    # 移除 created_at 字段
+    # 添加关系属性
+    house = db.relationship('House', backref='appointments')
+    user = db.relationship('User', foreign_keys=[user_id])
+    landlord = db.relationship('User', foreign_keys=[landlord_id])
