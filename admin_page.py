@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, jsonify, request
+from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 from models import House, User, Tuijian
 from datetime import datetime
 from utils.connect_to_database import query_data
@@ -12,8 +12,28 @@ from flask import Blueprint, render_template
 
 admin_page = Blueprint('admin_page', __name__, template_folder='templates')
 
-@admin_page.route('/admin')
+
+@admin_page.route('/admin/login', methods=['GET', 'POST'])
+def admin_login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        if username == 'admin' and password == '123':
+            session['admin_logged_in'] = True
+            return redirect(url_for('admin_page.dashboard'))
+        else:
+            flash('账号或密码错误', 'danger')
+
+    return render_template('admin_login.html')
+
+
+# 后台首页
+@admin_page.route('/admin/dashboard')
 def dashboard():
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('admin_page.admin_login'))
+
     return render_template('admin_dashboard.html')
 
 
