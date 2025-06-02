@@ -1133,9 +1133,13 @@
                                 <span class="collection" id="btn-collection"><a><i class="fa fa-heart"
                                                                                    aria-hidden="true"> 收藏</i></a></span>
 
-                                 <span class="appointment" id="btn-appointment" data-house-id="{{ house.id }}">
-                                     <a><i class="fa fa-calendar-check" aria-hidden="true">
-                                        {% if is_appointed %}已预约{% else %}预约看房{% endif %}
+                                <span class="appointment" id="btn-appointment" data-house-id="{{ house.id }}">
+                                    <a><i class="fa fa-calendar-check" aria-hidden="true">
+                                        {% if is_appointed %}
+                                            {% if appointment_status == 'pending' %}已预约{% elif appointment_status == 'confirmed' %}预约成功{% else %}已取消{% endif %}
+                                        {% else %}
+                                            预约看房
+                                        {% endif %}
                                     </i></a>
                                 </span>
                             </div>

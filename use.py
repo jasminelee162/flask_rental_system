@@ -10,7 +10,9 @@ import random
 import string
 from captcha.image import ImageCaptcha
 from datetime import date
-from models import UserLoginLog
+from models import UserLoginLog, User, House, RepairComplaintMessage, Appointment
+from settings import db
+from flask_login import current_user
 
 user_page = Blueprint('user_page', __name__)
 
@@ -79,6 +81,8 @@ def user(name):
 
     # 解析我的已租
     rent_house_list = []
+    user_feedback = []
+    rented_houses = []
     if user.rent_id:
         try:
             rented_ids = [int(hid.strip()) for hid in user.rent_id.split(',') if hid.strip()]
@@ -95,7 +99,6 @@ def user(name):
             RepairComplaintMessage.created_at.desc()
         ).all()
 
-        user_feedback = []
         for feedback in feedback_messages:
             user_feedback.append({
                 'house_region': feedback.house.region,
@@ -108,11 +111,22 @@ def user(name):
                 'house': feedback.house  # 传递整个house对象以便访问图片
             })
 
+    # 获取用户预约记录，并预加载关联的房源信息
+    user_appointments = Appointment.query.options(
+                db.joinedload(Appointment.house)
+            ).filter_by(
+                user_id=current_user.id
+            ).order_by(
+                Appointment.appointment_time.desc()
+            ).all()
+
+
     # 传递房东标识到模板
     return render_template(
         'user_page.html',
         user=user,
         user_feedback=user_feedback,
+        user_appointments=user_appointments,
         collect_house_list=collect_house_list,
         seen_house_list=seen_house_list,
         rent_house_list=rent_house_list,

@@ -64,6 +64,7 @@ def detail(hid):
 
     # 初始化预约状态
     is_appointed = False
+    appointment_status = None
     name = request.cookies.get('name')
 
     # 判断用户是否处于登录状态下
@@ -81,11 +82,16 @@ def detail(hid):
         # 获取用户对象
         user = User.query.filter(User.name == name).first()
 
+        # 获取预约记录
         # 检查预约状态
-        is_appointed = Appointment.query.filter_by(
+        appointment = Appointment.query.filter_by(
             house_id=hid,
             user_id=user.id
-        ).first() is not None
+        ).first()
+
+        if appointment:
+            is_appointed = True
+            appointment_status = appointment.status
 
         # 获取用户对象的浏览记录
         seen_id_str = user.seen_id  # 浏览记录的格式：'123，234，345' 或着 null
@@ -171,7 +177,7 @@ def detail(hid):
         else:
             tuijian = putong_tuijian
 
-    return render_template('detail_page.html', house=house, sheshi=sheshi_list, tuijian=tuijian, picture=house.picture,user=user,is_appointed=is_appointed)
+    return render_template('detail_page.html', house=house, sheshi=sheshi_list, tuijian=tuijian, picture=house.picture,user=user,is_appointed=is_appointed,appointment_status=appointment_status)
 
 
 # 实现户型占比功能
@@ -377,14 +383,15 @@ def cancel_appointment():
 @login_required
 def appointment_status():
     house_id = request.args.get('house_id')
-    is_appointed = Appointment.query.filter_by(
+    appointment = Appointment.query.filter_by(
         house_id=house_id,
         user_id=current_user.id
-    ).first() is not None
+    ).first()
 
     return jsonify({
         'success': True,
-        'is_appointed': is_appointed
+        'is_appointed': appointment is not None,
+        'status': appointment.status if appointment else None
     })
 
 
