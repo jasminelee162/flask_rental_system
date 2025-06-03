@@ -3,14 +3,15 @@
 <div class="container" style="margin-top: 50px;">
     <div class="row">
         <div class="col-md-6 mx-auto">
-            <div class="card">
-                <div class="card-header">
-                    <h4>提交反馈</h4>
+            <!-- 应用modal样式到card -->
+            <div class="card modal-content">
+                <div class="card-header modal-header">
+                    <h4 class="modal-title">提交反馈</h4>
                 </div>
-                <div class="card-body">
+                <div class="card-body modal-body">
                     <form action="{{ url_for('user_page.submit_feedback') }}" method="POST">
                         <input type="hidden" name="house_id" value="{{ house.id }}">
-                        
+
                         <div class="form-group">
                             <label>反馈类型</label>
                             <select class="form-control" name="message_type" required>
@@ -19,24 +20,120 @@
                                 <option value="complaint">投诉</option>
                             </select>
                         </div>
-                        
+
                         <div class="form-group">
                             <label>反馈内容</label>
                             <textarea class="form-control" name="message_text" rows="5" required></textarea>
                         </div>
-                        
+
                         <div class="form-group">
                             <label>房源信息</label>
-                            <div class="form-control" style="background-color: #f8f9fa;">
-                                <p>{{ house.region }} - {{house.block}} - {{house.address}}</p>
+                            <div class="form-control" style="background: rgba(43, 53, 83, 0.9); color: white;">
+                                <p>{{ house.region }} - {{house.address}}</p>
                             </div>
                         </div>
-                        
-                        <button type="submit" class="btn btn-primary">提交反馈</button>
+
+                        <div class="btn-group">
+                            <button type="submit" class="btn btn-primary" style="
+                                background: linear-gradient(45deg, #6a5acd, #9370db);
+                                border: none;
+                                border-radius: 8px;
+                                padding: 10px 25px;
+                                transition: all 0.3s ease;
+                            ">
+                                提交反馈
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    /* 确保这些样式只应用于这个页面 */
+    .modal-content {
+        background: rgba(39, 41, 61, 0.98);
+        border: 1px solid rgba(154, 104, 242, 0.4);
+        border-radius: 20px;
+        backdrop-filter: blur(15px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+    }
+
+    .modal-header {
+        border-bottom: 1px solid rgba(154, 104, 242, 0.3);
+        padding: 25px;
+        background: rgba(39, 41, 61, 0.95);
+    }
+
+    .modal-title {
+        color: #9a68f2;
+        font-size: 26px;
+        font-weight: 600;
+        text-align: center;
+        margin: 0;
+        letter-spacing: 0.5px;
+    }
+
+    .modal-body {
+        padding: 30px;
+    }
+
+    .form-group {
+        margin-bottom: 25px;
+        position: relative;
+    }
+
+    .form-group label {
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 15px;
+        margin-bottom: 10px;
+        display: block;
+        font-weight: 400;
+    }
+
+    .form-control {
+        background: rgba(43, 53, 83, 0.9);
+        border: 1px solid rgba(154, 104, 242, 0.3);
+        border-radius: 10px;
+        color: #fff;
+        padding: 14px 18px;
+        transition: all 0.3s ease;
+        font-size: 15px;
+    }
+
+    .form-control:focus {
+        background: rgba(43, 53, 83, 0.95);
+        border-color: #9a68f2;
+        box-shadow: 0 0 20px rgba(154, 104, 242, 0.3);
+    }
+
+    .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 14px;
+    }
+
+    .btn-group {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
+    }
+
+    /* 自定义按钮样式 */
+    .btn-primary {
+        background: linear-gradient(45deg, #6a5acd, #9370db);
+        border: none;
+        border-radius: 8px;
+        padding: 10px 25px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(45deg, #9370db, #6a5acd);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(106, 90, 205, 0.4);
+    }
+</style>
 {% endblock %}
