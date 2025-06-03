@@ -47,8 +47,11 @@ function createAppointment(houseId, time, note) {
         success: function(response) {
             if(response.success) {
                 $('#appointmentModal').modal('hide');
-                updateAppointmentButton(true);
-                alert('预约成功！');
+                updateAppointmentButton({
+                    is_appointed: true,
+                    status: 'pending'
+                });
+                alert('预约成功，等待房东确认！');
             } else {
                 alert(response.message || '预约失败');
             }
@@ -67,8 +70,11 @@ function cancelAppointment(houseId) {
         data: { house_id: houseId },
         success: function(response) {
             if(response.success) {
-                updateAppointmentButton(false);
-                alert('已取消预约');
+            updateAppointmentButton({
+                    is_appointed: false,
+                    status: 'canceled'
+                });
+            alert('已取消预约');
             } else {
                 alert(response.message || '取消预约失败');
             }
@@ -80,19 +86,30 @@ function cancelAppointment(houseId) {
 }
 
 // 更新预约按钮状态
-function updateAppointmentButton(isAppointed) {
+function updateAppointmentButton(status) {
     const $btn = $('#btn-appointment');
-    if(isAppointed !== undefined) {
-        $btn.toggleClass('appointed', isAppointed);
-        $btn.find('i').text(isAppointed ? ' 已预约' : ' 预约看房');
+    if(status !== undefined) {
+        $btn.toggleClass('appointed', status.is_appointed);
+        let btnText = '预约看房';
+        if(status.is_appointed) {
+            btnText = status.status === 'pending' ? '已预约' :
+                     status.status === 'confirmed' ? '预约成功' : '已取消';
+        }
+        $btn.find('i').text(' ' + btnText);
     } else {
         // 从服务器获取当前状态
         const houseId = $btn.data('house-id');
         $.get('/appointment/status?house_id=' + houseId, function(response) {
             if(response.success) {
                 $btn.toggleClass('appointed', response.is_appointed);
-                $btn.find('i').text(response.is_appointed ? ' 已预约' : ' 预约看房');
+                let btnText = '预约看房';
+                if(response.is_appointed) {
+                    btnText = response.status === 'pending' ? '已预约' :
+                             response.status === 'confirmed' ? '预约成功' : '已取消';
+                }
+                $btn.find('i').text(' ' + btnText);
             }
         });
     }
 }
+
