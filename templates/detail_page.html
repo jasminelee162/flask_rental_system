@@ -1572,13 +1572,14 @@
 <script src="/static/js/login.js"></script>
 <script src="/static/js/chat.js"></script>
 
-
 <!-- Custom scripts for this template -->
 <script src="/static/js/clean-blog.min.js"></script>
 
-<!-- side data -->
-<script type="text/javascript" src="/static/vendor/echarts-stat/ecStat.min.js"></script>
-<script src="/static/js/echarts.min.js"></script>
+<!-- 先加载 echarts 主库 -->
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<!-- 再加载 echarts-stat 统计扩展 -->
+<script src="https://cdn.jsdelivr.net/npm/echarts-stat/dist/ecStat.min.js"></script>
+<!-- 主题和你的自定义脚本 -->
 <script src="/static/js/dark-purple-theme.js"></script>
 <script src="/static/js/show_data_pie.js"></script>
 <script src="/static/js/f_data.js"></script>
