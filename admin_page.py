@@ -37,12 +37,28 @@ def dashboard():
         return redirect(url_for('admin_page.admin_login'))
 
     today = date.today()
-    # 查询当天活跃用户数量，去重统计
+
+    # 1. 统计今日活跃用户数（去重）
     active_user_count = db.session.query(func.count(UserLoginLog.user_id.distinct())) \
                                   .filter(UserLoginLog.login_date == today) \
                                   .scalar()
 
-    return render_template('admin_dashboard.html', active_user_count=active_user_count)
+    # 2. 统计房屋出租率
+    total_house_count = db.session.query(func.count(House.id)).scalar()
+    rented_house_count = db.session.query(func.count(House.id)) \
+                                   .filter(House.rental_status == '已出租') \
+                                   .scalar()
+
+    rental_rate = 0
+    if total_house_count > 0:
+        rental_rate = round(rented_house_count / total_house_count * 100, 2)
+
+    # 3. 渲染模板
+    return render_template(
+        'admin_dashboard.html',
+        active_user_count=active_user_count,
+        rental_rate=rental_rate
+    )
 
 
 
@@ -69,7 +85,7 @@ def admin_properties():
 
     # 生成页码范围，最多显示10页（或者实际总页数）
     total_pages = pagination.pages
-    max_pages = min(total_pages, 10)
+    max_pages = min(total_pages, 50)
     page_range = range(1, max_pages + 1)
 
     return render_template('admin_properties.html',
