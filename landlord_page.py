@@ -140,7 +140,7 @@ def edit_house(house_id):
         
         try:
             db.session.commit()
-            flash('房源信息更新成功!', 'success')
+
             return redirect(url_for('landlord_page.my_houses'))
         except Exception as e:
             db.session.rollback()
