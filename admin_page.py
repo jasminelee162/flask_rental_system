@@ -51,7 +51,10 @@ def dashboard():
 
     rental_rate = 0
     if total_house_count > 0:
-        rental_rate = round(rented_house_count / total_house_count * 100, 2)
+        rental_rate = round(rented_house_count / total_house_count * 100, 4)
+
+    print(f"Total houses: {total_house_count}")
+    print(f"Rented houses: {rented_house_count}")
 
     # 3. 渲染模板
     return render_template(
