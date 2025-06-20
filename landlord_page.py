@@ -98,7 +98,8 @@ def add_house():
             return redirect(url_for('landlord_page.my_houses'))
         except Exception as e:
             db.session.rollback()
-            flash('添加失败,请重试!', 'error')
+            
+            return redirect(url_for('landlord_page.my_houses'))
             
     return render_template('landlord/house_add.html')
 
@@ -152,14 +153,13 @@ def edit_house(house_id):
 def delete_house(house_id):
     """房东删除房源"""
     if not check_landlord():
-        return jsonify({'success': False, 'message': '您没有房东权限!'})
-        
+        flash('您没有房东权限!', 'error')
+        return redirect(url_for('landlord_page.my_houses'))
     house = House.query.get_or_404(house_id)
-    
     # 验证是否是房源的所有者
     if house.landlord_id != current_user.id:
-        return jsonify({'success': False, 'message': '您没有权限删除该房源!'})
-    
+        flash('您没有权限删除该房源!', 'error')
+        return redirect(url_for('landlord_page.my_houses'))
     try:
         # 删除房源图片
         if house.picture:
@@ -167,15 +167,15 @@ def delete_house(house_id):
                 os.remove(os.path.join('static/img', house.picture))
             except OSError:
                 pass  # 忽略文件删除错误
-        
         db.session.delete(house)
         db.session.commit()
-        # 清除缓存
         cache.delete_memoized(my_houses)
-        return jsonify({'success': True, 'message': '房源删除成功!'})
+        flash('房源删除成功!', 'success')
+        return redirect(url_for('landlord_page.my_houses'))
     except Exception as e:
         db.session.rollback()
-        return jsonify({'success': False, 'message': '删除失败,请重试!'})
+
+        return redirect(url_for('landlord_page.my_houses'))
 
 
 @landlord_page.route('/appointment/requests')

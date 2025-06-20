@@ -59,10 +59,11 @@
                                class="btn btn-sm btn-outline-primary">
                                 <i class="fas fa-edit"></i> 编辑
                             </a>
-                            <button class="btn btn-sm btn-outline-danger" 
-                                    onclick="deleteHouse({{ house.id }})">
-                                <i class="fas fa-trash"></i> 删除
-                            </button>
+                            <form method="POST" action="{{ url_for('landlord_page.delete_house', house_id=house.id) }}" style="display:inline;" onsubmit="return confirm('确定要删除这个房源吗？此操作不可恢复！');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                    <i class="fas fa-trash"></i> 删除
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -121,29 +122,5 @@
 
 {% block scripts %}
 {{ super() }}
-<script>
-function deleteHouse(houseId) {
-    if (confirm('确定要删除这个房源吗？此操作不可恢复！')) {
-        fetch(`/house/delete/${houseId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                location.reload();
-            } else {
-                alert(data.message || '删除失败，请重试！');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('删除失败，请重试！');
-        });
-    }
-}
-</script>
 {% endblock %}
 {% endblock %} 

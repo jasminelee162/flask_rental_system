@@ -2,6 +2,7 @@ from settings import db
 from flask_login import UserMixin
 from datetime import datetime
 from datetime import date
+import os
 
 
 # soufang 表的模型类
@@ -63,6 +64,7 @@ class User(UserMixin, db.Model):
     seen_id = db.Column(db.String(250))
     is_landlord = db.Column(db.Boolean, default=False)  # 是否是房东
     rent_id = db.Column(db.String(250))
+    phone_num = db.Column(db.String(20))
 
     # 与房源的一对多关系
     houses = db.relationship('House', backref='landlord', lazy=True)
