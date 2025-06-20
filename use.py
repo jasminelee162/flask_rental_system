@@ -209,6 +209,40 @@ def modify_info(option):
 
     # 原有字段修改逻辑保持不变
     # ...（其他option的处理代码）
+    # ... 前面的代码保持不变 ...
+    try:
+        user = current_user
+        if option == 'name':
+            new_name = request.form.get('name')
+            if not new_name:
+                return jsonify({'ok': '0', 'msg': '昵称不能为空'})
+            user.name = new_name
+        elif option == 'addr':
+            new_addr = request.form.get('addr')
+            user.addr = new_addr if new_addr else ''
+        elif option == 'pd':
+            new_pd = request.form.get('pd')
+            if not new_pd:
+                return jsonify({'ok': '0', 'msg': '密码不能为空'})
+            user.password = new_pd
+        elif option == 'email':
+            new_email = request.form.get('email')
+            if not new_email:
+                return jsonify({'ok': '0', 'msg': '邮箱不能为空'})
+            user.email = new_email
+        else:
+            return jsonify({'ok': '0', 'msg': '无效的修改选项'})
+
+        db.session.commit()
+        res = jsonify({'ok': '1', 'msg': '修改成功'})
+        if option == 'name':
+            res.set_cookie('name', new_name, 3600 * 2)
+        return res
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'ok': '0', 'msg': f'修改失败: {str(e)}'})
+
+    # ... 后面的代码保持不变 ...
 
     return jsonify({'ok': '1', 'msg': '修改成功'})
 
