@@ -102,32 +102,6 @@
 
 ---
 
-## 部署与运行
-
-1. 克隆项目
-   ```bash
-   git clone https://github.com/jasminelee162/flask_rental_system.git
-   cd flask_rental_system
-   ```
-
-2. 安装依赖
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. 配置数据库（修改 `app.py` 或配置文件）
-
-4. 初始化数据库（如有需要）
-
-5. 启动服务
-   ```bash
-   python app.py
-   ```
-
-6. 浏览器访问 [http://localhost:5000](http://localhost:5000)
-
----
-
 ## 贡献与反馈
 
 - 欢迎提交 Issue 和 Pull Request，完善功能或修复 Bug
