@@ -10,6 +10,9 @@
 - **商家端（房东端）**：房源发布、编辑、上下架、订单管理、合同管理等。
 - **管理端（平台后台）**：用户管理、房源审核、数据统计与监控、权限分配等。
 
+### 📊 系统功能结构图
+<img width="1052" height="412" alt="image" src="https://github.com/user-attachments/assets/f5c30c37-4702-4d90-b15d-13b4da5aca6b" />
+
 ---
 
 ## 主要功能列表
@@ -52,6 +55,10 @@
 - 权限管理与角色分配
 
 ---
+
+## 业务流程
+### 📈 业务流程图
+<img width="1107" height="1015" alt="image" src="https://github.com/user-attachments/assets/35f2e23e-ed53-4d03-a9aa-c5dcd35c6cc8" />
 
 ## 数据分析与AI智能预测
 
